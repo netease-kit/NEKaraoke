@@ -1,0 +1,477 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		320CE16DCDC2B3D2EAE14E3E /* Pods_NEKaraoke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C60BC04ACF633C8C91A8C1 /* Pods_NEKaraoke.framework */; };
+		5E408FBB286E9DA20026B24E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E408FBA286E9DA20026B24E /* AppDelegate.m */; };
+		5E408FC1286E9DA20026B24E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E408FC0286E9DA20026B24E /* ViewController.m */; };
+		5E408FC4286E9DA20026B24E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E408FC2286E9DA20026B24E /* Main.storyboard */; };
+		5E408FC6286E9DAB0026B24E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E408FC5286E9DAB0026B24E /* Assets.xcassets */; };
+		5E408FC9286E9DAB0026B24E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E408FC7286E9DAB0026B24E /* LaunchScreen.storyboard */; };
+		5E408FCC286E9DAB0026B24E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E408FCB286E9DAB0026B24E /* main.m */; };
+		5E4DE65C288FD0A8004F4419 /* NEWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E4DE65B288FD0A8004F4419 /* NEWebViewController.m */; };
+		5ED03DA428864D74004091AF /* MyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5ED03DA328864D74004091AF /* MyViewController.m */; };
+		5ED03DA9288654A6004091AF /* NECustomTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5ED03DA8288654A6004091AF /* NECustomTabBar.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		326C1559459AF8E161592637 /* Pods-NEKaraoke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NEKaraoke.debug.xcconfig"; path = "Target Support Files/Pods-NEKaraoke/Pods-NEKaraoke.debug.xcconfig"; sourceTree = "<group>"; };
+		45C60BC04ACF633C8C91A8C1 /* Pods_NEKaraoke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NEKaraoke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5375FEAF289908CC00FA767A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		5375FEB0289908CC00FA767A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		5E408FB6286E9DA20026B24E /* NEKaraoke.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NEKaraoke.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E408FB9286E9DA20026B24E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		5E408FBA286E9DA20026B24E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		5E408FBF286E9DA20026B24E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		5E408FC0286E9DA20026B24E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		5E408FC3286E9DA20026B24E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5E408FC5286E9DAB0026B24E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5E408FC8286E9DAB0026B24E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5E408FCA286E9DAB0026B24E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5E408FCB286E9DAB0026B24E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5E4DE65A288FD0A8004F4419 /* NEWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NEWebViewController.h; sourceTree = "<group>"; };
+		5E4DE65B288FD0A8004F4419 /* NEWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NEWebViewController.m; sourceTree = "<group>"; };
+		5ED03DA228864D74004091AF /* MyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyViewController.h; sourceTree = "<group>"; };
+		5ED03DA328864D74004091AF /* MyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyViewController.m; sourceTree = "<group>"; };
+		5ED03DA7288654A6004091AF /* NECustomTabBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NECustomTabBar.h; sourceTree = "<group>"; };
+		5ED03DA8288654A6004091AF /* NECustomTabBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NECustomTabBar.m; sourceTree = "<group>"; };
+		F4FD251056B88F268FEB6389 /* Pods-NEKaraoke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NEKaraoke.release.xcconfig"; path = "Target Support Files/Pods-NEKaraoke/Pods-NEKaraoke.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5E408FB3286E9DA20026B24E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				320CE16DCDC2B3D2EAE14E3E /* Pods_NEKaraoke.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		16FB179CE946EBCDFFF6705E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				326C1559459AF8E161592637 /* Pods-NEKaraoke.debug.xcconfig */,
+				F4FD251056B88F268FEB6389 /* Pods-NEKaraoke.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		36982CF28DFF021FE933D327 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				45C60BC04ACF633C8C91A8C1 /* Pods_NEKaraoke.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5E408FAD286E9DA20026B24E = {
+			isa = PBXGroup;
+			children = (
+				5E408FB8286E9DA20026B24E /* NEKaraoke */,
+				5E408FB7286E9DA20026B24E /* Products */,
+				16FB179CE946EBCDFFF6705E /* Pods */,
+				36982CF28DFF021FE933D327 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		5E408FB7286E9DA20026B24E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5E408FB6286E9DA20026B24E /* NEKaraoke.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5E408FB8286E9DA20026B24E /* NEKaraoke */ = {
+			isa = PBXGroup;
+			children = (
+				5E408FB9286E9DA20026B24E /* AppDelegate.h */,
+				5E408FBA286E9DA20026B24E /* AppDelegate.m */,
+				5E408FBF286E9DA20026B24E /* ViewController.h */,
+				5E408FC0286E9DA20026B24E /* ViewController.m */,
+				5E408FC2286E9DA20026B24E /* Main.storyboard */,
+				5E408FC5286E9DAB0026B24E /* Assets.xcassets */,
+				5E408FC7286E9DAB0026B24E /* LaunchScreen.storyboard */,
+				5E408FCA286E9DAB0026B24E /* Info.plist */,
+				5E408FCB286E9DAB0026B24E /* main.m */,
+				5ED03DA228864D74004091AF /* MyViewController.h */,
+				5ED03DA328864D74004091AF /* MyViewController.m */,
+				5ED03DA7288654A6004091AF /* NECustomTabBar.h */,
+				5ED03DA8288654A6004091AF /* NECustomTabBar.m */,
+				5E4DE65A288FD0A8004F4419 /* NEWebViewController.h */,
+				5E4DE65B288FD0A8004F4419 /* NEWebViewController.m */,
+			);
+			path = NEKaraoke;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5E408FB5286E9DA20026B24E /* NEKaraoke */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5E408FCF286E9DAB0026B24E /* Build configuration list for PBXNativeTarget "NEKaraoke" */;
+			buildPhases = (
+				35DDAE1410343D587E716DAD /* [CP] Check Pods Manifest.lock */,
+				5E408FB2286E9DA20026B24E /* Sources */,
+				5E408FB3286E9DA20026B24E /* Frameworks */,
+				5E408FB4286E9DA20026B24E /* Resources */,
+				544D3A5B67E3F766D6FB54C6 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NEKaraoke;
+			productName = NEKaraoke;
+			productReference = 5E408FB6286E9DA20026B24E /* NEKaraoke.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5E408FAE286E9DA20026B24E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1330;
+				TargetAttributes = {
+					5E408FB5286E9DA20026B24E = {
+						CreatedOnToolsVersion = 13.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 5E408FB1286E9DA20026B24E /* Build configuration list for PBXProject "NEKaraoke" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = 5E408FAD286E9DA20026B24E;
+			productRefGroup = 5E408FB7286E9DA20026B24E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5E408FB5286E9DA20026B24E /* NEKaraoke */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5E408FB4286E9DA20026B24E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5E408FC9286E9DAB0026B24E /* LaunchScreen.storyboard in Resources */,
+				5E408FC6286E9DAB0026B24E /* Assets.xcassets in Resources */,
+				5E408FC4286E9DA20026B24E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		35DDAE1410343D587E716DAD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NEKaraoke-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		544D3A5B67E3F766D6FB54C6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NEKaraoke/Pods-NEKaraoke-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NEKaraoke/Pods-NEKaraoke-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NEKaraoke/Pods-NEKaraoke-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5E408FB2286E9DA20026B24E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5E408FC1286E9DA20026B24E /* ViewController.m in Sources */,
+				5E408FBB286E9DA20026B24E /* AppDelegate.m in Sources */,
+				5E4DE65C288FD0A8004F4419 /* NEWebViewController.m in Sources */,
+				5ED03DA428864D74004091AF /* MyViewController.m in Sources */,
+				5ED03DA9288654A6004091AF /* NECustomTabBar.m in Sources */,
+				5E408FCC286E9DAB0026B24E /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		5E408FC2286E9DA20026B24E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5E408FC3286E9DA20026B24E /* Base */,
+				5375FEAF289908CC00FA767A /* zh-Hans */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		5E408FC7286E9DAB0026B24E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5E408FC8286E9DAB0026B24E /* Base */,
+				5375FEB0289908CC00FA767A /* zh-Hans */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5E408FCD286E9DAB0026B24E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		5E408FCE286E9DAB0026B24E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5E408FD0286E9DAB0026B24E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 326C1559459AF8E161592637 /* Pods-NEKaraoke.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = 569GNZ5392;
+				ENABLE_BITCODE = NO;
+				EXCLUDED_ARCHS = "EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64 arm64e armv7 armv7s armv6 armv8 EXCLUDED_ARCHS=$(inherited) $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NEKaraoke/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "天籁";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "请允许使用麦克风";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.netease.yunxin.app.karaoke;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = enterpriseForWildCard;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5E408FD1286E9DAB0026B24E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F4FD251056B88F268FEB6389 /* Pods-NEKaraoke.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = 569GNZ5392;
+				ENABLE_BITCODE = NO;
+				EXCLUDED_ARCHS = "EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64 arm64e armv7 armv7s armv6 armv8 EXCLUDED_ARCHS=$(inherited) $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NEKaraoke/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "天籁";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "请允许使用麦克风";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1.0;
+				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.netease.yunxin.app.karaoke;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = enterpriseForWildCard;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5E408FB1286E9DA20026B24E /* Build configuration list for PBXProject "NEKaraoke" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5E408FCD286E9DAB0026B24E /* Debug */,
+				5E408FCE286E9DAB0026B24E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5E408FCF286E9DAB0026B24E /* Build configuration list for PBXNativeTarget "NEKaraoke" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5E408FD0286E9DAB0026B24E /* Debug */,
+				5E408FD1286E9DAB0026B24E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5E408FAE286E9DA20026B24E /* Project object */;
+}
