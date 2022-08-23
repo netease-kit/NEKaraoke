@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2022 NetEase, Inc. All rights reserved. -->
+<!-- Use of this source code is governed by a MIT license that can be -->
+<!-- found in the LICENSE file. -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cly_anchor_info"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:background="@drawable/ktv_room_bg">
+
+    <TextView
+        android:id="@+id/tv_karaoke_room_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="10dp"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_chat_room_member_count"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/shape_corner_20_bg"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColor="#ffffff"
+        android:textSize="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_leave_room" />
+
+    <ImageView
+        android:id="@+id/iv_leave_room"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="14dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/seat_item_round_bg"
+        android:padding="7dp"
+        android:src="@drawable/close_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.netease.yunxin.kit.karaokekit.ui.view.SingingControlView
+        android:id="@+id/sing_control_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:visibility="visible"
+        android:keepScreenOn="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_karaoke_room_name" />
+
+    <com.netease.yunxin.kit.karaokekit.ui.view.SeatView
+        android:id="@+id/seat_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sing_control_view"/>
+
+    <FrameLayout
+        android:id="@+id/fl_msg_group"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="87dp"
+        android:layout_marginBottom="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_room_msg_input"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.netease.yunxin.kit.karaokekit.ui.view.ChatRoomMsgRecyclerView
+            android:id="@+id/crv_msg_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:overScrollMode="never" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_room_msg_input"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/shape_corner_18_bg"
+        android:drawablePadding="2dp"
+        android:gravity="center_vertical"
+        android:hint="@string/karaoke_say_something"
+        android:maxWidth="175dp"
+        android:paddingStart="15dp"
+        android:textColor="@color/white"
+        android:textColorHint="#4cffffff"
+        app:drawableStartCompat="@drawable/alpha_chat_room_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/lly_control"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/lly_control"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginStart="@dimen/dp_10"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_room_msg_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/tv_room_msg_input">
+
+        <ImageView
+            android:id="@+id/iv_local_audio_switch"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/dark_cycle_bg"
+            android:padding="5dp"
+            android:src="@drawable/selector_room_micro_phone"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_mute_other_text" />
+
+        <RelativeLayout
+            android:id="@+id/rl_arrange_micro"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_arrange_micro"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/dark_cycle_bg"
+                android:padding="5dp"
+                android:src="@drawable/arrange_micro" />
+
+            <TextView
+                android:id="@+id/tv_arrange_micro_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="7dp"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                android:layout_marginBottom="25dp"
+                android:layout_marginStart="25dp"
+                android:minWidth="12dp"
+                android:minHeight="12dp"
+                android:gravity="center"
+                android:text="0"
+                android:includeFontPadding="false"
+                android:background="@drawable/shape_corner_6_bg_white"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_music"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_music"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/dark_cycle_bg"
+                android:padding="5dp"
+                android:src="@drawable/music" />
+
+            <TextView
+                android:id="@+id/tv_music_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="7dp"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                android:layout_marginBottom="25dp"
+                android:layout_marginStart="25dp"
+                android:minWidth="12dp"
+                android:minHeight="12dp"
+                android:gravity="center"
+                android:text="0"
+                android:paddingStart="@dimen/dimen_2"
+                android:paddingEnd="@dimen/dimen_2"
+                android:background="@drawable/shape_corner_6_bg_white"/>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_gift"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_weight="1"
+            android:background="@drawable/dark_cycle_bg"
+            android:padding="5dp"
+            android:src="@drawable/gift"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/et_room_msg_input"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="#ff000000"
+        android:gravity="center_vertical"
+        android:hint="@string/karaoke_say_something"
+        android:imeOptions="actionSend"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:singleLine="true"
+        android:textColor="#ffffff"
+        android:textColorHint="#ccffffff"
+        android:textSize="14dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

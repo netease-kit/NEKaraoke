@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2022 NetEase, Inc. All rights reserved. -->
+<!-- Use of this source code is governed by a MIT license that can be -->
+<!-- found in the LICENSE file. -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingRight="@dimen/dimen_14_dp"
+    android:paddingLeft="@dimen/dimen_14_dp"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="200dp">
+    <FrameLayout
+        android:id="@+id/fly_singing"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY" />
+
+        <RelativeLayout
+            android:id="@+id/rly_music_singing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/singing_song_round_bg"
+            android:visibility="invisible"
+            tools:visibility="visible">
+
+<!--            不包括打分-->
+            <com.netease.yunxin.kit.karaokekit.lyric.view.NELyricView
+                android:id="@+id/lyricView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dimen_60"
+                app:lineSpace="10dp"
+                app:highLightTextColor="#4BF4FF"
+                app:highLightBgTextColor="@android:color/white"
+                app:highLightTextSizeSp="20sp"
+                app:defaultTextColor="#99ffffff"
+                app:defaultTextSizeSp="18sp"
+                android:visibility="gone" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/loading"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"/>
+
+            <!--独唱-->
+            <com.netease.yunxin.kit.karaokekit.ui.view.NESoloSingView
+                android:id="@+id/fl_solo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:id="@+id/ll_song_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dimen_20"
+                android:paddingBottom="@dimen/dimen_10"
+                android:gravity="center_vertical"
+                android:visibility="gone"
+                >
+                <TextView
+                    android:layout_width="@dimen/dp_4"
+                    android:layout_height="@dimen/dp_4"
+                    android:background="@drawable/round_blue_bg"
+                    />
+                <TextView
+                    android:id="@+id/tv_song_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_14"
+                    android:textColor="@color/color_80FFFFFF"
+                    android:layout_marginLeft="@dimen/dp_4"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+<!--匹配中，独唱倒计布局-->
+        <LinearLayout
+            android:id="@+id/lly_ready"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/singing_song_round_bg"
+            tools:visibility="visible"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/tv_music_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center_horizontal" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                >
+                <com.netease.yunxin.kit.karaokekit.ui.view.HeadImageView
+                    android:id="@+id/chorus_user_avatar"
+                    android:layout_marginTop="@dimen/dimen_4_dp"
+                    android:layout_width="@dimen/dimen_54_dp"
+                    android:layout_height="@dimen/dimen_54_dp"
+                    android:visibility="gone"
+                    android:layout_marginLeft="@dimen/dimen_40"
+                     />
+
+                <com.netease.yunxin.kit.karaokekit.ui.view.HeadImageView
+                    android:id="@+id/iv_user_avatar"
+                    android:layout_marginTop="@dimen/dimen_4_dp"
+                    android:layout_width="@dimen/dimen_54_dp"
+                    android:layout_height="@dimen/dimen_54_dp"
+                   />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_user_nick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:layout_marginTop="@dimen/dimen_4_dp"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/solo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                android:text="@string/solo"
+                android:paddingLeft="@dimen/dimen_10"
+                android:paddingRight="@dimen/dimen_10"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:background="@drawable/round_white_bg"
+                android:layout_marginTop="@dimen/dimen_10"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+    <!--    无已点歌曲-->
+    <LinearLayout
+        android:id="@+id/lly_no_ordered_song"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:visibility="visible"
+        android:gravity="center_vertical"
+        android:background="@drawable/diange_bg">
+
+        <TextView
+            android:id="@+id/tv_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/order_song"
+            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="@dimen/dimen_5"
+            android:paddingBottom="@dimen/dimen_5"
+            android:paddingStart="@dimen/dimen_10"
+            android:paddingEnd="@dimen/dimen_10"
+            android:drawableLeft="@drawable/mic_icon"
+            android:background="@drawable/round_red_bg"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:alpha="0.5"
+            android:text="@string/karaoke_tip"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dimen_12"
+            android:textColor="@color/color_80FFFFFF"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/karaoke_lines"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_ntp_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:text="0"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textColor="@color/color_ff4f4f" />
+
+</FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/lly_control"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/dimen_10"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:orientation="horizontal">
+
+        <com.netease.yunxin.kit.karaokekit.ui.view.ExTextView
+            android:id="@+id/iv_set_sound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:enableImg="@drawable/icon_set_sound_light"
+            app:disableImg="@drawable/icon_set_sound_gray"
+            android:drawableTop="@drawable/icon_set_sound_light"
+            android:text="@string/karaoke_set_sound"
+            android:gravity="center"
+            />
+
+       <com.netease.yunxin.kit.karaokekit.ui.view.ExTextView
+           android:id="@+id/iv_pause"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           app:enableImg="@drawable/icon_music_state_switch"
+           app:disableImg="@drawable/icon_music_state_switch_gray"
+           android:drawableTop="@drawable/icon_music_state_switch"
+           android:text="@string/karaoke_pause"
+           android:layout_weight="1"
+           android:gravity="center"
+           />
+
+
+        <com.netease.yunxin.kit.karaokekit.ui.view.ExTextView
+            android:id="@+id/iv_next_music"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:enableImg="@drawable/icon_next_light"
+            app:disableImg="@drawable/icon_next_gray"
+            android:drawableTop="@drawable/icon_next_light"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/karaoke_next_song"
+            />
+
+        <com.netease.yunxin.kit.karaokekit.ui.view.ExTextView
+            android:id="@+id/iv_switch_origin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/icon_switch_origin_colse"
+            app:disableImg="@drawable/icon_switch_origin_close_gray"
+            app:enableImg="@drawable/icon_switch_origin_colse"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/karaoke_origin_close"
+           />
+
+    </LinearLayout>
+
+</LinearLayout>
