@@ -115,7 +115,7 @@ class UserCenterFragment : BaseFragment() {
             }
         }
         val tvVersion = rootView.findViewById<TextView>(R.id.tv_app_version)
-        tvVersion.text = "v1.0.0"
+        tvVersion.text = "v1.1.0"
     }
 
     private fun initUser(rootView: View?) {
