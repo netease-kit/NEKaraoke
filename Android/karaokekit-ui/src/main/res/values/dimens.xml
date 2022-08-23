@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2022 NetEase, Inc. All rights reserved. -->
+<!-- Use of this source code is governed by a MIT license that can be -->
+<!-- found in the LICENSE file. -->
+
+<resources>
+
+    <!-- 通用 -->
+    <dimen name="text_size_9">9sp</dimen>
+    <dimen name="text_size_10">10sp</dimen>
+    <dimen name="text_size_11">11sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_13">13sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_15">15sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_17">17sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_19">19sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_21">21sp</dimen>
+    <dimen name="text_size_24">24sp</dimen>
+    <dimen name="text_size_25">25sp</dimen>
+    <dimen name="text_size_30">30sp</dimen>
+    <dimen name="text_size_32">32sp</dimen>
+    <dimen name="text_size_35">35sp</dimen>
+    <dimen name="text_size_37">37sp</dimen>
+    <dimen name="text_size_40">40sp</dimen>
+    <dimen name="text_size_45">45sp</dimen>
+    <dimen name="text_size_46">46sp</dimen>
+    <dimen name="text_size_55">55sp</dimen>
+
+    <dimen name="dp_1">1dp</dimen>
+    <dimen name="dp_2">2dp</dimen>
+    <dimen name="dp_4">4dp</dimen>
+    <dimen name="dp_5">5dp</dimen>
+    <dimen name="dp_6">6dp</dimen>
+    <dimen name="dp_8">8dp</dimen>
+    <dimen name="dp_10">10dp</dimen>
+    <dimen name="dp_12">12dp</dimen>
+    <dimen name="dp_16">16dp</dimen>
+    <dimen name="dp_20">20dp</dimen>
+    <dimen name="dp_24">24dp</dimen>
+    <dimen name="dp_40">40dp</dimen>
+    <dimen name="dp_48">48dp</dimen>
+    <dimen name="dp_64">64dp</dimen>
+    <dimen name="dp_88">88dp</dimen>
+    <dimen name="dp_100">100dp</dimen>
+    <dimen name="dp_240">240dp</dimen>
+    <dimen name="dp_340">340dp</dimen>
+
+    <!-- avatar -->
+    <dimen name="avatar_max_size">60dip</dimen>
+    <dimen name="avatar_size_default">50dip</dimen>
+    <dimen name="action_bar_height">48dp</dimen>
+
+    <dimen name="dimen_2">2dp</dimen>
+    <dimen name="dimen_5">5dp</dimen>
+    <dimen name="dimen_8">8dp</dimen>
+    <dimen name="dimen_10">10dp</dimen>
+    <dimen name="dimen_12">12dp</dimen>
+    <dimen name="dimen_15">15dp</dimen>
+    <dimen name="dimen_16">16dp</dimen>
+    <dimen name="dimen_19">19dp</dimen>
+    <dimen name="dimen_20">20dp</dimen>
+    <dimen name="dimen_25">25dp</dimen>
+    <dimen name="dimen_32">32dp</dimen>
+    <dimen name="dimen_35">35dp</dimen>
+    <dimen name="dimen_40">40dp</dimen>
+    <dimen name="dimen_48">48dp</dimen>
+    <dimen name="dimen_50">50dp</dimen>
+    <dimen name="dimen_55">55dp</dimen>
+    <dimen name="dimen_60">60dp</dimen>
+    <dimen name="dimen_65">65dp</dimen>
+    <dimen name="dimen_120">120dp</dimen>
+    <dimen name="dimen_160">160dp</dimen>
+    <dimen name="dimen_44">44dp</dimen>
+    <dimen name="dimen_38">38dp</dimen>
+    <dimen name="dimen_256">256dp</dimen>
+    <dimen name="dimen_58">58dp</dimen>
+
+    <dimen name="text_14">14sp</dimen>
+    <dimen name="text_16">16sp</dimen>
+    <dimen name="text_27">27sp</dimen>
+    <dimen name="text_100">100sp</dimen>
+    <dimen name="text_13">13sp</dimen>
+    <dimen name="text_12">12sp</dimen>
+    <dimen name="dimen_17">17sp</dimen>
+    <dimen name="dimen_18">18dp</dimen>
+    <dimen name="dimen_30">30dp</dimen>
+
+
+</resources>

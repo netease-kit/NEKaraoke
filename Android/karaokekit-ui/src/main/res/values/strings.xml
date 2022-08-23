@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2022 NetEase, Inc. All rights reserved. -->
+<!-- Use of this source code is governed by a MIT license that can be -->
+<!-- found in the LICENSE file. -->
+
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="karaoke">在线K歌</string>
+    <string name="karaoke_ten_thousand">w</string>
+    <string name="karaoke_million">million</string>
+    <string name="karaoke_coin">coins</string>
+    <string name="karaoke_pull_to_refresh">下拉更新</string>
+    <string name="karaoke_release_to_refresh">松开更新</string>
+    <string name="karaoke_refreshing">更新中...</string>
+    <string name="karaoke_have_no_more">没有更多了</string>
+    <string name="karaoke_load_more">上拉加载更多</string>
+    <string name="karaoke_empty_live">暂无直播哦</string>
+    <string name="karaoke_empty_apply_seat">还没有人申请上麦</string>
+    <string name="karaoke_start_live">开始直播</string>
+    <string name="karaoke_room_name">房间名</string>
+    <string name="karaoke_user_name">用户名</string>
+    <string name="karaoke_create_room">创建房间</string>
+    <string name="karaoke_create">创建</string>
+    <string name="karaoke_say_something">一起聊聊吧~</string>
+    <string name="karaoke_donate">赠送了</string>
+    <string name="karaoke_count">个</string>
+    <string name="karaoke_has_leave_seat">已下麦</string>
+    <string name="karaoke_has_success_enter_seat">已成功上麦</string>
+    <string name="karaoke_enter_room">进入直播间</string>
+    <string name="karaoke_leave_room">离开直播间</string>
+    <string name="karaoke_on_seat_request">申请上麦</string>
+    <string name="karaoke_on_seat">已上麦</string>
+    <string name="karaoke_down_seat">已下麦</string>
+    <string name="karaoke_cancel_on_seat_request">取消申请上麦</string>
+    <string name="karaoke_on_seat_reject">被房主拒绝申请上麦</string>
+    <string name="karaoke_kickout_seat">被房主踢下麦</string>
+    <string name="karaoke_kickout_seat_confirm">确定要踢下麦？</string>
+    <string name="karaoke_down_seat_confirm">当前正在麦上，确定要下麦？</string>
+
+    <string name="karaoke_glow_stick">荧光棒</string>
+    <string name="karaoke_arrange">安排</string>
+    <string name="karaoke_sports_car">跑车</string>
+    <string name="karaoke_rockets">火箭</string>
+    <string name="karaoke_authorization_failed">授权失败</string>
+    <string name="karaoke_micro_phone_is_close">话筒已关闭</string>
+    <string name="karaoke_micro_phone_is_open">话筒已打开</string>
+    <string name="karaoke_has_applyed_waiting_for_pass">您已提出过上麦申请，请耐心等待</string>
+    <string name="karaoke_apply_seate_to_host">向房主申请上麦互动</string>
+    <string name="karaoke_applyed_failed">申请上麦失败</string>
+    <string name="karaoke_online_member_count">在线%d人</string>
+    <string name="karaoke_room_already_closed">房间已经被关闭了</string>
+    <string name="karaoke_send_gift">送礼物</string>
+    <string name="karaoke_network_error">网络异常</string>
+    <string name="karaoke_reward_failed">打赏礼物失败</string>
+    <string name="karaoke_send">发送</string>
+    <string name="karaoke_apply_on_seat">申请上麦(%d)</string>
+    <string name="karaoke_agree_on_seat">允许上麦</string>
+    <string name="karaoke_cancel_on_seat">取消上麦</string>
+    <string name="karaoke_refuse_on_seat">拒绝</string>
+    <string name="karaoke_sure">确定</string>
+    <string name="karaoke_cancel">取消</string>
+    <string name="karaoke_net_error">网络似乎未连接</string>
+
+    <string name="karaoke_set_sound">调音</string>
+    <string name="karaoke_pause">暂停</string>
+    <string name="karaoke_resume">播放</string>
+    <string name="karaoke_next_song">切歌</string>
+    <string name="karaoke_origin_close">原唱:已关</string>
+    <string name="karaoke_origin_open">原唱:已开</string>
+    <string name="karaoke_host">房主</string>
+    <string name="join_chrous">加入合唱</string>
+    <string name="solo">独唱</string>
+    <string name="matching">合唱匹配中</string>
+    <string name="matching_with_time">合唱匹配中%s</string>
+    <string name="chorus_loading">伴奏加载中...</string>
+    <string name="chorus_loading_with_time">%s伴奏加载中...</string>
+    <string name="karaoke_tip">唱歌时请佩戴耳机避免回音</string>
+    <string name="turn_to_you">轮到你了</string>
+    <string name="song_name">《%s》</string>
+    <string name="give_up">放弃</string>
+    <string name="prepare_single">%s请准备</string>
+    <string name="prepare_chorus">%s、%s请准备</string>
+    <string name="play_delay">秒后播放</string>
+    <string name="go_on_play">继续播放</string>
+    <string name="order_song">我要点歌</string>
+    <string name="in_solo">进入独唱</string>
+    <string name="in_solo_tip">是否开始独唱</string>
+    <string name="wait_for_solo">等待进入独唱</string>
+    <string name="wait_for_solo_with_time">等待进入独唱%s</string>
+    <string name="karaoke_singing">演唱中</string>
+    <string name="karaoke_host_close_room">房主关闭KTV房间</string>
+    <string name="karaoke_host_confirm_close_room_title">确定要退出歌房？</string>
+    <string name="karaoke_host_confirm_close_room_content"> 你是房主，退出后其他人也将一起退出。</string>
+    <string name="karaoke_on_seat_confirm_close_room_title"> 正在连麦，确定要退出歌房？</string>
+    <string name="karaoke_on_seat_first">仅麦上成员可点歌，先申请上麦</string>
+    <string name="karaoke_apply_seat">申请上麦</string>
+    <string name="order_song_apply_seat">仅麦上成员可点歌，先申请上麦</string>
+    <string name="apply_seat">申请上麦</string>
+    <string name="no_effect_strength">该音效不支持强度调节</string>
+
+    <string name="song_ordered">点了歌曲《%s》</string>
+    <string name="song_deleted">删除了歌曲《%s》</string>
+    <string name="song_switched">切了歌曲《%s》</string>
+    <string name="song_top">置顶了歌曲《%s》</string>
+    <string name="song_pause">暂停了歌曲《%s》</string>
+    <string name="song_start">正在演唱歌曲《%s》</string>
+    <string name="song_restart">正在演唱歌曲《%s》</string>
+
+    <string name="tab_to_order">点歌</string>
+    <string name="tab_ordered">已点(%1$d)</string>
+    <string name="nobody_ordered">还没有人点歌哦</string>
+    <string name="no_music">没有歌曲哦</string>
+    <string name="song_state_singing">正在演唱</string>
+    <string name="global_search_hint">搜索</string>
+    <string name="preloading_failure">预加载失败：%d, %s</string>
+    <string name="order_song_success">点歌成功</string>
+    <string name="order_song_failure">点歌失败：%d, %s</string>
+    <string name="song_already_ordered">歌曲已点</string>
+    <string name="err_order_song_count_exceed_limit">每个用户最多点2首歌</string>
+    <string name="err_room_order_song_count_exceed_limit">每个房间最多点10首歌</string>
+    <string name="downloading">下载中</string>
+    <string name="download_fail">合唱者下载伴奏失败</string>
+    <string name="song_current_time">%s/%s</string>
+    <string name="did_not_find_right_result">没有找到合适的结果</string>
+    <string name="copyright_token_has_expired">版权token过期，请稍后再试</string>
+
+
+</resources>
