@@ -20,9 +20,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.netease.yunxin.kit.alog.ALog;
 import com.netease.yunxin.kit.common.image.ImageLoader;
@@ -55,7 +57,9 @@ import com.netease.yunxin.kit.karaokekit.ui.utils.LyricLoader;
 import com.netease.yunxin.kit.karaokekit.ui.utils.SeatUtils;
 import com.netease.yunxin.kit.login.AuthorManager;
 import com.netease.yunxin.kit.login.model.UserInfo;
+
 import java.util.Objects;
+
 import kotlin.Unit;
 
 /** 演唱区控制view */
@@ -177,7 +181,6 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
   }
 
   public void init() {
-    setPlayStateListener();
     NEKaraokeKit.getInstance()
         .requestPlayingSongInfo(
             new NEKaraokeCallback<NEKaraokeSongModel>() {
@@ -444,7 +447,7 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
         new MyKaraokeListener() {
           @Override
           public void onReceiveChorusMessage(
-              @NonNull NEKaraokeChorusActionType actionType, @NonNull NEKaraokeSongModel model) {
+                  @NonNull NEKaraokeChorusActionType actionType, @NonNull NEKaraokeSongModel model) {
             ALog.d(TAG, "actionType========>" + actionType.name() + " model = " + model);
             if (actionType == NEKaraokeChorusActionType.INVITE) { /// 邀请消息
               currentSongModel = model;
@@ -538,6 +541,63 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
               }
             }
           }
+
+          @Override
+          public void onRecordingAudioFrame(@NonNull NEKaraokeAudioFrame frame) {
+            if (needShowScore()) {
+              // 独唱且是主唱才需要打分
+              NEPitchAudioData audioData =
+                  new NEPitchAudioData(
+                      frame.data,
+                      frame.format.samplesPerChannel,
+                      (int) (currentPosition - 10),
+                      true,
+                      frame.format.sampleRate,
+                      frame.format.channels);
+              flSolo.pushAudioData(audioData);
+            }
+          }
+
+          @Override
+          public void onSongPlayingCompleted() {
+            ALog.d(TAG, "PlayState,onComplete");
+            currentPosition = 0;
+            if (isAnchor()) {
+              if (getNeSongMode() == NEKaraokeSongMode.SOLO
+                  && currentSongModel != null
+                  && flSolo.needShowFinalScore()) {
+                showGradeAndFinishSong(currentSongModel);
+              } else {
+                NEKaraokeKit.getInstance().requestStopPlayingSong(null);
+              }
+            }
+          }
+
+          @Override
+          public void onSongPlayingPosition(long position) {
+            currentPosition = position;
+            if (!alreadyPlayLoadAnimate && position > (preludeTime - preludeBufferTime)) {
+              alreadyPlayLoadAnimate = true;
+              ALog.d(TAG, "onSongPlayPosition startLoading,position:" + position);
+              if (isAssistant() || isAnchor()) { // 主唱和副唱展示loading动画
+                startLoading();
+              }
+            }
+            if (position - tempTime > 0) {
+              long songTime = 0;
+              if (currentSongModel != null && currentSongModel.getSongTime() != null) {
+                songTime = currentSongModel.getSongTime();
+              }
+              tvSongTime.setText(
+                  getContext()
+                      .getString(
+                          R.string.song_current_time,
+                          DateFormatUtils.long2StrHS(position),
+                          DateFormatUtils.long2StrHS(songTime)));
+              updateLyric(position);
+              tempTime = position;
+            }
+          }
         };
     NEKaraokeKit.getInstance().addKaraokeListener(listener);
   }
@@ -557,71 +617,6 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
     }
     switchKTVState(KTV_STATE_INIT);
     currentSongModel = null;
-  }
-
-  //// 设置 播放相关状态的监听
-  private void setPlayStateListener() {
-    NEKaraokeKit.getInstance()
-        .addKaraokeListener(
-            new MyKaraokeListener() {
-
-              @Override
-              public void onRecordingAudioFrame(@NonNull NEKaraokeAudioFrame frame) {
-                if (needShowScore()) {
-                  // 独唱且是主唱才需要打分
-                  NEPitchAudioData audioData =
-                      new NEPitchAudioData(
-                          frame.data,
-                          frame.format.samplesPerChannel,
-                          (int) (currentPosition - 10),
-                          true,
-                          frame.format.sampleRate,
-                          frame.format.channels);
-                  flSolo.pushAudioData(audioData);
-                }
-              }
-
-              @Override
-              public void onSongPlayingCompleted() {
-                ALog.d(TAG, "PlayState,onComplete");
-                currentPosition = 0;
-                if (isAnchor()) {
-                  if (getNeSongMode() == NEKaraokeSongMode.SOLO
-                      && currentSongModel != null
-                      && flSolo.needShowFinalScore()) {
-                    showGradeAndFinishSong(currentSongModel);
-                  } else {
-                    NEKaraokeKit.getInstance().requestStopPlayingSong(null);
-                  }
-                }
-              }
-
-              @Override
-              public void onSongPlayingPosition(long position) {
-                currentPosition = position;
-                if (!alreadyPlayLoadAnimate && position > (preludeTime - preludeBufferTime)) {
-                  alreadyPlayLoadAnimate = true;
-                  ALog.d(TAG, "onSongPlayPosition startLoading,position:" + position);
-                  if (isAssistant() || isAnchor()) { // 主唱和副唱展示loading动画
-                    startLoading();
-                  }
-                }
-                if (position - tempTime > 0) {
-                  long songTime = 0;
-                  if (currentSongModel != null && currentSongModel.getSongTime() != null) {
-                    songTime = currentSongModel.getSongTime();
-                  }
-                  tvSongTime.setText(
-                      getContext()
-                          .getString(
-                              R.string.song_current_time,
-                              DateFormatUtils.long2StrHS(position),
-                              DateFormatUtils.long2StrHS(songTime)));
-                  updateLyric(position);
-                  tempTime = position;
-                }
-              }
-            });
   }
 
   /** 切换播放/暂停 按钮UI状态 */
