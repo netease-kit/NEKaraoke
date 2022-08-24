@@ -16,7 +16,6 @@
 #import "NEKaraokeSongEmptyView.h"
 #import "NEKaraokeSongLog.h"
 #import "NEKaraokeToast.h"
-#import "NSMutableArray+NECommonWeakArray.h"
 #import "UIColor+Karaoke.h"
 #import "UIImage+Karaoke.h"
 

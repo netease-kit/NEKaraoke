@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 #import "NEKaraokeUIManager.h"
-#import "NECopyrightedMedia.h"
+#import <NECopyrightedMedia/NECopyrightedMediaPublic.h>
 #import "NEKaraokeCreateViewController.h"
 #import "NEKaraokeListViewController.h"
 #import "NEKaraokeSongLog.h"
