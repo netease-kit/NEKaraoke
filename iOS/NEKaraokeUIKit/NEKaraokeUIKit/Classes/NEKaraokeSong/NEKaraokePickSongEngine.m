@@ -6,8 +6,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <NEKaraokeKit/NEKaraokeKit-Swift.h>
 #import <YYModel/YYModel.h>
-#import "NECommonDownloaderEngine.h"
-#import "NECopyrightedMedia.h"
+#import <NECopyrightedMedia/NECopyrightedMediaPublic.h>
 #import "NEKaraokePickSongColorDefine.h"
 #import "NEKaraokeSongLog.h"
 
@@ -30,7 +29,7 @@ static int NEPageSize = 20;
     pickSongEngine = [[NEKaraokePickSongEngine alloc] init];
     [pickSongEngine initData];
     [[NEKaraokeKit shared] addKaraokeListener:pickSongEngine];
-    [[NECommonDownloaderEngine sharedInstance] addObserve:pickSongEngine];
+    [[NECopyrightedMedia getInstance] addPreloadProtocolObserve:pickSongEngine];
     [[NECopyrightedMedia getInstance] setEventHandler:pickSongEngine];
   });
   return pickSongEngine;
