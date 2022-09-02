@@ -38,7 +38,7 @@ dependencies {
 
 
     implementation("com.netease.yunxin.kit.karaoke:karaokekit:1.2.0")
-    implementation("com.netease.yunxin.kit.common:common-ui:1.1.6")
+    implementation("com.netease.yunxin.kit.common:common-ui:1.1.7")
     implementation("com.netease.yunxin.kit.common:common-network:1.1.6")
     implementation("com.netease.yunxin.kit.common:common-image:1.1.6")
     implementation("com.netease.yunxin.kit.karaoke:karaokekit-pitch-ui:1.2.0")
