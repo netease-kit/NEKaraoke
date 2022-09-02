@@ -92,13 +92,12 @@ public class KaraokeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
       if (liveInfo.getLiveModel().getAudienceCount() != null) {
         ((LiveItemHolder) holder)
             .tvAudienceNum.setText(
-                StringUtils.INSTANCE.getAudienceCount(
-                    liveInfo.getLiveModel().getAudienceCount() + 1));
+                StringUtils.getAudienceCount(liveInfo.getLiveModel().getAudienceCount() + 1));
       }
       if (liveInfo.getLiveModel().getOnSeatCount() != null) {
         ((LiveItemHolder) holder)
             .tvOnSeatNum.setText(
-                StringUtils.INSTANCE.getAudienceCount(liveInfo.getLiveModel().getOnSeatCount()));
+                StringUtils.getAudienceCount(liveInfo.getLiveModel().getOnSeatCount()));
       }
       switch (position % 5) {
         case 0:

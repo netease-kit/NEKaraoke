@@ -107,4 +107,10 @@ public class SeatView extends LinearLayout {
   public void updateSongModel(NEKaraokeSongModel songModel) {
     seatAdapter.updateSongModel(songModel);
   }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    SeatHelper.getInstance().setOnSeatItems(null);
+  }
 }

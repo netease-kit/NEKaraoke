@@ -21,13 +21,13 @@ import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeLiveState;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeLiveModel;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeRoomList;
+import com.netease.yunxin.kit.karaokekit.impl.utils.ScreenUtil;
 import com.netease.yunxin.kit.karaokekit.ui.NEKaraokeUIConstants;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 import com.netease.yunxin.kit.karaokekit.ui.list.KaraokeListAdapter;
 import com.netease.yunxin.kit.karaokekit.ui.model.KaraokeRoomModel;
 import com.netease.yunxin.kit.karaokekit.ui.utils.ClickUtils;
 import com.netease.yunxin.kit.karaokekit.ui.utils.NavUtils;
-import com.netease.yunxin.kit.karaokekit.ui.utils.SpUtils;
 import com.netease.yunxin.kit.karaokekit.ui.view.FooterView;
 import com.netease.yunxin.kit.karaokekit.ui.view.HeaderView;
 import com.netease.yunxin.kit.login.AuthorManager;
@@ -79,12 +79,12 @@ public class KaraokeRoomListFragment extends BaseFragment
     karaokeListAdapter = new KaraokeListAdapter(getActivity());
     karaokeListAdapter.setOnItemClickListener(
         (liveList, position) -> {
-          if (!NetworkUtils.isConnected(requireContext())) {
+          if (!NetworkUtils.isConnected()) {
             ToastUtils.showShort(R.string.karaoke_net_error);
             return;
           }
           //goto audience page
-          if (!ClickUtils.INSTANCE.isFastClick()) {
+          if (!ClickUtils.isFastClick()) {
             NEKaraokeLiveModel info = liveList.get(position).getLiveModel();
             KaraokeRoomModel roomModel = new KaraokeRoomModel();
             roomModel.setRoomName(info.getLiveTopic());
@@ -151,7 +151,7 @@ public class KaraokeRoomListFragment extends BaseFragment
               @Override
               public void onFailure(int code, String msg) {
                 ALog.d("==========code:" + code);
-                if (code == -1) {
+                if (code == NEKaraokeUIConstants.ERROR_NETWORK) {
                   ToastUtils.showShort(R.string.karaoke_net_error);
                 }
                 if (isRefresh) {
@@ -186,8 +186,8 @@ public class KaraokeRoomListFragment extends BaseFragment
         @NonNull View view,
         @NonNull RecyclerView parent,
         @NonNull RecyclerView.State state) {
-      int pixel8 = SpUtils.INSTANCE.dp2pix(getContext(), 8f);
-      int pixel4 = SpUtils.INSTANCE.dp2pix(getContext(), 4f);
+      int pixel8 = ScreenUtil.dip2px(8f);
+      int pixel4 = ScreenUtil.dip2px(4f);
       int position = parent.getChildAdapterPosition(view);
       int left;
       int right;

@@ -16,6 +16,7 @@ import com.blankj.utilcode.util.CollectionUtils;
 import com.netease.yunxin.kit.common.ui.fragments.BaseFragment;
 import com.netease.yunxin.kit.karaokekit.ui.adapter.OrderedAdapter;
 import com.netease.yunxin.kit.karaokekit.ui.databinding.OrderedListLayoutBinding;
+import com.netease.yunxin.kit.karaokekit.ui.viewmodel.OrderSongViewModel;
 
 /** chat message read state page */
 public class OrderedListFragment extends BaseFragment {

@@ -4,7 +4,7 @@
 
 package com.netease.yunxin.kit.karaokekit.ui.model;
 
-import com.netease.yunxin.kit.karaokekit.lyric.model.NELyric;
+import com.netease.yunxin.kit.copyrightedmedia.api.model.NELyric;
 
 /** 业务模块需要的歌词模型 */
 public class LyricBusinessModel {

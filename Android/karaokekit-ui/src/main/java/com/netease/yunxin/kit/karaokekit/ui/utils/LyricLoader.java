@@ -9,9 +9,9 @@ import androidx.annotation.Nullable;
 import com.netease.yunxin.kit.alog.ALog;
 import com.netease.yunxin.kit.copyrightedmedia.api.LyricCallback;
 import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
+import com.netease.yunxin.kit.copyrightedmedia.api.model.NELyric;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCallback;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSongModel;
-import com.netease.yunxin.kit.karaokekit.lyric.model.NELyric;
 import com.netease.yunxin.kit.karaokekit.ui.model.LyricBusinessModel;
 
 public class LyricLoader {

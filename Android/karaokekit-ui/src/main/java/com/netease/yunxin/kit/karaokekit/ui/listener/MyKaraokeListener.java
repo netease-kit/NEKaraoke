@@ -86,7 +86,7 @@ public class MyKaraokeListener implements NEKaraokeListener {
   public void onSongTopped(NEKaraokeOrderSongModel song) {}
 
   @Override
-  public void onNextSong(NEKaraokeOrderSongModel song, boolean isManual) {}
+  public void onNextSong(NEKaraokeOrderSongModel song) {}
 
   @Override
   public void onSongPlayingPosition(long position) {}

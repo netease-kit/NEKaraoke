@@ -15,8 +15,8 @@ android {
         minSdk = 21
         targetSdk = 30
         applicationId = "com.netease.yunxin.app.karaoke"
-        versionCode = 2
-        versionName = "1.1.0"
+        versionCode = 3
+        versionName = "1.2.0"
         multiDexEnabled = true
     }
 
@@ -53,8 +53,8 @@ dependencies {
     implementation(project(":karaokekit-ui"))
 
 
-    implementation("com.netease.yunxin.kit.karaoke:karaokekit:1.1.0")
-    implementation("com.netease.yunxin.kit.common:common-image:1.1.5")
+    implementation("com.netease.yunxin.kit.karaoke:karaokekit:1.2.0")
+    implementation("com.netease.yunxin.kit.common:common-image:1.1.6")
 
     implementation("com.gyf.immersionbar:immersionbar:3.0.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")

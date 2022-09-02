@@ -5,8 +5,6 @@
 package com.netease.yunxin.kit.karaokekit.ui;
 
 import android.app.Application;
-import com.netease.yunxin.kit.common.ui.CommonUIClient;
-import com.netease.yunxin.kit.common.utils.NetworkUtils;
 import com.netease.yunxin.kit.karaokekit.ui.activity.AppStatusManager;
 
 public class NEKaraokeUI {
@@ -34,7 +32,5 @@ public class NEKaraokeUI {
   public void init(Application application) {
     this.application = application;
     AppStatusManager.init(application);
-    CommonUIClient.init(application);
-    NetworkUtils.init(application);
   }
 }

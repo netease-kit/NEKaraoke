@@ -23,16 +23,17 @@ import com.netease.yunxin.kit.alog.ALog;
 import com.netease.yunxin.kit.common.ui.activities.adapter.CommonMoreAdapter;
 import com.netease.yunxin.kit.common.ui.activities.viewholder.BaseMoreViewHolder;
 import com.netease.yunxin.kit.common.ui.utils.ToastUtils;
-import com.netease.yunxin.kit.common.utils.PxUtils;
+import com.netease.yunxin.kit.common.utils.SizeUtils;
 import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
 import com.netease.yunxin.kit.copyrightedmedia.api.NEErrorCode;
 import com.netease.yunxin.kit.copyrightedmedia.api.NESongPreloadCallback;
 import com.netease.yunxin.kit.copyrightedmedia.api.SongResType;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 import com.netease.yunxin.kit.karaokekit.ui.databinding.OrderItemLayoutBinding;
-import com.netease.yunxin.kit.karaokekit.ui.dialog.OrderSongViewModel;
 import com.netease.yunxin.kit.karaokekit.ui.model.KaraokeOrderSongModel;
 import com.netease.yunxin.kit.karaokekit.ui.utils.MediaUtils;
+import com.netease.yunxin.kit.karaokekit.ui.utils.NetUtils;
+import com.netease.yunxin.kit.karaokekit.ui.viewmodel.OrderSongViewModel;
 import java.util.List;
 
 /** team message read state adapter */
@@ -84,7 +85,7 @@ public class OrderAdapter extends CommonMoreAdapter<KaraokeOrderSongModel, Order
 
     @Override
     public void bind(KaraokeOrderSongModel item) {
-      getBinding().songCover.setCornerRadius(PxUtils.dpToPx(itemView.getContext(), 5));
+      getBinding().songCover.setCornerRadius(SizeUtils.dp2px(5));
       if (TextUtils.isEmpty(item.getSongCover())) {
         getBinding().songCover.setData(R.drawable.icon_song_cover, "");
       } else {
@@ -109,6 +110,10 @@ public class OrderAdapter extends CommonMoreAdapter<KaraokeOrderSongModel, Order
             .orderSong
             .setOnClickListener(
                 view -> {
+                  if (!NetUtils.checkNetwork(view.getContext())) {
+                    return;
+                  }
+
                   ALog.i(TAG, "orderSong:" + item);
                   orderSongViewModel.getPerformOrderSongEvent().postValue(item);
                 });
@@ -180,7 +185,7 @@ public class OrderAdapter extends CommonMoreAdapter<KaraokeOrderSongModel, Order
                   NECopyrightedMedia.getInstance().getSongURI(songId, SongResType.TYPE_ORIGIN);
             }
             if (filePath != null) {
-              copyrightSong.setSongTime(MediaUtils.INSTANCE.getDuration(filePath));
+              copyrightSong.setSongTime(MediaUtils.getDuration(filePath));
             }
             if (errorCode == NEErrorCode.OK) {
               orderSong(copyrightSong);

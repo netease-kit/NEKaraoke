@@ -15,14 +15,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.netease.yunxin.kit.common.ui.activities.adapter.CommonMoreAdapter;
 import com.netease.yunxin.kit.common.ui.activities.viewholder.BaseMoreViewHolder;
+import com.netease.yunxin.kit.common.ui.utils.ToastUtils;
 import com.netease.yunxin.kit.common.ui.widgets.datepicker.DateFormatUtils;
-import com.netease.yunxin.kit.common.utils.PxUtils;
+import com.netease.yunxin.kit.common.utils.SizeUtils;
 import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeOrderSongModel;
+import com.netease.yunxin.kit.karaokekit.ui.NEKaraokeUIConstants;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 import com.netease.yunxin.kit.karaokekit.ui.databinding.OrderedItemLayoutBinding;
-import com.netease.yunxin.kit.karaokekit.ui.dialog.OrderSongViewModel;
 import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUtils;
+import com.netease.yunxin.kit.karaokekit.ui.viewmodel.OrderSongViewModel;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -53,7 +55,7 @@ public class OrderedAdapter
 
     @Override
     public void bind(NEKaraokeOrderSongModel item) {
-      getBinding().songCover.setCornerRadius(PxUtils.dpToPx(itemView.getContext(), 5));
+      getBinding().songCover.setCornerRadius(SizeUtils.dp2px(5));
       if (getBindingAdapterPosition() == 0) {
         getBinding().musicIcon.setVisibility(View.VISIBLE);
         getBinding().songOrder.setVisibility(View.GONE);
@@ -69,7 +71,7 @@ public class OrderedAdapter
         if (KaraokeUtils.isCurrentHost()
             || Objects.equals(KaraokeUtils.getCurrentAccount(), item.getUserUuid())) {
           getBinding().orderCancel.setVisibility(View.VISIBLE);
-          getBinding().orderCancel.setOnClickListener(v -> deleteSong(item.getOrderId()));
+          getBinding().orderCancel.setOnClickListener(v -> deleteSong(v, item.getOrderId()));
         } else {
           getBinding().orderCancel.setVisibility(View.GONE);
         }
@@ -79,7 +81,7 @@ public class OrderedAdapter
       }
       if (getBindingAdapterPosition() > 1 && KaraokeUtils.isCurrentHost()) {
         getBinding().songTop.setVisibility(View.VISIBLE);
-        getBinding().songTop.setOnClickListener(v -> topSong(item.getOrderId()));
+        getBinding().songTop.setOnClickListener(v -> topSong(v, item.getOrderId()));
       } else {
         getBinding().songTop.setVisibility(View.GONE);
       }
@@ -106,7 +108,7 @@ public class OrderedAdapter
     }
   }
 
-  public void deleteSong(long orderId) {
+  public void deleteSong(View view, long orderId) {
     orderSongViewModel.deleteSong(
         orderId,
         new NECopyrightedMedia.Callback<Boolean>() {
@@ -114,11 +116,16 @@ public class OrderedAdapter
           public void success(@Nullable Boolean info) {}
 
           @Override
-          public void error(int code, @Nullable String msg) {}
+          public void error(int code, @Nullable String msg) {
+            if (code == NEKaraokeUIConstants.ERROR_NETWORK) {
+              ToastUtils.INSTANCE.showShortToast(
+                  view.getContext(), view.getContext().getString(R.string.karaoke_network_error));
+            }
+          }
         });
   }
 
-  public void topSong(long orderId) {
+  public void topSong(View view, long orderId) {
     orderSongViewModel.topSong(
         orderId,
         new NECopyrightedMedia.Callback<Boolean>() {
@@ -126,7 +133,12 @@ public class OrderedAdapter
           public void success(@Nullable Boolean info) {}
 
           @Override
-          public void error(int code, @Nullable String msg) {}
+          public void error(int code, @Nullable String msg) {
+            if (code == NEKaraokeUIConstants.ERROR_NETWORK) {
+              ToastUtils.INSTANCE.showShortToast(
+                  view.getContext(), view.getContext().getString(R.string.karaoke_network_error));
+            }
+          }
         });
   }
 }
