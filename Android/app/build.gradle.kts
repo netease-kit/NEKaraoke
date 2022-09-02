@@ -15,8 +15,8 @@ android {
         minSdk = 21
         targetSdk = 30
         applicationId = "com.netease.yunxin.app.karaoke"
-        versionCode = 2
-        versionName = "1.1.0"
+        versionCode = 3
+        versionName = "1.2.0"
         multiDexEnabled = true
     }
 
