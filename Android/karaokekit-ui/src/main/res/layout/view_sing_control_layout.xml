@@ -37,7 +37,7 @@
             tools:visibility="visible">
 
 <!--            不包括打分-->
-            <com.netease.yunxin.kit.karaokekit.lyric.view.NELyricView
+            <com.netease.yunxin.kit.karaokekit.lyric.ui.widget.NELyricView
                 android:id="@+id/lyricView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

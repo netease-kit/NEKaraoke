@@ -23,6 +23,7 @@ import com.netease.yunxin.kit.karaokekit.ui.adapter.OrderAdapter;
 import com.netease.yunxin.kit.karaokekit.ui.adapter.OrderLoadMoreDecorator;
 import com.netease.yunxin.kit.karaokekit.ui.databinding.OrderListLayoutBinding;
 import com.netease.yunxin.kit.karaokekit.ui.model.KaraokeOrderSongModel;
+import com.netease.yunxin.kit.karaokekit.ui.viewmodel.OrderSongViewModel;
 import java.util.List;
 
 /** chat message read state page */
@@ -119,6 +120,7 @@ public class OrderListFragment extends BaseFragment {
           @Override
           public void error(int code, @Nullable String msg) {
             ALog.e("orderSong fail:" + code + " " + msg);
+            ToastUtils.showLong(getString(R.string.get_song_list_failed));
           }
         });
   }

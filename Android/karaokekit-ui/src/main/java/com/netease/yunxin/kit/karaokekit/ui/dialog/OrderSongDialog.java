@@ -17,6 +17,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.netease.yunxin.kit.common.ui.adapter.BaseFragmentAdapter;
 import com.netease.yunxin.kit.karaokekit.ui.R;
+import com.netease.yunxin.kit.karaokekit.ui.viewmodel.OrderSongViewModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

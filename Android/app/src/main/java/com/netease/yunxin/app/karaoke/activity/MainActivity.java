@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity {
     binding.tvMine.setOnClickListener(view -> selectFragment(TAB_MINE));
     binding.ivNewLive.setOnClickListener(
         view -> {
-          if (!ClickUtils.INSTANCE.isFastClick()) {
+          if (!ClickUtils.isFastClick()) {
             startActivity(new Intent(MainActivity.this, KaraokeRoomCreateActivity.class));
             overridePendingTransition(R.anim.anim_enter, 0);
           }

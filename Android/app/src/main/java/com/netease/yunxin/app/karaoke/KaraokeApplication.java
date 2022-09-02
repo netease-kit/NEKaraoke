@@ -31,7 +31,6 @@ public class KaraokeApplication extends Application {
   public void onCreate() {
     super.onCreate();
     ALog.init(this, ALog.LEVEL_ALL);
-    CrashReport.initCrashReport(this, "3863e0d466", true); //todo 发布的时候要删除该bugly的key
     application = this;
     initAuth();
     initKaraokeUI();
@@ -57,7 +56,7 @@ public class KaraokeApplication extends Application {
   private void initKaraokeKit(Context context, String appKey) {
     ALog.i(TAG, "initKaraokeKit");
     Map<String, String> extras = new HashMap<>();
-    extras.put("serverUrl", AppConfig.getServerUrl()); //todo 在这里切换环境
+    extras.put("serverUrl", AppConfig.getServerUrl());
     NEKaraokeKit.getInstance().initialize(context, new NEKaraokeKitConfig(appKey, extras), null);
     NEKaraokeKit.getInstance()
         .addAuthListener(

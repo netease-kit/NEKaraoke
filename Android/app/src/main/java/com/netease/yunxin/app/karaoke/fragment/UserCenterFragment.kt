@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.blankj.utilcode.util.ToastUtils
+import com.netease.yunxin.app.karaoke.BuildConfig
 import com.netease.yunxin.app.karaoke.Constants
 import com.netease.yunxin.app.karaoke.R
 import com.netease.yunxin.app.karaoke.utils.NavUtils
@@ -115,7 +116,7 @@ class UserCenterFragment : BaseFragment() {
             }
         }
         val tvVersion = rootView.findViewById<TextView>(R.id.tv_app_version)
-        tvVersion.text = "v1.1.0"
+        tvVersion.text = BuildConfig.VERSION_NAME
     }
 
     private fun initUser(rootView: View?) {

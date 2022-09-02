@@ -20,30 +20,30 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.netease.yunxin.kit.alog.ALog;
 import com.netease.yunxin.kit.common.image.ImageLoader;
 import com.netease.yunxin.kit.common.ui.utils.ToastUtils;
 import com.netease.yunxin.kit.common.ui.widgets.datepicker.DateFormatUtils;
-import com.netease.yunxin.kit.common.utils.ScreenUtil;
 import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
+import com.netease.yunxin.kit.copyrightedmedia.api.NEPitchSongScore;
 import com.netease.yunxin.kit.copyrightedmedia.api.NESongPreloadCallback;
 import com.netease.yunxin.kit.copyrightedmedia.api.SongResType;
+import com.netease.yunxin.kit.copyrightedmedia.api.model.NEPitchAudioData;
+import com.netease.yunxin.kit.copyrightedmedia.api.model.NEPitchRecordSingInfo;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeAudioFrame;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCallback;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeChorusActionType;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeSongMode;
-import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeOrderSongModel;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSongModel;
-import com.netease.yunxin.kit.karaokekit.lyric.view.NELyricView;
-import com.netease.yunxin.kit.karaokekit.pitch.api.NEPitchRecordSingMarker;
-import com.netease.yunxin.kit.karaokekit.pitch.api.model.NEPitchAudioData;
+import com.netease.yunxin.kit.karaokekit.audioeffect.api.NEAudioEffectManager;
+import com.netease.yunxin.kit.karaokekit.audioeffect.ui.ToneDialogFragment;
+import com.netease.yunxin.kit.karaokekit.impl.utils.ScreenUtil;
+import com.netease.yunxin.kit.karaokekit.lyric.ui.widget.NELyricView;
 import com.netease.yunxin.kit.karaokekit.pitch.ui.model.NEKTVPlayResultModel;
 import com.netease.yunxin.kit.karaokekit.ui.NEKaraokeUIConstants;
 import com.netease.yunxin.kit.karaokekit.ui.R;
@@ -51,15 +51,13 @@ import com.netease.yunxin.kit.karaokekit.ui.activity.KaraokeRoomActivity;
 import com.netease.yunxin.kit.karaokekit.ui.dialog.CommonDialog;
 import com.netease.yunxin.kit.karaokekit.ui.listener.MyKaraokeListener;
 import com.netease.yunxin.kit.karaokekit.ui.model.LyricBusinessModel;
-import com.netease.yunxin.kit.karaokekit.ui.tone.ToneDialogFragment;
 import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUtils;
 import com.netease.yunxin.kit.karaokekit.ui.utils.LyricLoader;
+import com.netease.yunxin.kit.karaokekit.ui.utils.NetUtils;
 import com.netease.yunxin.kit.karaokekit.ui.utils.SeatUtils;
 import com.netease.yunxin.kit.login.AuthorManager;
 import com.netease.yunxin.kit.login.model.UserInfo;
-
 import java.util.Objects;
-
 import kotlin.Unit;
 
 /** 演唱区控制view */
@@ -314,12 +312,14 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
                 preludeTime = lyricBusinessModel.preludeTime;
                 showLyricAndScore(lyricBusinessModel);
                 llyControl.setVisibility(VISIBLE);
+                NEAudioEffectManager.INSTANCE.adjustRecordingSignalVolume(
+                    NEAudioEffectManager.INSTANCE.getRecordingSignalVolume());
                 if (finalOriginPath != null && finalAccompanyPath != null) {
                   NEKaraokeKit.getInstance()
                       .playSong(
                           finalOriginPath,
                           finalAccompanyPath,
-                          50,
+                          NEAudioEffectManager.INSTANCE.getAudioMixingVolume(),
                           anchorUuid,
                           chorusUid,
                           startTimeStamp,
@@ -447,7 +447,7 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
         new MyKaraokeListener() {
           @Override
           public void onReceiveChorusMessage(
-                  @NonNull NEKaraokeChorusActionType actionType, @NonNull NEKaraokeSongModel model) {
+              @NonNull NEKaraokeChorusActionType actionType, @NonNull NEKaraokeSongModel model) {
             ALog.d(TAG, "actionType========>" + actionType.name() + " model = " + model);
             if (actionType == NEKaraokeChorusActionType.INVITE) { /// 邀请消息
               currentSongModel = model;
@@ -475,17 +475,7 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
                     .requestPlaySong(model.getOrderId(), model.getChorusId(), null, null);
               }
             } else if (actionType == NEKaraokeChorusActionType.START_SONG) {
-              tempTime = 0;
-              currentSongModel = model;
-              if (songModelChangeListener != null) {
-                songModelChangeListener.onSongModelChange(currentSongModel);
-              }
-              cancelCountDownTimerForMatch();
-              cancelCountDownTimerForPlay();
-              onStartSong(model);
-              if (needShowScore()) {
-                flSolo.start();
-              }
+              handleStartSong(model);
             } else if (actionType
                 == NEKaraokeChorusActionType.CANCEL_INVITE) { // 超时取消邀请，展示waiting for sole提醒
               currentSongModel = model;
@@ -512,20 +502,15 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
                 songModelChangeListener.onSongModelChange(currentSongModel);
               }
               playButtonChangeUI(true);
-              if (needShowScore()) {
-                flSolo.pause();
-              }
             } else if (actionType == NEKaraokeChorusActionType.RESUME_SONG) { /// 恢复播放
               currentSongModel = model;
               if (songModelChangeListener != null) {
                 songModelChangeListener.onSongModelChange(currentSongModel);
               }
               playButtonChangeUI(false);
-              if (needShowScore()) {
-                flSolo.start();
-              }
             } else if (actionType == NEKaraokeChorusActionType.ABANDON) {
               ALog.i(TAG, "onReceiveChorusMessage  NEKaraokeChorusActionType.ABANDON");
+              flSolo.destroyTimer();
               currentSongModel = null;
               cancelCountDownTimerForMatch();
               cancelCountDownTimerForPlay();
@@ -539,6 +524,10 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
               if (needShowScore()) {
                 flSolo.pause();
               }
+              flSolo.destroyTimer();
+            } else if (actionType == NEKaraokeChorusActionType.NEXT) { /// 下一首歌曲
+              ALog.i(TAG, "onReceiveChorusMessage  NEKaraokeChorusActionType.NEXT");
+              handleNextSong(model);
             }
           }
 
@@ -602,6 +591,30 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
     NEKaraokeKit.getInstance().addKaraokeListener(listener);
   }
 
+  private void handleStartSong(NEKaraokeSongModel model) {
+    tempTime = 0;
+    currentSongModel = model;
+    if (songModelChangeListener != null) {
+      songModelChangeListener.onSongModelChange(currentSongModel);
+    }
+    cancelCountDownTimerForMatch();
+    cancelCountDownTimerForPlay();
+    onStartSong(model);
+    if (needShowScore()) {
+      flSolo.start();
+    }
+
+    if (songModelChangeListener != null) {
+      songModelChangeListener.onStartSong(model);
+    }
+  }
+
+  private void handleNextSong(NEKaraokeSongModel model) {
+    if (songModelChangeListener != null) {
+      songModelChangeListener.onNextSong(model);
+    }
+  }
+
   @Override
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
@@ -624,12 +637,18 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
   private void playButtonChangeUI(boolean isPaused) {
     paused = isPaused;
     if (isPaused) {
+      if (needShowScore()) {
+        flSolo.pause();
+      }
       ivPause.setText(getResources().getString(R.string.karaoke_resume));
       Drawable drawable = getResources().getDrawable(R.drawable.resume_icon);
       int size = getResources().getDimensionPixelSize(R.dimen.dimen_28_dp);
       drawable.setBounds(1, 1, size, size);
       ivPause.setCompoundDrawables(null, drawable, null, null);
     } else {
+      if (needShowScore()) {
+        flSolo.start();
+      }
       ivPause.setText(getResources().getString(R.string.karaoke_pause));
       Drawable drawable = getResources().getDrawable(R.drawable.icon_music_state_switch);
       int size = getResources().getDimensionPixelSize(R.dimen.dimen_28_dp);
@@ -732,7 +751,9 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
       soloTextView.setText(getResources().getString(R.string.solo));
       soloTextView.setOnClickListener(
           view -> {
-            //                clickSolo();
+            if (!NetUtils.checkNetwork(getContext())) {
+              return;
+            }
             cancelCountDownTimerForMatch();
             NEKaraokeKit.getInstance()
                 .requestPlaySong(
@@ -761,6 +782,9 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
       soloTextView.setOnClickListener(
           view -> {
             if (currentSongModel != null && currentSongModel.getChorusId() != null) {
+              if (!NetUtils.checkNetwork(getContext())) {
+                return;
+              }
               if (SeatUtils.isCurrentOnSeat()) {
                 agreeAddChorus(currentSongModel.getChorusId());
               } else {
@@ -1093,8 +1117,7 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
         new NEKaraokeCallback<LyricBusinessModel>() {
           @Override
           public void onSuccess(@Nullable LyricBusinessModel lyricBusinessModel) {
-            ALog.i(
-                TAG, "initLyricView loadLyric success lyricBusinessModel = " + lyricBusinessModel);
+            ALog.i(TAG, "initLyricView loadLyric success");
             if (lyricBusinessModel == null) {
               return;
             }
@@ -1276,6 +1299,10 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
   @Override
   @SuppressLint("UseCompatLoadingForDrawables")
   public void clickSwitchToOriginalVolume() {
+    ALog.d(TAG, "clickSwitchToOriginalVolume");
+    if (!NetUtils.checkNetwork(getContext())) {
+      return;
+    }
     currentOrigin = !currentOrigin;
     NEKaraokeKit.getInstance().switchAccompaniment(!currentOrigin);
     changeSwitchOriginUI(currentOrigin, true);
@@ -1306,29 +1333,49 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
   @Override
   public void clickNextSong() {
     ALog.d(TAG, "clickNextSong");
-    NEKaraokeKit.getInstance().requestStopPlayingSong(null);
+    if (!NetUtils.checkNetwork(getContext())) {
+      return;
+    }
+
+    if (KaraokeUtils.isCurrentHost() || isAnchor() || isAssistant()) {
+      NEKaraokeKit.getInstance().nextSong(currentSongModel.getOrderId(), null);
+    } else {
+      ALog.e(TAG, "clickNextSong but current not anchor or assistant");
+    }
   }
 
   private void showGradeAndFinishSong(NEKaraokeSongModel currentSongModel) {
     // 独唱展示最终打分
     switchKTVState(KTV_STATE_GRADE);
-    NEPitchRecordSingMarker.INSTANCE.getFinalScore(
-        finalScore -> {
-          UserInfo userInfo = AuthorManager.INSTANCE.getUserInfo();
-          if (userInfo != null) {
-            NEKTVPlayResultModel userData =
-                new NEKTVPlayResultModel(
-                    currentSongModel.getSongName(), userInfo.getNickname(), userInfo.getAvatar());
-            flSolo.showFinalScore(
-                userData,
-                finalScore,
-                () ->
-                    postDelayed(
-                        () -> {
-                          flSolo.hideScoreView();
-                          NEKaraokeKit.getInstance().requestStopPlayingSong(null);
-                        },
-                        3000));
+    NEPitchSongScore instance = NEPitchSongScore.getInstance();
+    if (instance == null) {
+      return;
+    }
+    instance.getFinalScore(
+        new NECopyrightedMedia.Callback<NEPitchRecordSingInfo>() {
+          @Override
+          public void success(@Nullable NEPitchRecordSingInfo info) {
+            UserInfo userInfo = AuthorManager.INSTANCE.getUserInfo();
+            if (userInfo != null) {
+              NEKTVPlayResultModel userData =
+                  new NEKTVPlayResultModel(
+                      currentSongModel.getSongName(), userInfo.getNickname(), userInfo.getAvatar());
+              flSolo.showFinalScore(
+                  userData,
+                  info,
+                  () ->
+                      postDelayed(
+                          () -> {
+                            flSolo.hideScoreView();
+                            NEKaraokeKit.getInstance().requestStopPlayingSong(null);
+                          },
+                          3000));
+            }
+          }
+
+          @Override
+          public void error(int code, @Nullable String msg) {
+            ALog.e(TAG, "showGradeAndFinishSong onError errorCode:" + code);
           }
         });
   }
@@ -1336,10 +1383,13 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
   @Override
   public void playOrPause() {
     ALog.d(TAG, "playOrPause，paused：" + paused);
+    if (!NetUtils.checkNetwork(getContext())) {
+      return;
+    }
     changeMusicState(!paused);
   }
 
-  public void startSolo(NEKaraokeOrderSongModel song) {
+  public void startSolo(NEKaraokeSongModel song) {
     ALog.d(TAG, "startSolo，song:" + song);
     switchKTVState(
         KTV_STATE_WAITING_FOR_SOLE,
@@ -1469,27 +1519,22 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
 
               @Override
               public void onFailure(int code, @Nullable String msg) {
-                ALog.d(TAG, "joinChorus onFailure===============------:" + msg);
+                ALog.d(TAG, "joinChorus onFailure code = " + code + ", msg = " + msg);
+                if (msg != null) {
+                  ToastUtils.INSTANCE.showShortToast(getContext(), msg);
+                }
               }
             });
   }
 
   @Override
-  public boolean isAnchor() {
-    if (currentSongModel == null) {
-      return false;
-    }
-    String uuid = KaraokeUtils.getCurrentAccount();
-    return uuid.equals(currentSongModel.getUserUuid());
+  public boolean isAnchor() { // 主唱
+    return KaraokeUtils.isAnchor(currentSongModel);
   }
 
   @Override
   public boolean isAssistant() { // 副唱
-    if (currentSongModel == null || currentSongModel.getAssistantUuid() == null) {
-      return false;
-    }
-    String uuid = KaraokeUtils.getCurrentAccount();
-    return uuid.equals(currentSongModel.getAssistantUuid());
+    return KaraokeUtils.isAssistant(currentSongModel);
   }
 
   public void setSongModelChangeListener(OnSongModelChangeListener songModelChangeListener) {
@@ -1504,6 +1549,10 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
   public interface OnSongModelChangeListener {
 
     void onSongModelChange(NEKaraokeSongModel songModel);
+
+    void onNextSong(NEKaraokeSongModel songModel);
+
+    void onStartSong(NEKaraokeSongModel songModel);
   }
 
   static class SongModel {

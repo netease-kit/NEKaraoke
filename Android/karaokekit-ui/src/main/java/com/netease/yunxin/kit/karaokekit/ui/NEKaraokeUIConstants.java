@@ -15,4 +15,6 @@ public class NEKaraokeUIConstants {
   public static final int REAL_TIME_CHORUS = 2; /// 实时合唱
 
   public static final int SOLO = 3; // 独唱
+
+  public static final int ERROR_NETWORK = -1;
 }

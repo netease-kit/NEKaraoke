@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeMember;
+import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSongModel;
 import com.netease.yunxin.kit.karaokekit.ui.NEKaraokeUIConstants;
 import com.netease.yunxin.kit.karaokekit.ui.dialog.CommonDialog;
 import java.util.List;
@@ -46,6 +47,22 @@ public class KaraokeUtils {
       return false;
     }
     return TextUtils.equals(member.getRole(), NEKaraokeUIConstants.ROLE_HOST);
+  }
+
+  public static boolean isAnchor(NEKaraokeSongModel songModel) {
+    if (songModel == null) {
+      return false;
+    }
+    String uuid = KaraokeUtils.getCurrentAccount();
+    return uuid.equals(songModel.getUserUuid());
+  }
+
+  public static boolean isAssistant(NEKaraokeSongModel songModel) {
+    if (songModel == null || songModel.getAssistantUuid() == null) {
+      return false;
+    }
+    String uuid = KaraokeUtils.getCurrentAccount();
+    return uuid.equals(songModel.getAssistantUuid());
   }
 
   public static NEKaraokeMember getMember(String uuid) {

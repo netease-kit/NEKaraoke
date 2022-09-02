@@ -4,8 +4,8 @@
 
 package com.netease.yunxin.kit.karaokekit.ui.utils;
 
-import com.netease.yunxin.kit.karaokekit.lyric.model.NELyric;
-import com.netease.yunxin.kit.karaokekit.lyric.model.NELyricLine;
+import com.netease.yunxin.kit.copyrightedmedia.api.model.NELyric;
+import com.netease.yunxin.kit.copyrightedmedia.api.model.NELyricLine;
 
 public class LyricUtil {
   /** 获取歌曲前奏开始时间戳 */

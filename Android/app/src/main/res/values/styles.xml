@@ -26,5 +26,6 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="AppTheme" parent="android:Theme.Light.NoTitleBar" />
 
 </resources>

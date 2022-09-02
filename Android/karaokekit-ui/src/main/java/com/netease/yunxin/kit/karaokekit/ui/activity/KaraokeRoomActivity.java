@@ -6,7 +6,6 @@ package com.netease.yunxin.kit.karaokekit.ui.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -18,12 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.gyf.immersionbar.ImmersionBar;
-import com.netease.yunxin.app.newlive.gift.GiftRender;
 import com.netease.yunxin.kit.alog.ALog;
-import com.netease.yunxin.kit.common.utils.NetworkUtils;
 import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
 import com.netease.yunxin.kit.copyrightedmedia.api.NESongPreloadCallback;
 import com.netease.yunxin.kit.copyrightedmedia.impl.NECopyrightedEventHandler;
@@ -34,9 +32,10 @@ import com.netease.yunxin.kit.karaokekit.api.NEKaraokeEndReason;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeRole;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeGiftModel;
-import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeOrderSongModel;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeRoomInfo;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSeatInfo;
+import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSongModel;
+import com.netease.yunxin.kit.karaokekit.impl.utils.ScreenUtil;
 import com.netease.yunxin.kit.karaokekit.ui.NEKaraokeUIConstants;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 import com.netease.yunxin.kit.karaokekit.ui.chatroom.ChatRoomMsgCreator;
@@ -46,8 +45,8 @@ import com.netease.yunxin.kit.karaokekit.ui.dialog.AudienceArrangeMicroDialog;
 import com.netease.yunxin.kit.karaokekit.ui.dialog.CommonDialog;
 import com.netease.yunxin.kit.karaokekit.ui.dialog.GiftDialog;
 import com.netease.yunxin.kit.karaokekit.ui.dialog.OrderSongDialog;
-import com.netease.yunxin.kit.karaokekit.ui.dialog.OrderSongViewModel;
 import com.netease.yunxin.kit.karaokekit.ui.gift.GiftCache;
+import com.netease.yunxin.kit.karaokekit.ui.gift.GiftRender;
 import com.netease.yunxin.kit.karaokekit.ui.gift.ui.GifAnimationView;
 import com.netease.yunxin.kit.karaokekit.ui.listener.NEKaraokeCallbackWrapper;
 import com.netease.yunxin.kit.karaokekit.ui.model.ApplySeatModel;
@@ -57,16 +56,18 @@ import com.netease.yunxin.kit.karaokekit.ui.statusbar.StatusBarConfig;
 import com.netease.yunxin.kit.karaokekit.ui.utils.ClickUtils;
 import com.netease.yunxin.kit.karaokekit.ui.utils.InputUtils;
 import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUtils;
+import com.netease.yunxin.kit.karaokekit.ui.utils.NetUtils;
 import com.netease.yunxin.kit.karaokekit.ui.utils.SeatUtils;
-import com.netease.yunxin.kit.karaokekit.ui.utils.SpUtils;
 import com.netease.yunxin.kit.karaokekit.ui.utils.ViewUtils;
+import com.netease.yunxin.kit.karaokekit.ui.view.SingingControlView;
 import com.netease.yunxin.kit.karaokekit.ui.viewmodel.KaraokeRoomViewModel;
+import com.netease.yunxin.kit.karaokekit.ui.viewmodel.OrderSongViewModel;
 import java.util.List;
 import kotlin.Unit;
 
 public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEventHandler {
 
-  protected final String TAG = "KaraokeRoomActivity";
+  protected static final String TAG = "KaraokeRoomActivity";
 
   protected static final String ARRANGE_MICRO_DIALOG_TAG = "arrangeMicroDialog";
 
@@ -96,19 +97,25 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
 
   private final GiftRender giftRender = new GiftRender();
 
-  protected final NetworkUtils.NetworkStateListener netWorkStatusChangeListener =
-      new NetworkUtils.NetworkStateListener() {
+  private boolean isLastDisconnected;
+
+  protected final NetworkUtils.OnNetworkStatusChangedListener netWorkStatusChangeListener =
+      new NetworkUtils.OnNetworkStatusChangedListener() {
 
         @Override
-        public void onAvailable(NetworkInfo networkInfo) {
-          ALog.i(TAG, "network onConnected");
-          onNetworkConnected(networkInfo.getTypeName());
+        public void onDisconnected() {
+          ALog.i(TAG, "network disconnected");
+          isLastDisconnected = true;
+          onNetworkDisconnected();
         }
 
         @Override
-        public void onLost(NetworkInfo networkInfo) {
-          ALog.i(TAG, "network disconnected");
-          onNetworkDisconnected();
+        public void onConnected(NetworkUtils.NetworkType networkType) {
+          ALog.i(TAG, "network onConnected");
+          if (isLastDisconnected) {
+            onNetworkConnected(networkType.name());
+            isLastDisconnected = false;
+          }
         }
       };
 
@@ -250,12 +257,12 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
     if (KaraokeUtils.isCurrentHost()) {
       applyOnSeat(null);
     } else {
-      initSeat();
+      updateSeat();
     }
     refreshAudioSwitchButton();
   }
 
-  public void initSeat() {
+  public void updateSeat() {
     NEKaraokeKit.getInstance()
         .getSeatInfo(
             new NEKaraokeCallbackWrapper<NEKaraokeSeatInfo>() {
@@ -277,14 +284,14 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
 
   protected void initGiftAnimation() {
     GifAnimationView gifAnimationView = new GifAnimationView(KaraokeRoomActivity.this);
-    int size = SpUtils.INSTANCE.getScreenWidth(KaraokeRoomActivity.this);
+    int size = ScreenUtil.getDisplayWidth();
     FrameLayout.LayoutParams layoutParams =
         new FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
     layoutParams.width = size;
     layoutParams.height = size;
     layoutParams.gravity = Gravity.BOTTOM;
-    layoutParams.bottomMargin = SpUtils.INSTANCE.dp2pix(KaraokeRoomActivity.this, 166f);
+    layoutParams.bottomMargin = ScreenUtil.dip2px(166f);
     binding.getRoot().addView(gifAnimationView, layoutParams);
     gifAnimationView.bringToFront();
     giftRender.init(gifAnimationView);
@@ -302,14 +309,17 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
   @SuppressLint("MissingPermission")
   protected void initListener() {
     binding.ivLeaveRoom.setOnClickListener(v -> onClickLeaveBtn());
-    NetworkUtils.registerStateListener(netWorkStatusChangeListener);
+    NetUtils.registerStateListener(netWorkStatusChangeListener);
     binding.tvRoomMsgInput.setOnClickListener(
-        view -> InputUtils.INSTANCE.showSoftInput(binding.etRoomMsgInput));
+        view -> InputUtils.showSoftInput(binding.etRoomMsgInput));
     binding.etRoomMsgInput.setOnEditorActionListener(
         (textView, i, keyEvent) -> {
           if (textView == binding.etRoomMsgInput) {
+            if (!NetUtils.checkNetwork(KaraokeRoomActivity.this)) {
+              return true;
+            }
             String input = binding.etRoomMsgInput.getText().toString();
-            InputUtils.INSTANCE.hideSoftInput(binding.etRoomMsgInput);
+            InputUtils.hideSoftInput(binding.etRoomMsgInput);
             sendTextMsg(input);
             return true;
           }
@@ -317,7 +327,7 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
         });
     binding.ivLocalAudioSwitch.setOnClickListener(
         v -> {
-          if (!NetworkUtils.isConnected(this)) {
+          if (!NetUtils.isConnected()) {
             ToastUtils.showShort(R.string.karaoke_network_error);
             return;
           }
@@ -351,7 +361,7 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
         });
     binding.ivMusic.setOnClickListener(v -> showOrderDialog());
     binding.singControlView.setOrder(v -> showOrderDialog());
-    InputUtils.INSTANCE.registerSoftInputListener(
+    InputUtils.registerSoftInputListener(
         KaraokeRoomActivity.this,
         new InputUtils.InputParamHelper() {
 
@@ -409,6 +419,10 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
         });
     binding.ivGift.setOnClickListener(
         v -> {
+          if (!NetUtils.checkNetwork(KaraokeRoomActivity.this)) {
+            return;
+          }
+
           if (giftDialog == null) {
             giftDialog = new GiftDialog(KaraokeRoomActivity.this);
           }
@@ -429,14 +443,35 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
                           }));
         });
     binding.singControlView.setSongModelChangeListener(
-        songModel -> {
-          ALog.i(TAG, "onSongModelChange songModel = " + songModel);
-          binding.seatView.updateSongModel(songModel);
+        new SingingControlView.OnSongModelChangeListener() {
+
+          @Override
+          public void onSongModelChange(NEKaraokeSongModel songModel) {
+            ALog.i(TAG, "onSongModelChange songModel = " + songModel);
+            binding.seatView.updateSongModel(songModel);
+          }
+
+          @Override
+          public void onNextSong(NEKaraokeSongModel songModel) {
+            ALog.i(TAG, "onSongModelChange songModel = " + songModel);
+            nextSong(songModel);
+          }
+
+          @Override
+          public void onStartSong(NEKaraokeSongModel songModel) {
+            if (binding.singControlView.isAnchor() || binding.singControlView.isAssistant()) {
+              unmuteMyAudio();
+            }
+          }
         });
   }
 
   private void showOrderDialog() {
-    if (!ClickUtils.INSTANCE.isSlightlyFastClick()) {
+    if (!ClickUtils.isSlightlyFastClick()) {
+      if (!NetUtils.checkNetwork(KaraokeRoomActivity.this)) {
+        return;
+      }
+
       OrderSongDialog dialog = new OrderSongDialog();
       dialog.show(getSupportFragmentManager(), TAG);
     }
@@ -454,6 +489,10 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
   }
 
   public void showApplySeatDialog(String title, String positiveStr) {
+    if (!NetUtils.checkNetwork(KaraokeRoomActivity.this)) {
+      return;
+    }
+
     if (SeatUtils.isCurrentOnSeat()) {
       return;
     }
@@ -472,7 +511,7 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
                   }
 
                   @Override
-                  public void onError(int code, @Nullable String msg) { //1303
+                  public void onError(int code, @Nullable String msg) { // 1303
                     ToastUtils.showShort(msg);
                   }
                 }));
@@ -498,7 +537,18 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
         KaraokeRoomActivity.this,
         getString(R.string.karaoke_down_seat_confirm),
         v -> {
-          NEKaraokeKit.getInstance().leaveSeat(null);
+          NEKaraokeKit.getInstance()
+              .leaveSeat(
+                  new NEKaraokeCallback<Unit>() {
+
+                    @Override
+                    public void onSuccess(@Nullable Unit unit) {}
+
+                    @Override
+                    public void onFailure(int code, @Nullable String msg) {
+                      ToastUtils.showShort(msg);
+                    }
+                  });
           NEKaraokeKit.getInstance().requestStopPlayingSong(null);
         });
   }
@@ -554,42 +604,16 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
                 if (!KaraokeUtils.isCurrentHost()) {
                   ToastUtils.showShort(R.string.karaoke_host_close_room);
                 }
+                leaveRoom();
+              } else if (endReason == NEKaraokeEndReason.END_OF_RTC) {
+                leaveRoom();
+              } else {
+                KaraokeRoomActivity.this.finish();
               }
-              leaveRoom();
             });
     karaokeRoomViewModel
         .getChatRoomMsgData()
         .observe(this, charSequence -> binding.crvMsgList.appendItem(charSequence));
-    karaokeRoomViewModel
-        .getKickedOutData()
-        .observe(
-            this,
-            aBoolean -> {
-              //                stopLiveErrorNetwork();
-            });
-    karaokeRoomViewModel
-        .getUserAccountData()
-        .observe(
-            this,
-            integer -> {
-              //                topViewBinding.tvAudienceCount.setText(StringUtils.INSTANCE.getAudienceCount(integer));
-            });
-    karaokeRoomViewModel
-        .getAudioEffectFinishData()
-        .observe(
-            this,
-            integer -> {
-              //                onAudioEffectFinished(integer);
-            });
-    karaokeRoomViewModel
-        .getAudioMixingFinishData()
-        .observe(
-            this,
-            aBoolean -> {
-              if (aBoolean) {
-                //                    onAudioMixingFinished();
-              }
-            });
     karaokeRoomViewModel
         .getOnSeatListData()
         .observe(
@@ -659,8 +683,6 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
     karaokeRoomViewModel
         .getSongListData()
         .observe(this, songList -> orderSongViewModel.refreshOrderSongs());
-    karaokeRoomViewModel.getSwitchSongData().observe(this, this::nextSong);
-    karaokeRoomViewModel.getNextSongData().observe(this, this::nextSong);
   }
 
   protected void onUserReward(NEKaraokeGiftModel reward) {
@@ -668,13 +690,13 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
       return;
     }
     binding.crvMsgList.appendItem(
-        ChatRoomMsgCreator.INSTANCE.createGiftReward(
+        ChatRoomMsgCreator.createGiftReward(
             KaraokeRoomActivity.this,
             reward.getSendNick(),
             1,
-            GiftCache.INSTANCE.getGift(reward.getGiftId()).getStaticIconResId()));
+            GiftCache.getGift(reward.getGiftId()).getStaticIconResId()));
     if (!KaraokeUtils.isCurrentHost()) {
-      giftRender.addGift(GiftCache.INSTANCE.getGift(reward.getGiftId()).getDynamicIconResId());
+      giftRender.addGift(GiftCache.getGift(reward.getGiftId()).getDynamicIconResId());
     }
   }
 
@@ -694,7 +716,7 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
                 @Override
                 public void onSuccess(Unit unit) {
                   binding.crvMsgList.appendItem(
-                      ChatRoomMsgCreator.INSTANCE.createText(
+                      ChatRoomMsgCreator.createText(
                           KaraokeRoomActivity.this,
                           KaraokeUtils.isCurrentHost(),
                           KaraokeUtils.getCurrentName(),
@@ -719,6 +741,8 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
 
   protected void onNetworkConnected(String networkType) {
     ALog.i(TAG, "onNetworkConnected type = " + networkType);
+    binding.singControlView.clickNextSong();
+    updateSeat();
   }
 
   @Override
@@ -726,8 +750,8 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
     int x = (int) ev.getRawX();
     int y = (int) ev.getRawY();
     // 键盘区域外点击收起键盘
-    if (!ViewUtils.INSTANCE.isInView(binding.etRoomMsgInput, x, y)) {
-      InputUtils.INSTANCE.hideSoftInput(binding.etRoomMsgInput);
+    if (!ViewUtils.isInView(binding.etRoomMsgInput, x, y)) {
+      InputUtils.hideSoftInput(binding.etRoomMsgInput);
     }
     return super.dispatchTouchEvent(ev);
   }
@@ -799,28 +823,11 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    NetworkUtils.unregisterStateListener(netWorkStatusChangeListener);
+    NetUtils.unregisterStateListener(netWorkStatusChangeListener);
   }
 
-  private void nextSong(NEKaraokeOrderSongModel song) {
+  private void nextSong(NEKaraokeSongModel song) {
     if (isMySong(song)) {
-      boolean isAudioOn = NEKaraokeKit.getInstance().getLocalMember().isAudioOn();
-      if (!isAudioOn) {
-        NEKaraokeKit.getInstance()
-            .unmuteMyAudio(
-                new NEKaraokeCallback<Unit>() {
-                  @Override
-                  public void onSuccess(@Nullable Unit unit) {
-                    binding.ivLocalAudioSwitch.setSelected(false);
-                    ToastUtils.showShort(R.string.karaoke_micro_phone_is_open);
-                  }
-
-                  @Override
-                  public void onFailure(int code, @Nullable String msg) {
-                    ALog.e(TAG, "nextSong: unmuteMyAudio failure code:" + code + " msg = " + msg);
-                  }
-                });
-      }
       if (NEKaraokeKit.getInstance().getAllMemberList().size() <= 1) {
         binding.singControlView.startSolo(song);
       } else {
@@ -832,7 +839,27 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
     }
   }
 
-  private boolean isMySong(NEKaraokeOrderSongModel song) {
+  private void unmuteMyAudio() {
+    boolean isAudioOn = NEKaraokeKit.getInstance().getLocalMember().isAudioOn();
+    if (!isAudioOn) {
+      NEKaraokeKit.getInstance()
+          .unmuteMyAudio(
+              new NEKaraokeCallback<Unit>() {
+                @Override
+                public void onSuccess(@Nullable Unit unit) {
+                  binding.ivLocalAudioSwitch.setSelected(false);
+                  ToastUtils.showShort(R.string.karaoke_micro_phone_is_open);
+                }
+
+                @Override
+                public void onFailure(int code, @Nullable String msg) {
+                  ALog.e(TAG, "nextSong: unmuteMyAudio failure code:" + code + " msg = " + msg);
+                }
+              });
+    }
+  }
+
+  private boolean isMySong(NEKaraokeSongModel song) {
     if (song == null) {
       return false;
     }
@@ -886,20 +913,6 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
   public void onTokenExpired() {
     ALog.d(TAG, "onTokenExpired");
     ToastUtils.showShort(R.string.copyright_token_has_expired);
-    NEKaraokeKit.getInstance()
-        .getSongToken(
-            new NEKaraokeCallback<String>() {
-              @Override
-              public void onSuccess(@Nullable String token) {
-                if (token != null) {
-                  NECopyrightedMedia.getInstance().renewToken(token);
-                }
-              }
-
-              @Override
-              public void onFailure(int code, @Nullable String msg) {
-                ALog.d(TAG, "getSongToken failed: " + code + " " + msg);
-              }
-            });
+    NEKaraokeKit.getInstance().getSongDynamicTokenUntilSuccess(null);
   }
 }

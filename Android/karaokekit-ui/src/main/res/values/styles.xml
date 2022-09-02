@@ -23,13 +23,7 @@
         <item name="android:windowAnimationStyle">@style/BottomDialogAnimation</item>
     </style>
 
-    <style name="AppBottomSheet" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/AppBottomSheetStyle</item>
-    </style>
 
-    <style name="AppBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/karaoke_tone_dialog_bg</item>
-    </style>
 
     <!-- dialog fragment出现消失动画 -->
     <style name="Animation" parent="@android:style/Animation.Activity">
