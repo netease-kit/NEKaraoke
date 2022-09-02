@@ -23,8 +23,7 @@
                                      UITableViewDataSource,
                                      NESongPreloadProtocol,
                                      NESongPointProtocol,
-                                     UITextFieldDelegate,
-                                     NEKaraokeListener>
+                                     UITextFieldDelegate>
 //顶部切换视图
 @property(nonatomic, strong) UIView *mainTopView;
 //搜索父视图
@@ -73,13 +72,13 @@
     [SDImageCache sharedImageCache].config.maxMemoryCount = 20;
     //        [SDImageCache sharedImageCache].config.shouldDecompressImages = 20;
     //        [[NEKaraoSongEngine getInstance] addKaraokeSongProtocolObserve:self];
-    [[NEKaraokeKit shared] addKaraokeListener:self];
     [[NEKaraokePickSongEngine sharedInstance] addObserve:self];
   }
   return self;
 }
 
 - (void)refreshData {
+  [[NEKaraokePickSongEngine sharedInstance] updateSongArray];
   @weakify(self)
       [[NEKaraokePickSongEngine sharedInstance] getKaraokeSongList:^(NSError *_Nullable error) {
         if (error) {
@@ -426,11 +425,14 @@
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   if (tableView == self.pickSongsTableView) {
     //歌曲列表页面
+    NEKaraokePointSongTableViewCell *cell =
+        [tableView dequeueReusableCellWithIdentifier:@"Identifier" forIndexPath:indexPath];
+    if ([NEKaraokePickSongEngine sharedInstance].pickSongArray.count <= indexPath.row) {
+      return cell;
+    }
     NEKaraokeSongItem *item = [NEKaraokePickSongEngine sharedInstance].pickSongArray[indexPath.row];
     NSString *downlaodingStatus =
         [NEKaraokePickSongEngine sharedInstance].pickSongDownloadingArray[indexPath.row];
-    NEKaraokePointSongTableViewCell *cell =
-        [tableView dequeueReusableCellWithIdentifier:@"Identifier" forIndexPath:indexPath];
     [cell.songImageView sd_setImageWithURL:[NSURL URLWithString:item.songCover]];
     cell.songLabel.text = item.songName;
     cell.progress = item.downloadProcess;
@@ -459,10 +461,12 @@
     @weakify(cell);
     @weakify(self) cell.clickPointButton = ^{
       @strongify(cell);
-      @strongify(self)
-          //此处需要家逻辑
-          //是否在麦上
-          if (self.isUserOnSeat) {
+      @strongify(self) NSString *logInfo =
+          [NSString stringWithFormat:@"点击开始下载文件:%@", item.songId];
+      [NEKaraokeSongLog successLog:karaokeSongLog desc:logInfo];
+      //此处需要家逻辑
+      //是否在麦上
+      if (self.isUserOnSeat) {
         bool isOnSeat = self.isUserOnSeat();
         if (isOnSeat) {
           [[NEKaraokePickSongEngine sharedInstance].pickSongDownloadingArray
@@ -472,8 +476,13 @@
           cell.statueTopLabel.hidden = NO;
           cell.downloadingLabel.hidden = NO;
           cell.pointButton.hidden = YES;
-
+          NSString *viewLogInfo =
+              [NSString stringWithFormat:@"点击开始下载文件,界面变更为下载中:%@", item.songId];
+          [NEKaraokeSongLog successLog:karaokeSongLog desc:viewLogInfo];
           [[NEKaraokePickSongEngine sharedInstance].currentOrderSongArray addObject:item];
+          NSString *downloadingLogInfo =
+              [NSString stringWithFormat:@"点击开始下载文件,下载中列表数据变更:%@", item.songId];
+          [NEKaraokeSongLog successLog:karaokeSongLog desc:downloadingLogInfo];
           [[NECopyrightedMedia getInstance] preloadSong:item.songId observe:self];
         } else {
           //申请上麦
@@ -524,27 +533,25 @@
 
       cell.clickCancel = ^{
         //点击取消
-        [[NEKaraokeKit shared] deleteSongWithOrderId:item.orderId
-                                            callback:^(NSInteger code, NSString *_Nullable msg,
-                                                       NSNumber *_Nullable value){
-
-                                            }];
-        //                [[NEKaraoSongEngine getInstance] deleteSong:item.orderId callback:^(BOOL
-        //                deleteSuccess) {
-        //
-        //                }];
+        [[NEKaraokeKit shared]
+            deleteSongWithOrderId:item.orderId
+                         callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
+                           if (code != 0) {
+                             [NEKaraokeToast
+                                 showToast:[NSString stringWithFormat:@"删除歌曲失败 %@", msg]];
+                           }
+                         }];
       };
       cell.clickTop = ^{
         //点击置顶
-        [[NEKaraokeKit shared] topSongWithOrderId:item.orderId
-                                         callback:^(NSInteger code, NSString *_Nullable msg,
-                                                    NSNumber *_Nullable value){
-
-                                         }];
-        //                [[NEKaraoSongEngine getInstance] topSong:item.orderId callback:^(BOOL
-        //                deleteSuccess) {
-        //
-        //                }];
+        [[NEKaraokeKit shared]
+            topSongWithOrderId:item.orderId
+                      callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
+                        if (code != 0) {
+                          [NEKaraokeToast
+                              showToast:[NSString stringWithFormat:@"置顶歌曲失败 %@", msg]];
+                        }
+                      }];
       };
     }
     cell.songNumberLabel.text = [NSString stringWithFormat:@"%02d", (int)indexPath.row];
@@ -580,7 +587,7 @@
 }
 
 #pragma mark NEKaraokeSongProtocol
-- (void)onSongListChanged {
+- (void)onOrderSongRefresh {
   @weakify(self)[[NEKaraokePickSongEngine sharedInstance]
       getKaraokeSongOrderedList:^(NSError *_Nullable error) {
         @strongify(self) @weakify(self) dispatch_async(dispatch_get_main_queue(), ^{
@@ -627,6 +634,11 @@
     if ([NEKaraokePickSongEngine sharedInstance].pickSongArray.count > index.row) {
       NEKaraokePointSongTableViewCell *cell = [self.pickSongsTableView cellForRowAtIndexPath:index];
       cell.progress = progress;
+    } else {
+      NSString *progressLogInfo =
+          [NSString stringWithFormat:@"数据刷新导致目前列表中无下载数据,index:%@,\n progress:%.2f",
+                                     index, progress];
+      [NEKaraokeSongLog successLog:karaokeSongLog desc:progressLogInfo];
     }
   });
 }
@@ -654,15 +666,6 @@
   } else {
     self.searchClearButton.hidden = YES;
   }
-  //    [[NEKaraokePickSongEngine sharedInstance] updateSongArray];
-  //    [[NEKaraokePickSongEngine sharedInstance] resetPageNumber];
-  //    if (textField.text.length <= 0) {
-  //        [self getKaraokeSongsList];
-  //        self.isSearching = NO;
-  //    }else{
-  //        [self getKaraokeSearchSongsList];
-  //        self.isSearching = YES;
-  //    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

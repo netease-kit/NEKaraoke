@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'NEKaraokeUIKit'
-  s.version          = '0.1.0'
+  s.version          = '1.2.0'
   s.summary          = 'A short description of NEKaraokeUIKit.'
 
 # This description is used to generate tags and improve search results.
@@ -43,7 +43,6 @@ TODO: Add long description of the pod here.
   s.dependency 'BlocksKit'
   s.dependency 'libextobjc'
   s.dependency 'NELyricUIKit'
-  s.dependency 'NELyricKit'
   s.dependency 'M80AttributedLabel'
   s.dependency 'NEAudioEffectUIKit'
   s.dependency 'NEAudioEffectKit'
@@ -54,5 +53,4 @@ TODO: Add long description of the pod here.
   s.dependency 'SDWebImage'
   s.dependency 'NEPitchUIKit'
   s.dependency 'YXAlog_iOS'
-  s.dependency 'NEPitchKit'
 end

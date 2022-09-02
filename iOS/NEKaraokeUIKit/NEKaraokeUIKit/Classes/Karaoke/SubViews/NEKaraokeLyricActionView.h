@@ -101,7 +101,8 @@ typedef NS_ENUM(NSInteger, NEKaraokeLyricActionSubviewType) {
 //数据推送
 //最后一条数据isEnd 为YES
 - (void)pushAudioFrameWithFrame:(NEKaraokeAudioFrame *)frame isEnd:(BOOL)isEnd;
-
+//是否有打分数据
+- (BOOL)hasPitchConotent;
 //展示最终分数
 - (void)lyricActionViewLevel:(NEOpusLevel)level
                  resultModel:(NEPitchPlayResultModel *)playResultModel;

@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #import <Foundation/Foundation.h>
+#import <NEKaraokeKit/NEKaraokeKit-Swift.h>
 #import "NEKaraokeSongItem.h"
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Token过期
 - (void)onKaraokeSongTokenExpired;
+
+/// 已点歌曲列表更新
+- (void)onOrderSongRefresh;
 
 @end
 
@@ -73,6 +77,15 @@ typedef void (^SongListBlock)(NSError *_Nullable error);
 
 ////上麦成功数据处理
 - (void)applySuccessWithSong:(NEKaraokeSongItem *)songItem complete:(void (^)(void))complete;
+
+//内部自动重试
+- (void)getSongDynamicTokenUntilSuccess:
+    (void (^)(NEKaraokeDynamicToken *_Nullable dynamicToken))successCallback;
+
+//定时器相关处理
+
+//计算过期时间
+- (void)calculateExpiredTime:(long)timeExpired;
 
 @end
 
