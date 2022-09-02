@@ -324,7 +324,10 @@
 - (void)pushAudioFrameWithFrame:(NEKaraokeAudioFrame *)frame isEnd:(BOOL)isEnd {
   [self.lyricView pushAudioFrameWithFrame:frame isEnd:isEnd];
 }
-
+//是否有打分数据
+- (BOOL)hasPitchConotent {
+  return [self.lyricView hasPitchConotent];
+}
 //展示最终分数
 - (void)lyricActionViewLevel:(NEOpusLevel)level
                  resultModel:(NEPitchPlayResultModel *)playResultModel {

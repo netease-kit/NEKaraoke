@@ -6,6 +6,7 @@
 #import <NECopyrightedMedia/NECopyrightedMediaPublic.h>
 #import "NEKaraokeCreateViewController.h"
 #import "NEKaraokeListViewController.h"
+#import "NEKaraokePickSongEngine.h"
 #import "NEKaraokeSongLog.h"
 #import "NEKaraokeUILog.h"
 
@@ -49,18 +50,20 @@
          token:token
       callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
         if (code == 0) {
-          [NEKaraokeKit.shared getSongTokenWithCallback:^(NSInteger code, NSString *_Nullable msg,
-                                                          NSString *_Nullable tokenRealTime) {
-            __strong typeof(self) strongSelf = weakSelf;
-            if (code != 0) {
-              NSLog(@"初始化失败");
-            } else {
-              [[NECopyrightedMedia getInstance] initialize:strongSelf.config.appKey
-                                                     token:tokenRealTime
-                                                  userUuid:account
-                                                    extras:strongSelf.config.extras];
-            }
-          }];
+          [[NEKaraokePickSongEngine sharedInstance]
+              getSongDynamicTokenUntilSuccess:^(NEKaraokeDynamicToken *_Nullable dynamicToken) {
+                __strong typeof(self) strongSelf = weakSelf;
+                [[NECopyrightedMedia getInstance] initialize:strongSelf.config.appKey
+                                                       token:dynamicToken.accessToken
+                                                    userUuid:account
+                                                      extras:strongSelf.config.extras
+                                                    callback:^(NSError *_Nullable error) {
+                                                      NSLog(@"%@", error);
+                                                    }];
+                //处理过期时间
+                [[NEKaraokePickSongEngine sharedInstance]
+                    calculateExpiredTime:dynamicToken.oc_expiresIn];
+              }];
         }
         callback(code, msg, obj);
       }];

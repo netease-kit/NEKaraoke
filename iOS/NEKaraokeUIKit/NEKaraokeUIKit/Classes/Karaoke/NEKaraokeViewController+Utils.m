@@ -99,7 +99,7 @@
   return [[NECopyrightedMedia getInstance] getLyric:songId];
 }
 - (NSString *)fetchPitchContentWithSongId:(NSString *)songId {
-  return [[NECopyrightedMedia getInstance] getMidi:songId];
+  return [[NECopyrightedMedia getInstance] getPitch:songId];
 }
 - (NSString *)fetchOriginalFilePathWithSongId:(NSString *)songId {
   return [[NECopyrightedMedia getInstance] getSongURI:songId songResType:TYPE_ORIGIN];

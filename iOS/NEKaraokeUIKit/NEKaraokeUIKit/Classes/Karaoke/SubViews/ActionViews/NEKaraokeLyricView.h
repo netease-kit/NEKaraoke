@@ -30,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 //最后一条数据isEnd 为YES
 - (void)pushAudioFrameWithFrame:(NEKaraokeAudioFrame *)frame isEnd:(BOOL)isEnd;
 
+//是否有打分数据
+- (BOOL)hasPitchConotent;
 //展示最终分数
 - (void)showFinalScoreView:(NEPitchPlayResultModel *)playResultModel andLevel:(NEOpusLevel)level;
 //隐藏最终分数

@@ -149,7 +149,6 @@
   // Do any additional setup after loading the view.
 
   self.reachability = [NEKaraokeReachability reachabilityForInternetConnection];
-  [self.reachability startNotifier];
 
   // nav
   self.title = @"创建房间";

@@ -77,6 +77,10 @@
                                           : NEKaraokeInputToolBarSeatTypeOn];
   // 进房之后，不开始唱歌前不展示 控制视图
   [self showControlView:NO];
+
+  // 麦克风按钮默认隐藏
+  [self.bottomView setMicBtnSelected:YES];
+  [self.bottomView isShowMicBtn:NO];
 }
 - (void)showControlView:(BOOL)flag {
   self.controlView.hidden = !flag;

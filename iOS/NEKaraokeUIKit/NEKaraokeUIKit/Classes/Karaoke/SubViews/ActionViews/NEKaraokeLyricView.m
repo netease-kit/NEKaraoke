@@ -7,7 +7,7 @@
 #import <BlocksKit/BlocksKit.h>
 #import <Lottie/LOTAnimationView.h>
 #import <Masonry/Masonry.h>
-#import <NELyricKit/NELyricKit.h>
+#import <NECopyrightedMedia/NECopyrightedMediaPublic.h>
 #import <libextobjc/extobjc.h>
 #import "NEKaraokeSongLog.h"
 #import "UIColor+Karaoke.h"
@@ -140,20 +140,64 @@
   //    stringWithFormat:@"打分数据初始化--- pitchContent - %@ \n lyricContent -
   //    %@",pitchContent,lyricContent]];
   self.model = [[NELyric alloc] initWithContent:lyricContent andType:NELyricTypeYrc];
-  [self.compoentView loadRecordDataWithPitchContent:pitchContent
-                                          separator:separator
-                                          startTime:nil
-                                            endTime:nil
-                                         LocalLyric:lyricContent
-                                            andType:lyricType
-                                            builder:^(NEPitchLayoutBuilder *_Nonnull builder){
+  NSBundle *karaokeUIBundle = [NSBundle
+      bundleWithPath:[[NSBundle mainBundle]
+                         pathForResource:@"Frameworks/NEKaraokeUIKit.framework/NEKaraokeUIKit"
+                                  ofType:@"bundle"]];
+  [self.compoentView
+      loadRecordDataWithPitchContent:pitchContent
+                           separator:separator
+                           startTime:nil
+                             endTime:nil
+                          LocalLyric:lyricContent
+                             andType:lyricType
+                             builder:^(NEPitchLayoutBuilder *_Nonnull builder) {
+                               builder.emitterPathArray = @[
+                                 [karaokeUIBundle pathForResource:@"pop_1.png" ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"pop_2.png" ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"pop_3.png" ofType:nil],
+                               ];
+                               builder.finalScorePathArray = @[
+                                 [karaokeUIBundle pathForResource:@"score-s.webp" ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"score-ss.webp" ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"score-sss.webp" ofType:nil],
+                               ];
 
-                                            }];
+                               builder.perfectScorePathArray = @[
+                                 [karaokeUIBundle pathForResource:@"rcd_sing_score_pic_0.png"
+                                                           ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"rcd_sing_score_pic_1.png"
+                                                           ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"rcd_sing_score_pic_2.png"
+                                                           ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"rcd_sing_score_pic_3.png"
+                                                           ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"rcd_sing_score_pic_4.png"
+                                                           ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"rcd_sing_score_pic_5.png"
+                                                           ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"rcd_sing_score_pic_6.png"
+                                                           ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"rcd_sing_score_pic_7.png"
+                                                           ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"rcd_sing_score_pic_8.png"
+                                                           ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"rcd_sing_score_pic_9.png"
+                                                           ofType:nil],
+                                 [karaokeUIBundle pathForResource:@"rcd_sing_score_pic_x.png"
+                                                           ofType:nil],
+
+                               ];
+                             }];
 
   [self.compoentView recorStart];
   _recorStart = YES;
 }
 
+//是否有打分数据
+- (BOOL)hasPitchConotent {
+  return [self.compoentView hasPitchConotent];
+}
 - (void)showFinalScoreView:(NEPitchPlayResultModel *)playResultModel andLevel:(NEOpusLevel)level {
   [self.compoentView showScoreViewWithUserData:playResultModel songLevel:level];
 }
@@ -376,6 +420,6 @@
 }
 
 - (void)delayMethod {
-  [self.compoentView resetMidi];
+  [self.compoentView resetPitch];
 }
 @end

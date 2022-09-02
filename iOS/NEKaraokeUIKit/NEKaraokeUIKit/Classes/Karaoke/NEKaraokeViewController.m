@@ -6,7 +6,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <BlocksKit/BlocksKit.h>
 #import <Masonry/Masonry.h>
-#import <NELyricKit/NELyricKit.h>
+#import <NECopyrightedMedia/NECopyrightedMediaPublic.h>
 #import <NELyricUIKit/NELyricUIKit.h>
 #import <libextobjc/extobjc.h>
 #import "NEKaraokeAuthorityHelper.h"
@@ -33,6 +33,8 @@
                                        NESongPreloadProtocol>
 //是否打过分
 @property(nonatomic, assign) BOOL hasMarked;
+//是否断网
+@property(nonatomic, assign) BOOL loseNetwork;
 /// 网络监听器
 @property(nonatomic, strong) NEKaraokeReachability *reachability;
 @end
@@ -55,7 +57,6 @@
   [NEKaraokeLog infoLog:@"NEKaraokeKit" desc:@"NEKaraokeViewController dealloc"];
   [self.taskQueue stop];
   [[NEKaraokeKit shared] removeKaraokeListener:self];
-  [self.reachability stopNotifier];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 - (void)viewDidLoad {
@@ -65,6 +66,12 @@
   [[NEKaraokeKit shared] addKaraokeListener:self];
   //    [[NEKaraoSongEngine getInstance] addKaraokeSongProtocolObserve:self];
   [NEKaraokeAuthorityHelper checkMicAuthority];
+
+  [self setupBgView];
+  [self setupSubviews];
+  [self observeKeyboard];
+  [self setupTimer];
+  [self checkAudioOutputDevice];
 
   NEJoinKaraokeParams *param = [[NEJoinKaraokeParams alloc] init];
   param.nick = [NEKaraokeUIManager sharedInstance].nickname;
@@ -92,25 +99,82 @@
         });
       }];
 
-  [self setupBgView];
-  [self setupSubviews];
-  [self observeKeyboard];
-  [self setupTimer];
-  [self checkAudioOutputDevice];
   // 网络监听
   [self addObserver];
 }
 - (void)addObserver {
-  [self.reachability startNotifier];
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(networkStatusChange)
                                                name:kNEKaraokeReachabilityChangedNotification
                                              object:nil];
 }
 - (void)networkStatusChange {
-  // 无网络
-  if ([self.reachability currentReachabilityStatus] != NotReachable) return;
-  [self close];
+  NEKaraokeNetworkStatus status = [self.reachability currentReachabilityStatus];
+  if (status == NotReachable) {
+    // 无网toast
+    [NEKaraokeToast showToast:@"网络连接断开"];
+    self.loseNetwork = true;
+  } else {
+    if (!self.loseNetwork) {
+      return;
+    }
+    self.loseNetwork = false;
+    // 有网查询一波
+    [NEKaraokeToast showToast:@"网络重连成功"];
+    [self getSeatInfo];
+    [self fetchPickSongList];
+    @weakify(self)
+        // 拉取演唱信息
+        [NEKaraokeKit.shared requestPlayingSongInfo:^(NSInteger code, NSString *_Nullable msg,
+                                                      NEKaraokeSongModel *_Nullable songModel) {
+          if (code != 0) {
+            [NEKaraokeToast
+                showToast:[NSString stringWithFormat:@"查询歌曲失败 %zd %@", code, msg]];
+            return;
+          }
+          if (!songModel) {
+            return;
+          }
+          if ([songModel.account isEqualToString:NEKaraokeKit.shared.localMember.account] ||
+              [songModel.assistantUuid isEqualToString:NEKaraokeKit.shared.localMember.account]) {
+            // 自己是主唱或者合唱，直接切歌
+            [[NEKaraokeKit shared]
+                nextSongWithOrderId:songModel.orderId
+                           callback:^(NSInteger c, NSString *_Nullable m, id _Nullable o){
+
+                           }];
+          } else {
+            if (songModel.oc_songStatus == 0 ||
+                songModel.oc_songStatus == 1) {  // 暂停或者演唱中 下载歌词并展示
+              [[NECopyrightedMedia getInstance]
+                  preloadSongLyric:songModel.songId
+                          callback:^(NSString *_Nullable content, NSString *_Nullable lyricType,
+                                     NSError *_Nullable error) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                              @strongify(self) if (!content.length) {
+                                [self showNoLyricView:songModel];
+                              }
+                              else {
+                                self.lyricActionView.lyricContent = content;
+                                self.lyricActionView.lyricSeekBtnHidden = true;
+                                self.lyricActionView.lyricDuration = songModel.oc_songTime;
+                                [self.lyricActionView
+                                    showSubview:NEKaraokeLyricActionSubviewTypeLyric];
+                              }
+                            });
+                          }];
+            }
+          }
+        }];
+  }
+}
+- (BOOL)checkNetwork {
+  NEKaraokeNetworkStatus status = [self.reachability currentReachabilityStatus];
+  if (status == NotReachable) {
+    [NEKaraokeToast showToast:@"网络连接断开，请稍后重试"];
+    return false;
+  }
+  return true;
 }
 - (void)setupTimer {
   self.taskQueue = [[NEKaraokeTaskQueue alloc] init];
@@ -178,6 +242,10 @@
 - (void)defaultOperation {
   // 如果是主播、上麦及 打开麦克风
   if (self.role == NEKaraokeViewRoleHost) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self.bottomView setMicBtnSelected:NO];
+      [self.bottomView isShowMicBtn:YES];
+    });
     @weakify(self)[NEKaraokeKit.shared
         requestSeat:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
           @strongify(self) if (code == 0) {
@@ -188,10 +256,6 @@
           }
         }];
   } else {
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [self.bottomView setMicBtnSelected:YES];
-      [self.bottomView isShowMicBtn:NO];
-    });
     [self fetchPickSongList];
     @weakify(self)
         // 拉取演唱信息
@@ -205,8 +269,8 @@
           if (!songModel) {
             return;
           }
-          if (songModel.oc_songStaus == 0 ||
-              songModel.oc_songStaus == 1) {  // 暂停或者演唱中 下载歌词并展示
+          if (songModel.oc_songStatus == 0 ||
+              songModel.oc_songStatus == 1) {  // 暂停或者演唱中 下载歌词并展示
             [[NECopyrightedMedia getInstance]
                 preloadSongLyric:songModel.songId
                         callback:^(NSString *_Nullable content, NSString *_Nullable lyricType,
@@ -232,6 +296,9 @@
 #pragma mark - private
 
 - (void)showChooseSingViewController {
+  if (![self checkNetwork]) {
+    return;
+  }
   UIViewController *controller = [[UIViewController alloc] init];
   controller.preferredContentSize = CGSizeMake(CGRectGetWidth([UIScreen mainScreen].bounds), 500);
   NEKaraokePickSongView *view = [[NEKaraokePickSongView alloc]
@@ -409,6 +476,9 @@
                                effectId:[[NEKaraokeKit shared] currentSongIdForAudioEffect]];
       break;
     case NEKaraokeControlEventTypePause: {  // 暂停播放
+      if (![self checkNetwork]) {
+        return;
+      }
       @weakify(self)[[NEKaraokeKit shared]
           requestPausePlayingSong:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -421,6 +491,9 @@
           }];
     } break;
     case NEKaraokeControlEventTypeResume: {  // 恢复播放
+      if (![self checkNetwork]) {
+        return;
+      }
       @weakify(self)[[NEKaraokeKit shared]
           requestResumePlayingSong:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -433,12 +506,17 @@
           }];
     } break;
     case NEKaraokeControlEventTypeSwitch: {
+      if (![self checkNetwork]) {
+        return;
+      }
       [NEKaraokeKit.shared
-          requestStopPlayingSong:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
-            if (code != 0) {
-              [NEKaraokeToast showToast:[NSString stringWithFormat:@"切歌失败: %@", msg]];
-            }
-          }];
+          nextSongWithOrderId:self.localOrderSong.orderId
+                     callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
+                       if (code != 0) {
+                         [NEKaraokeToast
+                             showToast:[NSString stringWithFormat:@"切歌失败: %@", msg]];
+                       }
+                     }];
     } break;
     case NEKaraokeControlEventTypeOriginal:
       [[NEKaraokeKit shared] switchAccompaniment:false];
@@ -457,6 +535,9 @@
 #pragma mark - NEKaraokeKeyboardToolbarDelegate
 - (void)didToolBarSendText:(NSString *)text {
   if (text.length) {
+    if (![self checkNetwork]) {
+      return;
+    }
     @weakify(self)[[NEKaraokeKit shared]
         sendTextMessage:text
                callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
@@ -476,6 +557,9 @@
 #pragma mark - NEKaraokeSendGiftViewtDelegate
 
 - (void)didSendGift:(NEKaraokeUIGiftModel *)gift {
+  if (![self checkNetwork]) {
+    return;
+  }
   // 发送礼物
   [self
       dismissViewControllerAnimated:true
@@ -529,7 +613,9 @@
       } else {
         switch (self.seatRequestType) {
           case NEKaraokeSeatRequestTypeOn: {
-            [self showAlert:@"向房主申请上麦互动"
+            if ([self checkNetwork]) {
+              [self
+                  showAlert:@"向房主申请上麦互动"
                     confirm:@"确定"
                       block:^{
                         if (![NEKaraokeAuthorityHelper checkMicAuthority]) {
@@ -546,6 +632,7 @@
                           });
                         }];
                       }];
+            }
           } break;
           case NEKaraokeSeatRequestTypeApplying: {
             NEKaraokeSeatListVC *seatListVC = [[NEKaraokeSeatListVC alloc] init];
@@ -1113,7 +1200,7 @@
   NEKaraokeSongMode songMode = [self fetchCurrentSongMode];
   // 自己独唱 展示打分
   if ([self isAnchorWithSelf]) {
-    if (songMode == NEKaraokeSongModeSolo) {
+    if (songMode == NEKaraokeSongModeSolo && [self needShowFinalScoreView]) {
       [self showFinalScoreView];
       // 5秒延迟操作
       double delayInSeconds = 5.0;
@@ -1161,6 +1248,9 @@
       break;
     case NEKaraokeLyricActionTypeToSolo: {
       [self.taskQueue removeTask];
+      if (![self checkNetwork]) {
+        return;
+      }
       [NEKaraokeKit.shared
           requestPlaySongWithOrderId:self.localOrderSong.orderId
                             chorusId:nil
@@ -1173,6 +1263,9 @@
                             }];
     } break;
     case NEKaraokeLyricActionTypeJoinChorus: {
+      if (![self checkNetwork]) {
+        return;
+      }
       if (![self isOnSeat]) {
         [self showAlert:@"仅麦上成员才能加入合唱"
                 confirm:@"申请上麦"
@@ -1281,15 +1374,19 @@
 - (void)onPreloadComplete:(NSString *)songId error:(NSError *)error {
   if (_preloadSong) {
     _preloadSong = false;
-    [NEKaraokeKit.shared
-        chorusReadyWithChorusId:self.chorusId
-                       callback:^(NSInteger code, NSString *_Nullable msg,
-                                  NEKaraokeSongModel *_Nullable songModel) {
-                         if (code != 0) {
-                           [NEKaraokeToast
-                               showToast:[NSString stringWithFormat:@"加入合唱失败: %@", msg]];
-                         }
-                       }];
+    if (!error) {
+      [NEKaraokeKit.shared
+          chorusReadyWithChorusId:self.chorusId
+                         callback:^(NSInteger code, NSString *_Nullable msg,
+                                    NEKaraokeSongModel *_Nullable songModel) {
+                           if (code != 0) {
+                             [NEKaraokeToast
+                                 showToast:[NSString stringWithFormat:@"加入合唱失败: %@", msg]];
+                           }
+                         }];
+    } else {
+      [NEKaraokeToast showToast:[NSString stringWithFormat:@"下载歌曲失败 %@", error.description]];
+    }
   }
 }
 
@@ -1317,6 +1414,11 @@
                                                              song.songName]];
 }
 
+- (void)onNextSong:(NEKaraokeOrderSongModel *)song {
+  [self sendChatroomNotifyMessage:[NSString
+                                      stringWithFormat:@"%@ 已切歌", song.actionOperator.userName]];
+}
+
 - (BOOL)shouldAutorotate {
   return NO;
 }
@@ -1330,6 +1432,9 @@
 
 #pragma mark 展示最后打分
 /// 是否展示
+- (BOOL)needShowFinalScoreView {
+  return [self.lyricActionView hasPitchConotent];
+}
 - (void)showFinalScoreView {
   __block NEPitchPlayResultModel *playResultModel = [[NEPitchPlayResultModel alloc] init];
   playResultModel.nickName = [self.localOrderSong.userName mutableCopy];
@@ -1337,10 +1442,11 @@
   playResultModel.headerUrl = [self.localOrderSong.icon mutableCopy];
 
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    @weakify(self)[NEPitchRecordSingRecordHandler
-        doFinishCompleteBlock:^(NSError *_Nonnull error, NSInteger availableLyricCount,
-                                NEPitchRecordSingMarkModel *_Nonnull chorusFinalMark) {
-          __block long markValue = chorusFinalMark.totalValue / availableLyricCount;
+    @weakify(self)[[NEPitchSongScore getInstance]
+        getFinalScoreComplete:^(NSError *_Nullable error,
+                                NEPitchRecordSingInfo *_Nullable pitchRecordSingInfo) {
+          __block long markValue = pitchRecordSingInfo.chorusFinalMark.totalValue /
+                                   pitchRecordSingInfo.availableLyricCount;
           __block NEOpusLevel markLevel = NEOpusLevelC;
           dispatch_async(dispatch_get_main_queue(), ^{
             if (markValue > 90) {
