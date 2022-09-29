@@ -28,6 +28,7 @@ import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
 import com.netease.yunxin.kit.copyrightedmedia.api.NEErrorCode;
 import com.netease.yunxin.kit.copyrightedmedia.api.NESongPreloadCallback;
 import com.netease.yunxin.kit.copyrightedmedia.api.SongResType;
+import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 import com.netease.yunxin.kit.karaokekit.ui.databinding.OrderItemLayoutBinding;
 import com.netease.yunxin.kit.karaokekit.ui.model.KaraokeOrderSongModel;
@@ -160,29 +161,30 @@ public class OrderAdapter extends CommonMoreAdapter<KaraokeOrderSongModel, Order
   public void preloadSong(Context context, KaraokeOrderSongModel copyrightSong) {
     orderSongViewModel.preloadSong(
         copyrightSong.getSongId(),
+        copyrightSong.getChannel(),
         new NESongPreloadCallback() {
 
           @Override
-          public void onPreloadStart(String songId) {
+          public void onPreloadStart(String songId, int channel) {
             copyrightSong.setStatus(KaraokeOrderSongModel.STATE_DOWNLOADING);
             refreshDataAndNotify(copyrightSong, true);
           }
 
           @Override
-          public void onPreloadProgress(String songId, float progress) {
+          public void onPreloadProgress(String songId, int channel, float progress) {
             copyrightSong.setDownloadProgress((int) (progress * 100));
             refreshDataAndNotify(copyrightSong, true);
           }
 
           @Override
-          public void onPreloadComplete(String songId, int errorCode, String msg) {
+          public void onPreloadComplete(String songId, int channel, int errorCode, String msg) {
             copyrightSong.setStatus(KaraokeOrderSongModel.STATE_DOWNLOADED);
             copyrightSong.setDownloadProgress(100);
             String filePath =
-                NECopyrightedMedia.getInstance().getSongURI(songId, SongResType.TYPE_ACCOMP);
+                NEKaraokeKit.getInstance().getSongURI(songId, channel, SongResType.TYPE_ACCOMP);
             if (TextUtils.isEmpty(filePath)) {
               filePath =
-                  NECopyrightedMedia.getInstance().getSongURI(songId, SongResType.TYPE_ORIGIN);
+                  NEKaraokeKit.getInstance().getSongURI(songId, channel, SongResType.TYPE_ORIGIN);
             }
             if (filePath != null) {
               copyrightSong.setSongTime(MediaUtils.getDuration(filePath));

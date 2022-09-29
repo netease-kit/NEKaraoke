@@ -22,12 +22,11 @@ import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.gyf.immersionbar.ImmersionBar;
 import com.netease.yunxin.kit.alog.ALog;
-import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
-import com.netease.yunxin.kit.copyrightedmedia.api.NESongPreloadCallback;
-import com.netease.yunxin.kit.copyrightedmedia.impl.NECopyrightedEventHandler;
 import com.netease.yunxin.kit.karaokekit.api.NEJoinKaraokeOptions;
 import com.netease.yunxin.kit.karaokekit.api.NEJoinKaraokeParams;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCallback;
+import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCopyrightedMediaEventHandler;
+import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCopyrightedMediaListener;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeEndReason;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeRole;
@@ -65,7 +64,8 @@ import com.netease.yunxin.kit.karaokekit.ui.viewmodel.OrderSongViewModel;
 import java.util.List;
 import kotlin.Unit;
 
-public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEventHandler {
+public class KaraokeRoomActivity extends BaseActivity
+    implements NEKaraokeCopyrightedMediaEventHandler {
 
   protected static final String TAG = "KaraokeRoomActivity";
 
@@ -166,7 +166,7 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
               }
             });
     initView();
-    NECopyrightedMedia.getInstance().setEventHandler(this);
+    NEKaraokeKit.getInstance().setCopyrightedMediaEventHandler(this);
   }
 
   private void initView() {
@@ -835,7 +835,7 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
       }
     }
     if (song != null) {
-      loadRes(song.getSongId());
+      loadRes(song.getSongId(), song.getChannel());
     }
   }
 
@@ -867,22 +867,25 @@ public class KaraokeRoomActivity extends BaseActivity implements NECopyrightedEv
         song.getUserUuid(), NEKaraokeKit.getInstance().getLocalMember().getAccount());
   }
 
-  private void loadRes(String songId) {
-    boolean isExit = NECopyrightedMedia.getInstance().isSongPreloaded(songId);
+  private void loadRes(String songId, int channel) {
+    boolean isExit = NEKaraokeKit.getInstance().isSongPreloaded(songId, channel);
     if (!isExit) {
-      NECopyrightedMedia.getInstance()
+      ALog.d(TAG, "loadRes 1------>" + songId);
+      NEKaraokeKit.getInstance()
           .preloadSong(
               songId,
-              new NESongPreloadCallback() {
+              channel,
+              new NEKaraokeCopyrightedMediaListener() {
 
                 @Override
-                public void onPreloadStart(String songId) {}
+                public void onPreloadStart(String songId, int channel) {}
 
                 @Override
-                public void onPreloadProgress(String songId, float progress) {}
+                public void onPreloadProgress(String songId, int channel, float progress) {}
 
                 @Override
-                public void onPreloadComplete(String songId, int errorCode, String msg) {}
+                public void onPreloadComplete(
+                    String songId, int channel, int errorCode, String msg) {}
               });
     }
   }

@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** The decorator for recyclerView is used to load more data. */
 public class OrderLoadMoreDecorator<T> {
-  public static final int LOAD_MORE_LIMIT = 5;
+  public static final int LOAD_MORE_LIMIT = 30;
   public final RecyclerView innerView;
   public final LinearLayoutManager layoutManager;
   public final OrderAdapter adapter;
