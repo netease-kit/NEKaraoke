@@ -74,11 +74,13 @@ public class InputUtils {
             rootView.getWindowVisibleDisplayFrame(outRect);
             int differ = helper.getHeight() - outRect.bottom;
             if (differ == 0) {
-              helper.getInputView().setVisibility(View.GONE);
-              helper.getInputView().setText("");
-              ConstraintLayout.LayoutParams layoutParams =
-                  (ConstraintLayout.LayoutParams) helper.getInputView().getLayoutParams();
-              layoutParams.bottomMargin = 0;
+              if (helper.getInputView().getVisibility() == View.VISIBLE) {
+                helper.getInputView().setVisibility(View.GONE);
+                helper.getInputView().setText("");
+                ConstraintLayout.LayoutParams layoutParams =
+                    (ConstraintLayout.LayoutParams) helper.getInputView().getLayoutParams();
+                layoutParams.bottomMargin = 0;
+              }
               return;
             }
             helper.getInputView().setVisibility(View.VISIBLE);

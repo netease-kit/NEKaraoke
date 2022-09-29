@@ -4,20 +4,23 @@
 
 package com.netease.yunxin.kit.karaokekit.ui.utils;
 
+import static com.netease.yunxin.kit.copyrightedmedia.api.model.NELyricType.NELyricTypeKas;
+import static com.netease.yunxin.kit.copyrightedmedia.api.model.NELyricType.NELyricTypeQrc;
+import static com.netease.yunxin.kit.copyrightedmedia.api.model.NELyricType.NELyricTypeYrc;
+
 import android.text.TextUtils;
 import androidx.annotation.Nullable;
 import com.netease.yunxin.kit.alog.ALog;
 import com.netease.yunxin.kit.copyrightedmedia.api.LyricCallback;
 import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
 import com.netease.yunxin.kit.copyrightedmedia.api.model.NELyric;
+import com.netease.yunxin.kit.copyrightedmedia.api.model.NELyricType;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCallback;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSongModel;
 import com.netease.yunxin.kit.karaokekit.ui.model.LyricBusinessModel;
 
 public class LyricLoader {
   private static final String TAG = "LyricLoader";
-  private static final String YRC_TYPE = "yrc";
-  private static final String QRC_TYPE = "qrc";
 
   /** 加载歌词 */
   public static void loadLyric(
@@ -32,22 +35,30 @@ public class LyricLoader {
     if (songId == null) {
       return;
     }
+    if (model.getChannel() == null) {
+      return;
+    }
+    int channel = model.getChannel();
     NECopyrightedMedia.getInstance()
         .preloadSongLyric(
             songId,
+            channel,
             new LyricCallback() {
 
               @Override
-              public void success(@Nullable String content, @Nullable String type) {
+              public void success(
+                  @Nullable String content, @Nullable String type, @Nullable int channel) {
                 if (callback != null) {
                   LyricBusinessModel lyricBusinessModel = new LyricBusinessModel();
-                  String midiContent = NECopyrightedMedia.getInstance().getMidi(songId);
-                  if (YRC_TYPE.equals(type)) {
-                    lyricBusinessModel.lyricType = NELyric.NELyricType.NELyricTypeYrc;
-                  } else if (QRC_TYPE.equals(type)) {
-                    lyricBusinessModel.lyricType = NELyric.NELyricType.NELyricTypeQrc;
+                  String midiContent = NECopyrightedMedia.getInstance().getPitch(songId, channel);
+                  if (NELyricTypeYrc.getType().equals(type)) {
+                    lyricBusinessModel.lyricType = NELyricTypeYrc;
+                  } else if (NELyricTypeQrc.getType().equals(type)) {
+                    lyricBusinessModel.lyricType = NELyricTypeQrc;
+                  } else if (NELyricTypeKas.getType().equals(type)) {
+                    lyricBusinessModel.lyricType = NELyricTypeKas;
                   } else {
-                    lyricBusinessModel.lyricType = NELyric.NELyricType.NELyricTypeLrc;
+                    lyricBusinessModel.lyricType = NELyricType.NELyricTypeLrc;
                   }
                   if (TextUtils.isEmpty(content)) {
                     lyricBusinessModel.lyricContent = "";

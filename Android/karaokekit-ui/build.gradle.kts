@@ -37,14 +37,14 @@ dependencies {
     implementation("com.netease.yunxin.kit:alog:1.0.2")
 
 
-    implementation("com.netease.yunxin.kit.karaoke:karaokekit:1.2.0")
+    implementation("com.netease.yunxin.kit.karaoke:karaokekit:1.3.0")
     implementation("com.netease.yunxin.kit.common:common-ui:1.1.7")
     implementation("com.netease.yunxin.kit.common:common-network:1.1.6")
     implementation("com.netease.yunxin.kit.common:common-image:1.1.6")
-    implementation("com.netease.yunxin.kit.karaoke:karaokekit-pitch-ui:1.2.0")
-    implementation("com.netease.yunxin.kit.karaoke:karaokekit-lyric-ui:1.2.0")
-    api("com.netease.yunxin.kit.karaoke:karaokekit-audioeffect:1.2.0")
-    api("com.netease.yunxin.kit.karaoke:karaokekit-audioeffect-ui:1.2.0")
+    implementation("com.netease.yunxin.kit.karaoke:karaokekit-pitch-ui:1.3.0")
+    implementation("com.netease.yunxin.kit.karaoke:karaokekit-lyric-ui:1.3.0")
+    api("com.netease.yunxin.kit.karaoke:karaokekit-audioeffect:1.3.0")
+    api("com.netease.yunxin.kit.karaoke:karaokekit-audioeffect-ui:1.3.0")
 
     implementation("com.gyf.immersionbar:immersionbar:3.0.0")
     implementation("com.netease.yunxin.kit.auth:auth-yunxin-login:1.0.1")

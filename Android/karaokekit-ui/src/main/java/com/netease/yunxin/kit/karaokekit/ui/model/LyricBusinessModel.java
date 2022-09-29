@@ -5,12 +5,13 @@
 package com.netease.yunxin.kit.karaokekit.ui.model;
 
 import com.netease.yunxin.kit.copyrightedmedia.api.model.NELyric;
+import com.netease.yunxin.kit.copyrightedmedia.api.model.NELyricType;
 
 /** 业务模块需要的歌词模型 */
 public class LyricBusinessModel {
   public String lyricContent;
   public String midiContent;
-  public NELyric.NELyricType lyricType;
+  public NELyricType lyricType;
   public NELyric lyric;
   public int preludeTime;
 

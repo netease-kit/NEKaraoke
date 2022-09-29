@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.netease.yunxin.kit.alog.ALog;
 import com.netease.yunxin.kit.copyrightedmedia.api.model.NELyric;
+import com.netease.yunxin.kit.copyrightedmedia.api.model.NELyricType;
 import com.netease.yunxin.kit.copyrightedmedia.api.model.NEOpusLevel;
 import com.netease.yunxin.kit.copyrightedmedia.api.model.NEPitchAudioData;
 import com.netease.yunxin.kit.copyrightedmedia.api.model.NEPitchRecordSingInfo;
@@ -94,9 +95,9 @@ public class NESoloSingView extends FrameLayout {
     pitchLayoutBuilder.linearGradientEndColor = LINEAR_GRADIENT_END_COLOR;
   }
 
-  void showLyricAndScore(String lyricContent, String midiContent, NELyric.NELyricType lyricType) {
+  void showLyricAndScore(String lyricContent, String midiContent, NELyricType lyricType) {
     String separator = ",";
-    if (lyricType == NELyric.NELyricType.NELyricTypeQrc) {
+    if (lyricType == NELyricType.NELyricTypeQrc) {
       separator = " ";
     }
     lyric = NELyric.initWithContent(lyricContent, lyricType);

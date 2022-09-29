@@ -13,6 +13,7 @@ import com.netease.yunxin.kit.copyrightedmedia.api.NEErrorCode;
 import com.netease.yunxin.kit.copyrightedmedia.api.NESongPreloadCallback;
 import com.netease.yunxin.kit.copyrightedmedia.api.model.NECopyrightedSong;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCallback;
+import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCopyrightedMediaListener;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeOrderSongModel;
 import com.netease.yunxin.kit.karaokekit.ui.model.KaraokeOrderSongModel;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderSongViewModel extends ViewModel {
-  private NECopyrightedMedia copyRight = NECopyrightedMedia.getInstance();
   private NEKaraokeKit karaokeKit = NEKaraokeKit.getInstance();
   private final MutableLiveData<List<NEKaraokeOrderSongModel>> orderSongListChangeEvent =
       new MutableLiveData<>();
@@ -35,7 +35,8 @@ public class OrderSongViewModel extends ViewModel {
       int pageNum,
       int pageSize,
       NECopyrightedMedia.Callback<List<KaraokeOrderSongModel>> callback) {
-    copyRight.getSongList(
+    karaokeKit.getSongList(
+        null,
         null,
         pageNum,
         pageSize,
@@ -68,8 +69,9 @@ public class OrderSongViewModel extends ViewModel {
       int pageNum,
       int pageSize,
       NECopyrightedMedia.Callback<List<KaraokeOrderSongModel>> callback) {
-    copyRight.searchSong(
+    karaokeKit.searchSong(
         keyword,
+        null,
         pageNum,
         pageSize,
         new NECopyrightedMedia.Callback<List<NECopyrightedSong>>() {
@@ -115,30 +117,31 @@ public class OrderSongViewModel extends ViewModel {
         });
   }
 
-  public void preloadSong(String songId, NESongPreloadCallback callback) {
-    if (copyRight.isSongPreloaded(songId)) {
-      callback.onPreloadComplete(songId, NEErrorCode.OK, "");
+  public void preloadSong(String songId, int channel, NESongPreloadCallback callback) {
+    if (karaokeKit.isSongPreloaded(songId, channel)) {
+      callback.onPreloadComplete(songId, channel, NEErrorCode.OK, "");
     } else {
-      copyRight.preloadSong(
+      karaokeKit.preloadSong(
           songId,
-          new NESongPreloadCallback() {
+          channel,
+          new NEKaraokeCopyrightedMediaListener() {
 
             @Override
-            public void onPreloadStart(String songId) {
+            public void onPreloadStart(String songId, int channel) {
               ALog.i("onPreloadStart $songId");
-              callback.onPreloadStart(songId);
+              callback.onPreloadStart(songId, channel);
             }
 
             @Override
-            public void onPreloadProgress(String songId, float progress) {
+            public void onPreloadProgress(String songId, int channel, float progress) {
               ALog.i("onPreloadProgress $songId $progress");
-              callback.onPreloadProgress(songId, progress);
+              callback.onPreloadProgress(songId, channel, progress);
             }
 
             @Override
-            public void onPreloadComplete(String songId, int errorCode, String msg) {
+            public void onPreloadComplete(String songId, int channel, int errorCode, String msg) {
               ALog.i("onPreloadComplete $songId $errorCode $msg");
-              callback.onPreloadComplete(songId, errorCode, msg);
+              callback.onPreloadComplete(songId, channel, errorCode, msg);
             }
           });
     }
