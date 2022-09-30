@@ -45,6 +45,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 //销毁打分
 - (void)pitchDestroy;
+
+/// 设置路径
+/// @param path 路径
+/// @param type 类型
+- (void)setPath:(NSString *)path lyricType:(NELyricType)type;
+/// 设置歌词内容
+/// @param content 内容
+/// @param type 类型
+- (void)setContent:(NSString *)content lyricType:(NELyricType)type;
 @end
 
 NS_ASSUME_NONNULL_END

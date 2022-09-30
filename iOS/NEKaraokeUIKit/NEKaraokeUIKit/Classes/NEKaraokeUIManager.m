@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 #import "NEKaraokeUIManager.h"
-#import <NECopyrightedMedia/NECopyrightedMediaPublic.h>
 #import "NEKaraokeCreateViewController.h"
 #import "NEKaraokeListViewController.h"
 #import "NEKaraokePickSongEngine.h"
@@ -45,28 +44,11 @@
                 callback:(void (^)(NSInteger, NSString *_Nullable, id _Nullable))callback {
   self.nickname = nickname;
   __weak typeof(self) weakSelf = self;
-  [NEKaraokeKit.shared
-         login:account
-         token:token
-      callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
-        if (code == 0) {
-          [[NEKaraokePickSongEngine sharedInstance]
-              getSongDynamicTokenUntilSuccess:^(NEKaraokeDynamicToken *_Nullable dynamicToken) {
-                __strong typeof(self) strongSelf = weakSelf;
-                [[NECopyrightedMedia getInstance] initialize:strongSelf.config.appKey
-                                                       token:dynamicToken.accessToken
-                                                    userUuid:account
-                                                      extras:strongSelf.config.extras
-                                                    callback:^(NSError *_Nullable error) {
-                                                      NSLog(@"%@", error);
-                                                    }];
-                //处理过期时间
-                [[NEKaraokePickSongEngine sharedInstance]
-                    calculateExpiredTime:dynamicToken.oc_expiresIn];
-              }];
-        }
-        callback(code, msg, obj);
-      }];
+  [NEKaraokeKit.shared login:account
+                       token:token
+                    callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
+                      callback(code, msg, obj);
+                    }];
 }
 
 - (void)logoutWithCallback:(void (^)(NSInteger, NSString *_Nullable, id _Nullable))callback {

@@ -5,7 +5,6 @@
 #import "NEKaraokePickSongView.h"
 #import <MJRefresh/MJRefresh.h>
 #import <Masonry/Masonry.h>
-#import <NECopyrightedMedia/NECopyrightedMediaPublic.h>
 #import <NEKaraokeKit/NEKaraokeKit-Swift.h>
 #import <SDWebImage/SDWebImage.h>
 #import <libextobjc/extobjc.h>
@@ -433,7 +432,12 @@
     NEKaraokeSongItem *item = [NEKaraokePickSongEngine sharedInstance].pickSongArray[indexPath.row];
     NSString *downlaodingStatus =
         [NEKaraokePickSongEngine sharedInstance].pickSongDownloadingArray[indexPath.row];
-    [cell.songImageView sd_setImageWithURL:[NSURL URLWithString:item.songCover]];
+    if (item.songCover.length > 0) {
+      [cell.songImageView sd_setImageWithURL:[NSURL URLWithString:item.songCover]];
+    } else {
+      cell.songImageView.image = [UIImage karaoke_imageNamed:@"empty_song_cover"];
+    }
+
     cell.songLabel.text = item.songName;
     cell.progress = item.downloadProcess;
     NECopyrightedSinger *singer = item.singers.firstObject;
@@ -483,7 +487,7 @@
           NSString *downloadingLogInfo =
               [NSString stringWithFormat:@"点击开始下载文件,下载中列表数据变更:%@", item.songId];
           [NEKaraokeSongLog successLog:karaokeSongLog desc:downloadingLogInfo];
-          [[NECopyrightedMedia getInstance] preloadSong:item.songId observe:self];
+          [[NEKaraokePickSongEngine sharedInstance] preloadSong:item.songId channel:item.channel];
         } else {
           //申请上麦
           if (self.applyOnseat) {
@@ -623,7 +627,7 @@
   //                    [[NEKaraokePickSongEngine sharedInstance].currentOrderSongArray
   //                        addObject:self.currentOrderSong];
   //
-  //                    [[NECopyrightedMedia getInstance] preloadSong:self.currentOrderSong.songId
+  //                    [[NEKaraokeKit shared] preloadSong:self.currentOrderSong.songId
   //                                                          observe:self];
   //                  }];
 }
@@ -646,7 +650,12 @@
   if (isSonsList) {
     dispatch_async(dispatch_get_main_queue(), ^{
       if ([NEKaraokePickSongEngine sharedInstance].pickSongArray.count > index.row) {
-        [self.pickSongsTableView reloadRowsAtIndexPaths:@[ index ] withRowAnimation:NO];
+        NEKaraokePointSongTableViewCell *cell =
+            [self.pickSongsTableView cellForRowAtIndexPath:index];
+        cell.statueBottomLabel.hidden = YES;
+        cell.statueTopLabel.hidden = YES;
+        cell.downloadingLabel.hidden = YES;
+        cell.pointButton.hidden = NO;
       }
     });
   }
@@ -697,6 +706,7 @@
                             if ([self.pickSongsTableView.refreshControl isRefreshing]) {
                               [self.pickSongsTableView.refreshControl endRefreshing];
                             }
+                            [self.pickSongsTableView reloadData];
                             [NEKaraokeToast showToast:@"没有找到合适的结果"];
                           } else {
                             [[NEKaraokePickSongEngine sharedInstance] updatePageNumber:YES];

@@ -6,7 +6,6 @@
 #import <AVFoundation/AVFoundation.h>
 #import <BlocksKit/BlocksKit.h>
 #import <Masonry/Masonry.h>
-#import <NECopyrightedMedia/NECopyrightedMediaPublic.h>
 #import <NELyricUIKit/NELyricUIKit.h>
 #import <libextobjc/extobjc.h>
 #import "NEKaraokeAuthorityHelper.h"
@@ -30,7 +29,7 @@
                                        NEKaraokeListener,
                                        NEKaraokeSeatViewDelegate,
                                        NEKaraokeSeatListVCDelegate,
-                                       NESongPreloadProtocol>
+                                       NEKaraokeCopyrightedMediaListener>
 //是否打过分
 @property(nonatomic, assign) BOOL hasMarked;
 //是否断网
@@ -146,8 +145,9 @@
           } else {
             if (songModel.oc_songStatus == 0 ||
                 songModel.oc_songStatus == 1) {  // 暂停或者演唱中 下载歌词并展示
-              [[NECopyrightedMedia getInstance]
+              [[NEKaraokeKit shared]
                   preloadSongLyric:songModel.songId
+                           channel:songModel.oc_channel
                           callback:^(NSString *_Nullable content, NSString *_Nullable lyricType,
                                      NSError *_Nullable error) {
                             dispatch_async(dispatch_get_main_queue(), ^{
@@ -155,7 +155,10 @@
                                 [self showNoLyricView:songModel];
                               }
                               else {
-                                self.lyricActionView.lyricContent = content;
+                                [self.lyricActionView
+                                    setLyricContent:content
+                                          lyricType:songModel.oc_channel == MIGU ? NELyricTypeKas
+                                                                                 : NELyricTypeYrc];
                                 self.lyricActionView.lyricSeekBtnHidden = true;
                                 self.lyricActionView.lyricDuration = songModel.oc_songTime;
                                 [self.lyricActionView
@@ -271,8 +274,9 @@
           }
           if (songModel.oc_songStatus == 0 ||
               songModel.oc_songStatus == 1) {  // 暂停或者演唱中 下载歌词并展示
-            [[NECopyrightedMedia getInstance]
+            [[NEKaraokeKit shared]
                 preloadSongLyric:songModel.songId
+                         channel:(int)songModel.oc_channel
                         callback:^(NSString *_Nullable content, NSString *_Nullable lyricType,
                                    NSError *_Nullable error) {
                           dispatch_async(dispatch_get_main_queue(), ^{
@@ -280,7 +284,10 @@
                               [self showNoLyricView:songModel];
                             }
                             else {
-                              self.lyricActionView.lyricContent = content;
+                              [self.lyricActionView
+                                  setLyricContent:content
+                                        lyricType:songModel.oc_channel == MIGU ? NELyricTypeKas
+                                                                               : NELyricTypeYrc];
                               self.lyricActionView.lyricSeekBtnHidden = true;
                               self.lyricActionView.lyricDuration = songModel.oc_songTime;
                               [self.lyricActionView
@@ -894,24 +901,28 @@
                                                                  songModel.actionOperator.userName,
                                                                  songModel.songName]];
       [self.taskQueue removeTask];
-      NSString *originPath = [self fetchOriginalFilePathWithSongId:songModel.songId];
-      NSString *accompanyPath = [self fetchAccompanyFilePathWithSongId:songModel.songId];
+      NSString *originPath = [self fetchOriginalFilePathWithSongId:songModel.songId
+                                                           channel:(int)songModel.oc_channel];
+      NSString *accompanyPath = [self fetchAccompanyFilePathWithSongId:songModel.songId
+                                                               channel:(int)songModel.oc_channel];
       // 主唱ID
       NSString *anchorUuid = songModel.account;
       NSString *chorusUuid = songModel.assistantUuid;
       // 当前模式
       NEKaraokeSongMode songMode = [self fetchCurrentSongMode];
-      NSString *lyric = [self fetchLyricContentWithSongId:songModel.songId];
+      NSString *lyric = [self fetchLyricContentWithSongId:songModel.songId
+                                                  channel:(int)songModel.oc_channel];
       // 自己独唱 展示打分
       if (songMode == NEKaraokeSongModeSolo && [self isAnchorWithSelf]) {
         dispatch_async(dispatch_get_main_queue(), ^{
           self.hasMarked = NO;
           if (lyric.length) {
             [self.lyricActionView
-                setPitchContent:[self fetchPitchContentWithSongId:songModel.songId]
+                setPitchContent:[self fetchPitchContentWithSongId:songModel.songId
+                                                          channel:(int)songModel.oc_channel]
                       separator:@","
                    lyricContent:lyric
-                      lyricType:NELyricTypeYrc];
+                      lyricType:songModel.oc_channel == MIGU ? NELyricTypeKas : NELyricTypeYrc];
             [self.lyricActionView showSubview:NEKaraokeLyricActionSubviewTypePitch];
             self.lyricActionView.lyricSeekBtnHidden = false;
           } else {
@@ -922,7 +933,9 @@
         // 开始合唱，展示歌词页，独唱展示打分，合唱展示歌词
         dispatch_async(dispatch_get_main_queue(), ^{
           if (lyric.length) {
-            self.lyricActionView.lyricContent = lyric;
+            [self.lyricActionView
+                setLyricContent:lyric
+                      lyricType:songModel.oc_channel == MIGU ? NELyricTypeKas : NELyricTypeYrc];
             [self.lyricActionView showSubview:NEKaraokeLyricActionSubviewTypeLyric];
             self.lyricActionView.lyricSeekBtnHidden = true;
           } else {
@@ -1063,8 +1076,9 @@
     } break;
     case NEKaraokeChorusActionTypeNext: {  // 开始播放 150
       self.time = 0;
-      [[NECopyrightedMedia getInstance]
+      [[NEKaraokeKit shared]
           preloadSongLyric:songModel.songId
+                   channel:(int)songModel.oc_channel
                   callback:^(NSString *_Nullable content, NSString *_Nullable lyricType,
                              NSError *_Nullable error){
                   }];
@@ -1293,18 +1307,23 @@
                             NSInteger singMode = [songModel oc_singMode];
                             if (singMode == 0 || singMode == 2) {  //下载全部内容
                               @strongify(self) self->_preloadSong = true;
-                              [[NECopyrightedMedia getInstance] preloadSong:songModel.songId
-                                                                    observe:self];
+                              [[NEKaraokeKit shared] preloadSong:songModel.songId
+                                                         channel:(int)songModel.oc_channel
+                                                         observe:self];
                             } else {  // 下载歌词
-                              @weakify(self)[[NECopyrightedMedia getInstance]
+                              @weakify(self)[[NEKaraokeKit shared]
                                   preloadSongLyric:songModel.songId
+                                           channel:(int)songModel.oc_channel
                                           callback:^(NSString *_Nullable content,
                                                      NSString *_Nullable lyricType,
                                                      NSError *_Nullable error) {
                                             if (!error) {
                                               dispatch_async(dispatch_get_main_queue(), ^{
-                                                @strongify(self) self.lyricActionView.lyricContent =
-                                                    content;
+                                                @strongify(self)[self.lyricActionView
+                                                    setLyricContent:content
+                                                          lyricType:songModel.oc_channel == MIGU
+                                                                        ? NELyricTypeKas
+                                                                        : NELyricTypeYrc];
                                               });
                                               // 发送准备
                                               [NEKaraokeKit.shared
@@ -1371,7 +1390,9 @@
   return _seatItems;
 }
 #pragma mark-----------------------------  NESongPreloadProtocol  -----------------------------
-- (void)onPreloadComplete:(NSString *)songId error:(NSError *)error {
+- (void)karaoke_onPreloadComplete:(NSString *)songId
+                          channel:(SongChannel)channel
+                            error:(NSError *)error {
   if (_preloadSong) {
     _preloadSong = false;
     if (!error) {

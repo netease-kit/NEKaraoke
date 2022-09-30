@@ -2,7 +2,6 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-#import <NECopyrightedMedia/NECopyrightedMedia.h>
 #import <libextobjc/extobjc.h>
 #import "NEKaraokeToast.h"
 #import "NEKaraokeViewController+Utils.h"
@@ -95,17 +94,17 @@
       }];
 }
 
-- (NSString *)fetchLyricContentWithSongId:(NSString *)songId {
-  return [[NECopyrightedMedia getInstance] getLyric:songId];
+- (NSString *)fetchLyricContentWithSongId:(NSString *)songId channel:(SongChannel)channel {
+  return [[NEKaraokeKit shared] getLyric:songId channel:channel];
 }
-- (NSString *)fetchPitchContentWithSongId:(NSString *)songId {
-  return [[NECopyrightedMedia getInstance] getPitch:songId];
+- (NSString *)fetchPitchContentWithSongId:(NSString *)songId channel:(SongChannel)channel {
+  return [[NEKaraokeKit shared] getPitch:songId channel:channel];
 }
-- (NSString *)fetchOriginalFilePathWithSongId:(NSString *)songId {
-  return [[NECopyrightedMedia getInstance] getSongURI:songId songResType:TYPE_ORIGIN];
+- (NSString *)fetchOriginalFilePathWithSongId:(NSString *)songId channel:(SongChannel)channel {
+  return [[NEKaraokeKit shared] getSongURI:songId channel:channel songResType:TYPE_ORIGIN];
 }
-- (NSString *)fetchAccompanyFilePathWithSongId:(NSString *)songId {
-  return [[NECopyrightedMedia getInstance] getSongURI:songId songResType:TYPE_ACCOMP];
+- (NSString *)fetchAccompanyFilePathWithSongId:(NSString *)songId channel:(SongChannel)channel {
+  return [[NEKaraokeKit shared] getSongURI:songId channel:channel songResType:TYPE_ACCOMP];
 }
 
 @end
