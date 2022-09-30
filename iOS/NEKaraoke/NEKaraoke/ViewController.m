@@ -31,17 +31,16 @@
 
   self.my = [[MyViewController alloc] init];
   self.my.tabBarItem.title = @"我的";
-  self.my.tabBarItem.image =
-      [[UIImage imageNamed:@"tab2"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-
+  [self updateTabIcon];
   self.viewControllers =
       @[ list, [[UINavigationController alloc] initWithRootViewController:self.my] ];
 }
 
 - (void)updateTabIcon {
-  if ([AuthorManager shareInstance].isLogin) {
-    YXUserInfo *info = [[AuthorManager shareInstance] getUserInfo];
-    dispatch_async(dispatch_get_main_queue(), ^{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    if ([AuthorManager shareInstance].isLogin) {
+      YXUserInfo *info = [[AuthorManager shareInstance] getUserInfo];
+
       UIImage *image =
           [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:info.avatar]]];
       NSData *data = UIImageJPEGRepresentation(image, 0.5);
@@ -55,10 +54,21 @@
       UIImage *newImage = [self circleImageWithImage:resultImage
                                          borderWidth:0
                                          borderColor:[UIColor clearColor]];
-      self.my.tabBarItem.image =
-          [newImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    });
-  }
+      self.my.tabBarItem = nil;
+      self.my.tabBarItem = [[UITabBarItem alloc]
+          initWithTitle:@"我的"
+                  image:[newImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
+                    tag:nil];
+
+    } else {
+      self.my.tabBarItem = nil;
+      self.my.tabBarItem = [[UITabBarItem alloc]
+          initWithTitle:@"我的"
+                  image:[[UIImage imageNamed:@"tab2"]
+                            imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
+                    tag:nil];
+    }
+  });
 }
 - (void)push:(UIButton *)sender {
   UINavigationController *create = [[NEKaraokeUIManager sharedInstance] createViewController];

@@ -22,16 +22,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)unmuteAudio:(BOOL)showToast;
 
 /// 通过songId获取歌词内容
-- (NSString *)fetchLyricContentWithSongId:(NSString *)songId;
+- (NSString *)fetchLyricContentWithSongId:(NSString *)songId channel:(SongChannel)channel;
 
 /// 通过songId获取打分内容
-- (NSString *)fetchPitchContentWithSongId:(NSString *)songId;
+- (NSString *)fetchPitchContentWithSongId:(NSString *)songId channel:(SongChannel)channel;
 
 /// 通过songId获取原唱地址
-- (NSString *)fetchOriginalFilePathWithSongId:(NSString *)songId;
+- (NSString *)fetchOriginalFilePathWithSongId:(NSString *)songId channel:(SongChannel)channel;
 
 /// 通过songId获取伴奏地址
-- (NSString *)fetchAccompanyFilePathWithSongId:(NSString *)songId;
+- (NSString *)fetchAccompanyFilePathWithSongId:(NSString *)songId channel:(SongChannel)channel;
 
 @end
 

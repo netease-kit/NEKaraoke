@@ -7,7 +7,6 @@
 #import <BlocksKit/BlocksKit.h>
 #import <Lottie/LOTAnimationView.h>
 #import <Masonry/Masonry.h>
-#import <NECopyrightedMedia/NECopyrightedMediaPublic.h>
 #import <libextobjc/extobjc.h>
 #import "NEKaraokeSongLog.h"
 #import "UIColor+Karaoke.h"
@@ -84,9 +83,9 @@
   [self layoutIfNeeded];
 }
 
-- (void)setContent:(NSString *)content {
+- (void)setContent:(NSString *)content lyricType:(NELyricType)type {
   _content = content;
-  self.model = [[NELyric alloc] initWithContent:content andType:NELyricTypeYrc];
+  self.model = [[NELyric alloc] initWithContent:content andType:type];
   @weakify(self)[self
       preloadLyricCompleteBlock:^{
         @strongify(self)[self.lyricView loadWithLyricModel:self.model];
@@ -94,12 +93,12 @@
                       lyricList:(NSArray<NELyricLine *> *)self.model.lineModels];
 }
 
-- (void)setPath:(NSString *)path {
-  _path = path;
+- (void)setPath:(NSString *)path lyricType:(NELyricType)type {
+  self.path = path;
   NSString *content = [[NSString alloc] initWithContentsOfFile:path
                                                       encoding:NSUTF8StringEncoding
                                                          error:nil];
-  self.model = [[NELyric alloc] initWithContent:content andType:NELyricTypeYrc];
+  self.model = [[NELyric alloc] initWithContent:content andType:type];
   @weakify(self)[self
       preloadLyricCompleteBlock:^{
         @strongify(self)[self.lyricView loadWithLyricModel:self.model];
@@ -139,7 +138,7 @@
   //    [NEKaraokeSongLog infoLog:karaokeSongLog desc:[NSString
   //    stringWithFormat:@"打分数据初始化--- pitchContent - %@ \n lyricContent -
   //    %@",pitchContent,lyricContent]];
-  self.model = [[NELyric alloc] initWithContent:lyricContent andType:NELyricTypeYrc];
+  self.model = [[NELyric alloc] initWithContent:lyricContent andType:lyricType];
   NSBundle *karaokeUIBundle = [NSBundle
       bundleWithPath:[[NSBundle mainBundle]
                          pathForResource:@"Frameworks/NEKaraokeUIKit.framework/NEKaraokeUIKit"

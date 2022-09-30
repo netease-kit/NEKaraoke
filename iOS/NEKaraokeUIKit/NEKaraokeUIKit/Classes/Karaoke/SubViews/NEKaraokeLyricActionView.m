@@ -270,9 +270,9 @@
   self.lyricView.path = lyricPath;
 }
 
-- (void)setLyricContent:(NSString *)lyricContent {
-  _lyricContent = lyricContent;
-  self.lyricView.content = lyricContent;
+- (void)setLyricContent:(NSString *)lyricContent lyricType:(NELyricType)type {
+  self.lyricContent = lyricContent;
+  [self.lyricView setContent:lyricContent lyricType:type];
 }
 
 - (void)setLyricDuration:(NSInteger)lyricDuration {

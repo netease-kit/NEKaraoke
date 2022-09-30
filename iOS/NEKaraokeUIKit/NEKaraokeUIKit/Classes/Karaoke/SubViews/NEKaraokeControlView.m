@@ -316,8 +316,8 @@
       button.selected = !button.selected;
       @strongify(self) if ([self.delegate respondsToSelector:@selector(onControlEvent:)]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-          [self.delegate onControlEvent:isSelected ? NEKaraokeControlEventTypeOriginal
-                                                   : NEKaraokeControlEventTypeAccompany];
+          [self.delegate onControlEvent:isSelected ? NEKaraokeControlEventTypeAccompany
+                                                   : NEKaraokeControlEventTypeOriginal];
         });
       }
     }];

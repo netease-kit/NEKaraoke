@@ -1,3 +1,13 @@
+# 1.3.0
+
+## Feature
+- 接入咪咕音乐版权
+- NEKaraokeKit将NECopyrightedMedia包含
+
+## Fix
+- 偶现的观众端歌曲进度显示有误问题
+
+
 # 1.2.0
 
 ## Feature

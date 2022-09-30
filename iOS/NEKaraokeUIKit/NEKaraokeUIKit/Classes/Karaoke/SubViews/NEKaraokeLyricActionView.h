@@ -118,6 +118,11 @@ typedef NS_ENUM(NSInteger, NEKaraokeLyricActionSubviewType) {
 
 //销毁打分
 - (void)pitchDestroy;
+
+/// 设置歌词
+/// @param lyricContent 歌词内容
+/// @param type 类型
+- (void)setLyricContent:(NSString *)lyricContent lyricType:(NELyricType)type;
 @end
 
 NS_ASSUME_NONNULL_END

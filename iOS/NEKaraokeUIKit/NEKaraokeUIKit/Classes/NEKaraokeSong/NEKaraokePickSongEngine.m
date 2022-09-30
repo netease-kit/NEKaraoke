@@ -4,25 +4,19 @@
 
 #import "NEKaraokePickSongEngine.h"
 #import <AVFoundation/AVFoundation.h>
-#import <NECopyrightedMedia/NECopyrightedMediaPublic.h>
 #import <YYModel/YYModel.h>
 #import "NEKaraokePickSongColorDefine.h"
 #import "NEKaraokeSongLog.h"
 
 static int NEPageSize = 20;
 
-@interface NEKaraokePickSongEngine () <NESongPreloadProtocol,
+@interface NEKaraokePickSongEngine () <NEKaraokeCopyrightedMediaEventHandler,
                                        NEKaraokeListener,
-                                       NECopyrightedEventHandler>
+                                       NEKaraokeCopyrightedMediaListener>
 
 @property(nonatomic, strong) NSPointerArray *observeArray;
-@property(nonatomic, strong) dispatch_queue_t getTokenRetryQueue;
-@property(nonatomic, assign) uint64_t retrtLater;
 
-//过期定时器
-@property(nonatomic, strong) NSTimer *expiredTimer;
-//过期时间
-@property(nonatomic, assign) uint64_t expiredSeconds;
+@property(nonatomic, assign) uint64_t retrtLater;
 
 @end
 
@@ -35,16 +29,12 @@ static int NEPageSize = 20;
     pickSongEngine = [[NEKaraokePickSongEngine alloc] init];
     [pickSongEngine initData];
     [[NEKaraokeKit shared] addKaraokeListener:pickSongEngine];
-    [[NECopyrightedMedia getInstance] addPreloadProtocolObserve:pickSongEngine];
-    [[NECopyrightedMedia getInstance] setEventHandler:pickSongEngine];
+    [[NEKaraokeKit shared] setCopyrightedMediaEventHandler:pickSongEngine];
   });
   return pickSongEngine;
 }
 
 - (void)initData {
-  self.expiredSeconds = 3 * 60;
-  self.retrtLater = 2;
-  self.getTokenRetryQueue = dispatch_queue_create("getTokenRetryQueue", nil);
   self.pickSongArray = [NSMutableArray array];
   self.pickSongDownloadingArray = [NSMutableArray array];
   self.pickedSongArray = [NSMutableArray array];
@@ -64,10 +54,6 @@ static int NEPageSize = 20;
   if (!hasAdded) {
     [self.observeArray addPointer:(__bridge void *)(observe)];
   }
-}
-
-- (void)setEngineObserve {
-  [[NECopyrightedMedia getInstance] addPreloadProtocolObserve:self];
 }
 
 - (void)clearData {
@@ -90,8 +76,9 @@ static int NEPageSize = 20;
 }
 
 - (void)getKaraokeSongList:(SongListBlock)callback {
-  [[NECopyrightedMedia getInstance]
+  [[NEKaraokeKit shared]
       getSongList:nil
+          channel:nil
           pageNum:@(self.pageNum)
          pageSize:@(NEPageSize)
          callback:^(NSArray<NECopyrightedSong *> *_Nonnull songList, NSError *_Nonnull error) {
@@ -124,7 +111,7 @@ static int NEPageSize = 20;
                dispatch_async(dispatch_get_main_queue(), ^{
                  [self.pickSongArray addObjectsFromArray:tempItems];
                  [self.pickSongDownloadingArray addObjectsFromArray:tempLoading];
-                 self.noMore = songList.count < 20;
+                 self.noMore = songList.count <= 0;
                  callback(nil);
                });
              }
@@ -153,8 +140,9 @@ static int NEPageSize = 20;
 
 //上下滑动刷新搜索数据
 - (void)getKaraokeSearchSongList:(NSString *)searchString callback:(SongListBlock)callback {
-  [[NECopyrightedMedia getInstance]
+  [[NEKaraokeKit shared]
       searchSong:searchString
+         channel:nil
          pageNum:@(self.searchPageNum)
         pageSize:@(NEPageSize)
         callback:^(NSArray<NECopyrightedSong *> *_Nonnull songList, NSError *_Nonnull error) {
@@ -187,7 +175,7 @@ static int NEPageSize = 20;
               dispatch_async(dispatch_get_main_queue(), ^{
                 [self.pickSongArray addObjectsFromArray:tempItems];
                 [self.pickSongDownloadingArray addObjectsFromArray:tempLoading];
-                self.noMore = songList.count < 20;
+                self.noMore = songList.count <= 0;
                 callback(nil);
               });
             }
@@ -203,13 +191,26 @@ static int NEPageSize = 20;
     }
   }
 }
+
+/**
+ * 预加载 Song 数据
+ *
+ * @param songId 歌曲id
+ * @param channel 渠道
+ */
+- (void)preloadSong:(NSString *)songId channel:(SongChannel)channel {
+  [[NEKaraokeKit shared] preloadSong:songId channel:channel observe:self];
+}
 #pragma mark <NESongPreloadProtocol>
 
-- (void)onPreloadStart:(nonnull NSString *)songId {
+- (void)karaoke_onPreloadStart:(NSString *)songId channel:(SongChannel)channel {
   [NEKaraokeSongLog successLog:karaokeSongLog
                           desc:[NSString stringWithFormat:@"%@开始加载", songId]];
 }
-- (void)onPreloadProgress:(NSString *)songId progress:(float)progress {
+
+- (void)karaoke_onPreloadProgress:(NSString *)songId
+                          channel:(SongChannel)channel
+                         progress:(float)progress {
   NEKaraokeSongItem *songItem;
   @synchronized(self) {
     for (NEKaraokeSongItem *item in self.pickSongArray) {
@@ -246,7 +247,9 @@ static int NEPageSize = 20;
   }
 }
 
-- (void)onPreloadComplete:(NSString *)songId error:(NSError *_Nullable)preloadError {
+- (void)karaoke_onPreloadComplete:(NSString *)songId
+                          channel:(SongChannel)channel
+                            error:(NSError *_Nullable)preloadError {
   NSString *infoString =
       [NSString stringWithFormat:@"songid = %@;error = %@", songId,
                                  preloadError.description ? preloadError.description : @"scuuess"];
@@ -312,16 +315,29 @@ static int NEPageSize = 20;
     orderSong.songName = [NSString stringWithFormat:@"%@", currentSongitem.songName];
     orderSong.songCover = [NSString stringWithFormat:@"%@", currentSongitem.songCover];
     orderSong.songCover = [NSString stringWithFormat:@"%@", currentSongitem.songCover];
+    orderSong.oc_channel = channel;
+
     // 获取歌曲长度
-    NSString *accomp = [[NECopyrightedMedia getInstance] getSongURI:songId songResType:TYPE_ACCOMP];
-    NSData *data = [NSData dataWithContentsOfFile:accomp];
+    NSString *songPath = [[NEKaraokeKit shared] getSongURI:songId
+                                                   channel:(SongChannel)channel
+                                               songResType:TYPE_ACCOMP];
+    NSData *data = [NSData dataWithContentsOfFile:songPath];
     if (!data.length) {
-      NSString *origin = [[NECopyrightedMedia getInstance] getSongURI:songId
-                                                          songResType:TYPE_ORIGIN];
-      data = [NSData dataWithContentsOfFile:origin];
+      songPath = [[NEKaraokeKit shared] getSongURI:songId
+                                           channel:(SongChannel)channel
+                                       songResType:TYPE_ORIGIN];
+      data = [NSData dataWithContentsOfFile:songPath];
     }
-    AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithData:data error:nil];
-    orderSong.oc_songTime = player.duration * 1000;
+
+    if (channel == MIGU) {
+      if (songPath) {
+        orderSong.oc_songTime =
+            [self getAudioDurationWithAudioURL:[NSURL fileURLWithPath:songPath]] * 1000;
+      }
+    } else {
+      AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithData:data error:nil];
+      orderSong.oc_songTime = player.duration * 1000;
+    }
 
     [NEKaraokeSongLog
         successLog:karaokeSongLog
@@ -416,7 +432,7 @@ static int NEPageSize = 20;
   return item;
 }
 
-- (void)onTokenExpired {
+- (void)karaoke_onTokenExpired {
   [NEKaraokeSongLog infoLog:karaokeSongLog desc:@"收到token过期回调"];
   for (id<NESongPointProtocol> obj in self.observeArray) {
     if (obj && [obj conformsToProtocol:@protocol(NESongPointProtocol)] &&
@@ -424,79 +440,14 @@ static int NEPageSize = 20;
       [obj onKaraokeSongTokenExpired];
     }
   }
-  [self getSongDynamicTokenUntilSuccess:^(NEKaraokeDynamicToken *_Nullable dynamicToken) {
-    if (dynamicToken) {
-      [[NECopyrightedMedia getInstance] renewToken:dynamicToken.accessToken];
-      [[NEKaraokePickSongEngine sharedInstance] calculateExpiredTime:dynamicToken.oc_expiresIn];
-    }
-  }];
 }
 
-//幂等网络请求子线程处理
-- (void)getSongDynamicTokenUntilSuccess:
-    (void (^)(NEKaraokeDynamicToken *_Nullable dynamicToken))successCallback {
-  [NEKaraokeKit.shared getSongTokenWithCallback:^(NSInteger code, NSString *_Nullable msg,
-                                                  NEKaraokeDynamicToken *_Nullable dynamicToken) {
-    if (code != 0) {
-      [NEKaraokeSongLog errorLog:karaokeSongLog desc:@"获取动态token失败"];
-      //表示延迟2秒后执行
-      if (self.retrtLater > 10) {
-        self.retrtLater = 2;
-        successCallback(nil);
-      } else {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.retrtLater * NSEC_PER_SEC)),
-                       self.getTokenRetryQueue, ^{
-                         [self getSongDynamicTokenUntilSuccess:successCallback];
-                         self.retrtLater = 2 * self.retrtLater;
-                       });
-      }
-    } else {
-      [NEKaraokeSongLog successLog:karaokeSongLog desc:@"获取动态token成功"];
-      self.retrtLater = 2;
-      successCallback(dynamicToken);
-    }
-  }];
-}
-//定时器相关处理
-
-//计算过期时间
-- (void)calculateExpiredTime:(long)timeExpired {
-  //单位是秒
-  //直接释放定时器
-  [self releaseExpiredTimer];
-  if (timeExpired > 0) {
-    if (timeExpired > self.expiredSeconds) {
-      //大于用户设定过期提醒时间
-      self.expiredTimer = [NSTimer scheduledTimerWithTimeInterval:timeExpired - self.expiredSeconds
-                                                           target:self
-                                                         selector:@selector(timeEvent)
-                                                         userInfo:nil
-                                                          repeats:NO];
-      [[NSRunLoop currentRunLoop] addTimer:self.expiredTimer forMode:NSRunLoopCommonModes];
-      [[NSRunLoop currentRunLoop] run];
-    } else {
-      //直接提示
-      //设置属性即将过期
-      [self timeEvent];
-    }
-  } else {
-    //未设定过期时间，直接释放
-    [self timeEvent];
-  }
-}
-- (void)releaseExpiredTimer {
-  if (self.expiredTimer) {
-    [self.expiredTimer invalidate];
-    self.expiredTimer = nil;
-  }
-}
-- (void)timeEvent {
-  [NEKaraokeSongLog infoLog:karaokeSongLog desc:@"动态tokne即将过期，重新Token"];
-  [self getSongDynamicTokenUntilSuccess:^(NEKaraokeDynamicToken *_Nullable dynamicToken) {
-    if (dynamicToken) {
-      [[NECopyrightedMedia getInstance] renewToken:dynamicToken.accessToken];
-      [self calculateExpiredTime:dynamicToken.oc_expiresIn];
-    }
-  }];
+- (CGFloat)getAudioDurationWithAudioURL:(NSURL *)audioURL {
+  NSDictionary *opts =
+      [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES]
+                                  forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
+  AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:audioURL options:opts];
+  CGFloat second = urlAsset.duration.value * 1.0 / urlAsset.duration.timescale;
+  return second;
 }
 @end
