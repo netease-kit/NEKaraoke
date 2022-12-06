@@ -128,19 +128,25 @@ public class OrderSongViewModel extends ViewModel {
 
             @Override
             public void onPreloadStart(String songId, int channel) {
-              ALog.i("onPreloadStart $songId");
+              ALog.i("onPreloadStart songId = " + songId);
               callback.onPreloadStart(songId, channel);
             }
 
             @Override
             public void onPreloadProgress(String songId, int channel, float progress) {
-              ALog.i("onPreloadProgress $songId $progress");
+              ALog.i("onPreloadProgress songId = " + songId + ", progress = " + progress);
               callback.onPreloadProgress(songId, channel, progress);
             }
 
             @Override
             public void onPreloadComplete(String songId, int channel, int errorCode, String msg) {
-              ALog.i("onPreloadComplete $songId $errorCode $msg");
+              ALog.i(
+                  "onPreloadComplete songId = "
+                      + songId
+                      + ", errorCode = "
+                      + errorCode
+                      + ", msg = "
+                      + msg);
               callback.onPreloadComplete(songId, channel, errorCode, msg);
             }
           });

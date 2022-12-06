@@ -32,7 +32,6 @@ import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeRole;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeGiftModel;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeRoomInfo;
-import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSeatInfo;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSongModel;
 import com.netease.yunxin.kit.karaokekit.impl.utils.ScreenUtil;
 import com.netease.yunxin.kit.karaokekit.ui.NEKaraokeUIConstants;
@@ -257,29 +256,9 @@ public class KaraokeRoomActivity extends BaseActivity
     if (KaraokeUtils.isCurrentHost()) {
       applyOnSeat(null);
     } else {
-      updateSeat();
+      karaokeRoomViewModel.updateSeat();
     }
     refreshAudioSwitchButton();
-  }
-
-  public void updateSeat() {
-    NEKaraokeKit.getInstance()
-        .getSeatInfo(
-            new NEKaraokeCallbackWrapper<NEKaraokeSeatInfo>() {
-
-              @Override
-              public void onSuccess(@Nullable NEKaraokeSeatInfo seatInfo) {
-                if (seatInfo != null) {
-                  binding.seatView.updateSeats(
-                      SeatUtils.transNESeatItem2OnSeatModel(seatInfo.getSeatItems()));
-                }
-              }
-
-              @Override
-              public void onError(int code, @Nullable String msg) {
-                ALog.e(TAG, "getSeatInfo failed code = " + code + " msg = " + msg);
-              }
-            });
   }
 
   protected void initGiftAnimation() {
@@ -303,6 +282,30 @@ public class KaraokeRoomActivity extends BaseActivity
     } else {
       binding.ivLocalAudioSwitch.setVisibility(View.GONE);
       binding.ivLocalAudioSwitch.setSelected(false);
+    }
+
+    switch (currentSeatState) {
+      case KaraokeRoomViewModel.CURRENT_SEAT_STATE_APPLYING:
+        if (!KaraokeUtils.isCurrentHost()) {
+          binding.ivArrangeMicro.setImageResource(R.drawable.arrange_micro);
+          binding.ivArrangeMicro.setBackgroundResource(R.drawable.dark_cycle_bg);
+          binding.tvArrangeMicroNum.setVisibility(View.VISIBLE);
+        }
+        break;
+      case KaraokeRoomViewModel.CURRENT_SEAT_STATE_ON_SEAT:
+        if (!KaraokeUtils.isCurrentHost()) {
+          binding.ivArrangeMicro.setImageResource(R.drawable.down_mircro);
+          binding.ivArrangeMicro.setBackgroundResource(R.drawable.dark_cycle_bg);
+          binding.tvArrangeMicroNum.setVisibility(View.GONE);
+        }
+
+        break;
+      default:
+        if (!KaraokeUtils.isCurrentHost()) {
+          binding.ivArrangeMicro.setImageResource(R.drawable.on_micro);
+          binding.ivArrangeMicro.setBackgroundResource(R.drawable.red_cycle_bg);
+          binding.tvArrangeMicroNum.setVisibility(View.GONE);
+        }
     }
   }
 
@@ -636,30 +639,11 @@ public class KaraokeRoomActivity extends BaseActivity
             this,
             seatState -> {
               currentSeatState = seatState;
-              switch (currentSeatState) {
-                case KaraokeRoomViewModel.CURRENT_SEAT_STATE_APPLYING:
-                  if (!KaraokeUtils.isCurrentHost()) {
-                    binding.ivArrangeMicro.setImageResource(R.drawable.arrange_micro);
-                    binding.ivArrangeMicro.setBackgroundResource(R.drawable.dark_cycle_bg);
-                    binding.tvArrangeMicroNum.setVisibility(View.VISIBLE);
-                  }
-                  break;
-                case KaraokeRoomViewModel.CURRENT_SEAT_STATE_ON_SEAT:
-                  if (!KaraokeUtils.isCurrentHost()) {
-                    binding.ivArrangeMicro.setImageResource(R.drawable.down_mircro);
-                    binding.ivArrangeMicro.setBackgroundResource(R.drawable.dark_cycle_bg);
-                    binding.tvArrangeMicroNum.setVisibility(View.GONE);
-                  }
-                  NEKaraokeKit.getInstance().unmuteMyAudio(null);
-                  break;
-                default:
-                  if (!KaraokeUtils.isCurrentHost()) {
-                    binding.ivArrangeMicro.setImageResource(R.drawable.on_micro);
-                    binding.ivArrangeMicro.setBackgroundResource(R.drawable.red_cycle_bg);
-                    binding.tvArrangeMicroNum.setVisibility(View.GONE);
-                  }
-              }
               refreshAudioSwitchButton();
+              if (KaraokeUtils.isCurrentHost()
+                  && currentSeatState == KaraokeRoomViewModel.CURRENT_SEAT_STATE_ON_SEAT) {
+                NEKaraokeKit.getInstance().unmuteMyAudio(null);
+              }
             });
     karaokeRoomViewModel
         .getApplySeatListData()
@@ -742,7 +726,7 @@ public class KaraokeRoomActivity extends BaseActivity
   protected void onNetworkConnected(String networkType) {
     ALog.i(TAG, "onNetworkConnected type = " + networkType);
     binding.singControlView.clickNextSong();
-    updateSeat();
+    karaokeRoomViewModel.updateSeat();
   }
 
   @Override

@@ -28,6 +28,12 @@ public class MyKaraokeListener implements NEKaraokeListener {
   public void onMemberLeaveRoom(@NonNull List<NEKaraokeMember> members) {}
 
   @Override
+  public void onMemberJoinChatroom(@NonNull List<NEKaraokeMember> members) {}
+
+  @Override
+  public void onMemberLeaveChatroom(@NonNull List<NEKaraokeMember> members) {}
+
+  @Override
   public void onRoomEnded(@NonNull NEKaraokeEndReason reason) {}
 
   @Override
