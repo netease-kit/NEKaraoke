@@ -107,12 +107,12 @@
   self.cancelButton.layer.masksToBounds = YES;
   self.cancelButton.layer.cornerRadius = 14;
   self.cancelButton.titleLabel.font = [UIFont systemFontOfSize:14];
-  //边框宽度
+  // 边框宽度
   [self.cancelButton.layer setBorderWidth:1.0];
-  //设置边框颜色有两种方法：第一种如下:
+  // 设置边框颜色有两种方法：第一种如下:
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   CGColorRef colorref = CGColorCreate(colorSpace, (CGFloat[]){255, 255, 255, 1});
-  [self.cancelButton.layer setBorderColor:colorref];  //边框颜色
+  [self.cancelButton.layer setBorderColor:colorref];  // 边框颜色
 
   self.cancelButton.titleLabel.textColor = [UIColor karaoke_colorWithHex:color_FFFFFF];
   [self.contentView addSubview:self.cancelButton];

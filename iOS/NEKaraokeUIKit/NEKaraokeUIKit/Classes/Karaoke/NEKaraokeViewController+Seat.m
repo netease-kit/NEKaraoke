@@ -147,6 +147,7 @@ typedef NS_ENUM(NSInteger, NEKaraokeSeatMessageType) {
   return nil;
 }
 #pragma mark-----------------------------  NEKaraokeListener Seat  -----------------------------
+
 /// 请求
 - (void)onSeatRequestSubmitted:(NSInteger)seatIndex account:(NSString *_Nonnull)account {
   [self sendSeatMessageToChatroom:account messageType:NEKaraokeSeatMessageTypeApply];
@@ -232,6 +233,20 @@ typedef NS_ENUM(NSInteger, NEKaraokeSeatMessageType) {
 - (void)onSeatListChanged:(NSArray<NEKaraokeSeatItem *> *)seatItems {
   [self sortSeatItems:seatItems];
   [self.seatView configWithSeatItems:seatItems hostUuid:self.detail.anchor.userUuid];
+
+  if (self.role == NEKaraokeViewRoleHost) return;
+  for (NEKaraokeSeatItem *item in seatItems) {
+    if ([item.user isEqualToString:NEKaraokeKit.shared.localMember.account]) {
+      // 自己在麦上
+      if (item.status == NEKaraokeSeatItemStatusWaiting) {
+        self.seatRequestType = NEKaraokeSeatRequestTypeApplying;
+      } else if (item.status == NEKaraokeSeatItemStatusTaken) {
+        [self.bottomView isShowMicBtn:YES];
+        self.seatRequestType = NEKaraokeSeatRequestTypeDown;
+      }
+      break;
+    }
+  }
 }
 
 // 聊天室发麦位消息
@@ -239,7 +254,7 @@ typedef NS_ENUM(NSInteger, NEKaraokeSeatMessageType) {
                       messageType:(NEKaraokeSeatMessageType)msgType {
   NSString *userName = [self getUserNameWithUserUuid:userUuid];
   if (!userName.length) return;
-  NSString *content = @"";
+  NSString *content;
   switch (msgType) {
     case NEKaraokeSeatMessageTypeApply:
       content = [NSString stringWithFormat:@"%@ 申请上麦", userName];

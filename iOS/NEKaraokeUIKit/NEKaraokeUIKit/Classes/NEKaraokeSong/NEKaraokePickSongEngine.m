@@ -61,7 +61,7 @@ static int NEPageSize = 20;
   [self.pickedSongArray removeAllObjects];
   [self.pickSongDownloadingArray removeAllObjects];
 }
-//获取已点数据
+// 获取已点数据
 - (void)getKaraokeSongOrderedList:(SongListBlock)callback {
   [[NEKaraokeKit shared]
       getOrderedSongsWithCallback:^(NSInteger code, NSString *_Nullable msg,
@@ -138,7 +138,7 @@ static int NEPageSize = 20;
   }
 }
 
-//上下滑动刷新搜索数据
+// 上下滑动刷新搜索数据
 - (void)getKaraokeSearchSongList:(NSString *)searchString callback:(SongListBlock)callback {
   [[NEKaraokeKit shared]
       searchSong:searchString
@@ -254,7 +254,7 @@ static int NEPageSize = 20;
       [NSString stringWithFormat:@"songid = %@;error = %@", songId,
                                  preloadError.description ? preloadError.description : @"scuuess"];
   [NEKaraokeSongLog infoLog:karaokeSongLog desc:infoString];
-  //获取Item 刷新UI
+  // 获取Item 刷新UI
   @synchronized(self) {
     NEKaraokeSongItem *songItem;
     for (NEKaraokeSongItem *song in self.pickSongArray) {
@@ -268,8 +268,8 @@ static int NEPageSize = 20;
       long index = [self.pickSongArray indexOfObject:songItem];
       [[NEKaraokePickSongEngine sharedInstance].pickSongDownloadingArray replaceObjectAtIndex:index
                                                                                    withObject:@"0"];
-      //此处添加数据回调
-      //回调抛出
+      // 此处添加数据回调
+      // 回调抛出
       for (id<NESongPointProtocol> obj in self.observeArray) {
         if (obj && [obj conformsToProtocol:@protocol(NESongPointProtocol)] &&
             [obj respondsToSelector:@selector(onSourceReloadIndex:isSonsList:)]) {
@@ -287,11 +287,21 @@ static int NEPageSize = 20;
       }
     }
     if (preloadError) {
-      [NEKaraokeSongLog successLog:karaokeSongLog desc:@"文件加载失败"];
-      for (id<NESongPointProtocol> obj in self.observeArray) {
-        if (obj && [obj conformsToProtocol:@protocol(NESongPointProtocol)] &&
-            [obj respondsToSelector:@selector(onOrderSongError:)]) {
-          [obj onOrderSongError:@"文件加载失败"];
+      if (preloadError.code == ERR_CANCEL) {
+        [NEKaraokeSongLog successLog:karaokeSongLog desc:@"用户取消下载"];
+        for (id<NESongPointProtocol> obj in self.observeArray) {
+          if (obj && [obj conformsToProtocol:@protocol(NESongPointProtocol)] &&
+              [obj respondsToSelector:@selector(onOrderSongError:)]) {
+            [obj onOrderSongError:@"用户取消下载"];
+          }
+        }
+      } else {
+        [NEKaraokeSongLog successLog:karaokeSongLog desc:@"文件加载失败"];
+        for (id<NESongPointProtocol> obj in self.observeArray) {
+          if (obj && [obj conformsToProtocol:@protocol(NESongPointProtocol)] &&
+              [obj respondsToSelector:@selector(onOrderSongError:)]) {
+            [obj onOrderSongError:@"文件加载失败"];
+          }
         }
       }
       if (currentSongitem) {
@@ -362,8 +372,8 @@ static int NEPageSize = 20;
                message = @"点歌失败";
              }
 
-             //此处添加数据回调
-             //回调抛出
+             // 此处添加数据回调
+             // 回调抛出
              for (id<NESongPointProtocol> obj in self.observeArray) {
                if (obj && [obj conformsToProtocol:@protocol(NESongPointProtocol)] &&
                    [obj respondsToSelector:@selector(onOrderSongError:)]) {
@@ -372,8 +382,8 @@ static int NEPageSize = 20;
              }
 
            } else {
-             //此处添加数据回调
-             //回调抛出
+             // 此处添加数据回调
+             // 回调抛出
              [NEKaraokeSongLog successLog:karaokeSongLog desc:@"点歌成功"];
              for (id<NESongPointProtocol> obj in self.observeArray) {
                if (obj && [obj conformsToProtocol:@protocol(NESongPointProtocol)] &&
@@ -386,7 +396,7 @@ static int NEPageSize = 20;
   }
 }
 
-//上麦成功数据处理
+// 上麦成功数据处理
 - (void)applySuccessWithSong:(NEKaraokeSongItem *)songItem complete:(void (^)(void))complete {
   if (songItem) {
     NSNumber *index = nil;
@@ -404,8 +414,8 @@ static int NEPageSize = 20;
         replaceObjectAtIndex:[index intValue]
                   withObject:@"1"];
 
-    //此处添加数据回调
-    //回调抛出
+    // 此处添加数据回调
+    // 回调抛出
     for (id<NESongPointProtocol> obj in self.observeArray) {
       if (obj && [obj conformsToProtocol:@protocol(NESongPointProtocol)] &&
           [obj respondsToSelector:@selector(onSourceReloadIndex:isSonsList:)]) {

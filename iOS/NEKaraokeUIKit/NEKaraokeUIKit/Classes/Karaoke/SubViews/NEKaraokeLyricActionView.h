@@ -92,31 +92,31 @@ typedef NS_ENUM(NSInteger, NEKaraokeLyricActionSubviewType) {
 
 @property(nonatomic, strong) NSString *UserIconUrl;
 
-//初始化
+// 初始化
 - (void)setPitchContent:(NSString *)pitchContent
               separator:(NSString *)separator
            lyricContent:(NSString *)lyricContent
               lyricType:(NELyricType)lyricType;
 
-//数据推送
-//最后一条数据isEnd 为YES
+// 数据推送
+// 最后一条数据isEnd 为YES
 - (void)pushAudioFrameWithFrame:(NEKaraokeAudioFrame *)frame isEnd:(BOOL)isEnd;
-//是否有打分数据
+// 是否有打分数据
 - (BOOL)hasPitchConotent;
-//展示最终分数
+// 展示最终分数
 - (void)lyricActionViewLevel:(NEOpusLevel)level
                  resultModel:(NEPitchPlayResultModel *)playResultModel;
 
-//隐藏最终分数
+// 隐藏最终分数
 - (void)hideScoreView;
 
-//暂停打分
+// 暂停打分
 - (void)pitchPause;
 
-//开始打分：初始化自动启动，中间暂停才需要调用
+// 开始打分：初始化自动启动，中间暂停才需要调用
 - (void)pitchStart;
 
-//销毁打分
+// 销毁打分
 - (void)pitchDestroy;
 
 /// 设置歌词

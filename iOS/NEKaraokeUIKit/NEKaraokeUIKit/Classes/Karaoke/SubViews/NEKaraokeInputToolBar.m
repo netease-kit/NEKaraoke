@@ -133,7 +133,7 @@
   }
 }
 - (void)configSeatWithType:(NEKaraokeInputToolBarSeatType)type {
-  NSString *imageName = @"seat_on";
+  NSString *imageName;
   switch (type) {
     case NEKaraokeInputToolBarSeatTypeOn:
       imageName = @"seat_on";

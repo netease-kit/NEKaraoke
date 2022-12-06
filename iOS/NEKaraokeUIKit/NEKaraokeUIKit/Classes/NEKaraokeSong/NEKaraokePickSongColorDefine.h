@@ -14,11 +14,11 @@
 #define color_999999 0x999999
 
 typedef enum : NSUInteger {
-  //歌曲已点
+  // 歌曲已点
   SONG_ERROR_SONG_POINTED = 1401,
-  //个人点歌受限
+  // 个人点歌受限
   SONG_ERROR_SONG_POINTED_USER_LIMIT = 1403,
-  //房间点歌受限
+  // 房间点歌受限
   SONG_ERROR_SONG_POINTED_ROOM_LIMIT = 1404,
 
 } NEOrderSongErrorCode;

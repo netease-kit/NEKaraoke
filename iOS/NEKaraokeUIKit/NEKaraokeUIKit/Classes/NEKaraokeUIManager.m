@@ -43,7 +43,6 @@
                 nickname:(NSString *)nickname
                 callback:(void (^)(NSInteger, NSString *_Nullable, id _Nullable))callback {
   self.nickname = nickname;
-  __weak typeof(self) weakSelf = self;
   [NEKaraokeKit.shared login:account
                        token:token
                     callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {

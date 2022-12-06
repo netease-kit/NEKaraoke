@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #import "NEKaraokeTaskQueue.h"
+#import "NEKaraokeCustomTimer.h"
 
 @implementation NEKaraokeTask
 
@@ -40,7 +41,7 @@
 // 目前场景同时只会有一个定时任务
 @property(nonatomic, strong) NEKaraokeTask *task;
 @property(nonatomic, strong) dispatch_queue_t timeQueue;
-@property(nonatomic, strong) NSTimer *timer;
+@property(nonatomic, strong) NEKaraokeCustomTimer *timer;
 
 @end
 
@@ -76,14 +77,13 @@
 - (void)start {
   __weak typeof(self) weakSelf = self;
   dispatch_async(self.timeQueue, ^() {
-    __strong typeof(weakSelf) strongSelf = weakSelf;
-    if (!strongSelf.timer) {
-      strongSelf.timer = [NSTimer scheduledTimerWithTimeInterval:0.3
-                                                          target:self
-                                                        selector:@selector(timerDown)
-                                                        userInfo:nil
-                                                         repeats:YES];
-      [[NSRunLoop currentRunLoop] addTimer:strongSelf.timer forMode:NSRunLoopCommonModes];
+    __strong typeof(self) strongSelf = weakSelf;
+    if (strongSelf && !strongSelf.timer) {
+      strongSelf.timer = [[NEKaraokeCustomTimer alloc] initWithTimeInterval:0.3
+                                                                     target:strongSelf
+                                                                   selector:@selector(timerDown)
+                                                                    repeats:YES];
+      [[NSRunLoop currentRunLoop] addTimer:strongSelf.timer.timer forMode:NSRunLoopCommonModes];
       [[NSRunLoop currentRunLoop] run];
     }
   });

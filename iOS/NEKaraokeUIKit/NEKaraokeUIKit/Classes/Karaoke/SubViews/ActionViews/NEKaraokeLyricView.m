@@ -56,8 +56,8 @@
     make.right.equalTo(self.timeLabel.mas_left).offset(-4);
   }];
   [self addSubview:self.waitSeekView];
-  @weakify(self)[self.waitSeekView mas_makeConstraints:^(MASConstraintMaker *make) {
-    @strongify(self) make.centerX.equalTo(self);
+  [self.waitSeekView mas_makeConstraints:^(MASConstraintMaker *make) {
+    make.centerX.equalTo(self);
     CGFloat seekWaitViewWidth = 110.f * 0.6;
     CGFloat seekWaitViewHeight = 25.f * 0.6;
     make.size.mas_equalTo(CGSizeMake(seekWaitViewWidth, seekWaitViewHeight));
@@ -193,7 +193,7 @@
   _recorStart = YES;
 }
 
-//是否有打分数据
+// 是否有打分数据
 - (BOOL)hasPitchConotent {
   return [self.compoentView hasPitchConotent];
 }
@@ -221,17 +221,17 @@
   }
 }
 
-//暂停打分
+// 暂停打分
 - (void)pitchPause {
   [self.compoentView pitchPause];
 }
 
-//开始打分：初始化自动启动，中间暂停才需要调用
+// 开始打分：初始化自动启动，中间暂停才需要调用
 - (void)pitchStart {
   [self.compoentView pitchStart];
 }
 
-//销毁打分
+// 销毁打分
 - (void)pitchDestroy {
   [self.compoentView pitchDestroy];
 }

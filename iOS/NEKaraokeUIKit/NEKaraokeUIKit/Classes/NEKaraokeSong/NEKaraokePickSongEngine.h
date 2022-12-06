@@ -35,38 +35,38 @@ typedef void (^SongListBlock)(NSError *_Nullable error);
 
 @interface NEKaraokePickSongEngine : NSObject
 
-///点歌列表数据
+/// 点歌列表数据
 @property(nonatomic, strong) NSMutableArray *pickSongArray;
-///已点列表数据
+/// 已点列表数据
 @property(nonatomic, strong) NSMutableArray *pickedSongArray;
 
-///点歌列表数据 展示状态数组
+/// 点歌列表数据 展示状态数组
 @property(nonatomic, strong) NSMutableArray *pickSongDownloadingArray;
 
-///推荐页码
+/// 推荐页码
 @property(nonatomic, assign) NSInteger pageNum;
 
-///搜索页码
+/// 搜索页码
 @property(nonatomic, assign) NSInteger searchPageNum;
 
-///是否有更多数据
+/// 是否有更多数据
 @property(nonatomic, assign) bool noMore;
 
-///当前点歌数据列表
+/// 当前点歌数据列表
 @property(nonatomic, strong) NSMutableArray *currentOrderSongArray;
 
 + (instancetype)sharedInstance;
 
-//数据进度刷新协议
+// 数据进度刷新协议
 - (void)addObserve:(id<NESongPointProtocol>)observe;
 
-///获取推荐数据
+/// 获取推荐数据
 - (void)getKaraokeSongList:(SongListBlock)callback;
 
-///获取已点数据
+/// 获取已点数据
 - (void)getKaraokeSongOrderedList:(SongListBlock)callback;
 
-///上下滑动刷新搜索数据
+/// 上下滑动刷新搜索数据
 - (void)getKaraokeSearchSongList:(NSString *)searchString callback:(SongListBlock)callback;
 
 - (void)updateSongArray;
