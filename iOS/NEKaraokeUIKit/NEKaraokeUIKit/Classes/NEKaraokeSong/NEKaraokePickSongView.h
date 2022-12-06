@@ -19,7 +19,7 @@ typedef void (^ApplyOnSeat)(void);
 @property(nonatomic, copy) IsUserOnSeat isUserOnSeat;
 @property(nonatomic, copy) ApplyOnSeat applyOnseat;
 
-//申请连麦相关
+// 申请连麦相关
 - (void)cancelApply;
 - (void)applyFaile;
 - (void)applySuccess;

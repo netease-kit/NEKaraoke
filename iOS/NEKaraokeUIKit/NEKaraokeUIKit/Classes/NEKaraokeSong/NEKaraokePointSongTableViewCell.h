@@ -10,23 +10,23 @@ typedef void (^ClickPointButton)(void);
 
 @interface NEKaraokePointSongTableViewCell : UITableViewCell
 
-//歌曲封面
+// 歌曲封面
 @property(nonatomic, strong) UIImageView *songImageView;
-//歌曲名称
+// 歌曲名称
 @property(nonatomic, strong) UILabel *songLabel;
-//歌手名
+// 歌手名
 @property(nonatomic, strong) UILabel *anchorLabel;
-//来源
+// 来源
 @property(nonatomic, strong) UIImageView *resourceImageView;
-//状态
+// 状态
 @property(nonatomic, strong) UIButton *pointButton;
 @property(nonatomic, copy) ClickPointButton clickPointButton;
 
-//下载中状态
+// 下载中状态
 @property(nonatomic, strong) UILabel *downloadingLabel;
-//底层状态
+// 底层状态
 @property(nonatomic, strong) UILabel *statueBottomLabel;
-//顶部状态
+// 顶部状态
 @property(nonatomic, strong) UILabel *statueTopLabel;
 
 @property(nonatomic, assign) CGFloat progress;

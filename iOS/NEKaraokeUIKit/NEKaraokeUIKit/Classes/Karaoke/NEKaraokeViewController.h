@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, NEKaraokeSeatRequestType) {
 
 @interface NEKaraokeViewController : UIViewController
 @property(nonatomic, strong) NEKaraokeHeaderView *headerView;            // 头部
-@property(nonatomic, strong) NEKaraokeLyricActionView *lyricActionView;  //歌词及打分
+@property(nonatomic, strong) NEKaraokeLyricActionView *lyricActionView;  // 歌词及打分
 @property(nonatomic, strong) NEKaraokeControlView *controlView;  // 调音、暂停、切歌、原唱
 @property(nonatomic, strong) NEKaraokeSeatView *seatView;        // 麦位
 @property(nonatomic, strong) NEKaraokeInputToolBar *bottomView;      // 底部工具栏

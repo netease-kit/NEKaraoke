@@ -452,21 +452,23 @@
   } else if (self.ntpBox.checked) {
     params.singMode = NEKaraokeSingModeNTPChorus;
   }
+  self.createButton.enabled = false;
   [[NEKaraokeKit shared]
       createRoom:params
          options:[[NECreateKaraokeOptions alloc] init]
         callback:^(NSInteger code, NSString *_Nullable msg, NEKaraokeRoomInfo *_Nullable obj) {
-          [NEKaraokeToast hideLoading];
-          if (code == 0) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+          dispatch_async(dispatch_get_main_queue(), ^{
+            [NEKaraokeToast hideLoading];
+            self.createButton.enabled = true;
+            if (code == 0) {
               NEKaraokeViewController *view =
                   [[NEKaraokeViewController alloc] initWithRole:NEKaraokeViewRoleHost detail:obj];
               [self.navigationController pushViewController:view animated:true];
-            });
-          } else {
-            [NEKaraokeToast
-                showToast:[NSString stringWithFormat:@"加入直播间失败 %zd %@", code, msg]];
-          }
+            } else {
+              [NEKaraokeToast
+                  showToast:[NSString stringWithFormat:@"加入直播间失败 %zd %@", code, msg]];
+            }
+          });
         }];
 }
 

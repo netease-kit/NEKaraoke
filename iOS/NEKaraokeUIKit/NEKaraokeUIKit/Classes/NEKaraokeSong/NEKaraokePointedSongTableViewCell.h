@@ -10,21 +10,21 @@ typedef void (^ClickButton)(void);
 
 @interface NEKaraokePointedSongTableViewCell : UITableViewCell
 
-//播放中图标
+// 播放中图标
 @property(nonatomic, strong) UIImageView *playingImageView;
-//播放列表
+// 播放列表
 @property(nonatomic, strong) UILabel *songNumberLabel;
-//歌曲封面
+// 歌曲封面
 @property(nonatomic, strong) UIImageView *songIconImageView;
-//歌曲名
+// 歌曲名
 @property(nonatomic, strong) UILabel *songNameLabel;
-//用户头像
+// 用户头像
 @property(nonatomic, strong) UIImageView *userIconImageView;
-//用户昵称
+// 用户昵称
 @property(nonatomic, strong) UILabel *userNickNameLabel;
-//歌曲时长
+// 歌曲时长
 @property(nonatomic, strong) UILabel *songDurationLabel;
-//状态
+// 状态
 @property(nonatomic, strong) UILabel *statueLabel;
 // cancel
 @property(nonatomic, strong) UIButton *cancelButton;

@@ -8,7 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NEKaraokeUIGiftModel : NSObject
 
-//礼物id，1荧光棒 2安排 3跑车 4 火箭
+// 礼物id，1荧光棒 2安排 3跑车 4 火箭
 @property(nonatomic, assign) int32_t giftId;
 @property(nonatomic, copy) NSString *icon;
 @property(nonatomic, copy) NSString *display;

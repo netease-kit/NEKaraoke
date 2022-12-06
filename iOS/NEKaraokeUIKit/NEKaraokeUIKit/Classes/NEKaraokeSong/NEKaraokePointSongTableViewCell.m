@@ -76,11 +76,11 @@
   gradientLayer.frame = CGRectMake(0, 0, 48, 24);
   gradientLayer.startPoint = CGPointMake(0, 0);
   gradientLayer.endPoint = CGPointMake(1, 0);
-  gradientLayer.locations = @[ @(0.5), @(1.0) ];  //渐变点
+  gradientLayer.locations = @[ @(0.5), @(1.0) ];  // 渐变点
   [gradientLayer setColors:@[
     (id)[[UIColor karaoke_colorWithHex:color_FE7081] CGColor],
     (id)[[UIColor karaoke_colorWithHex:color_FF4FA6] CGColor]
-  ]];  //渐变数组
+  ]];  // 渐变数组
   [self.pointButton.layer addSublayer:gradientLayer];
 
   self.pointButton.titleLabel.font = [UIFont systemFontOfSize:14];

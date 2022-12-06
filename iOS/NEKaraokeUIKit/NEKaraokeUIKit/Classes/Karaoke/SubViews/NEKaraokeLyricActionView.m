@@ -319,16 +319,16 @@
                         lyricType:lyricType];
 }
 
-//数据推送
-//最后一条数据isEnd 为YES
+// 数据推送
+// 最后一条数据isEnd 为YES
 - (void)pushAudioFrameWithFrame:(NEKaraokeAudioFrame *)frame isEnd:(BOOL)isEnd {
   [self.lyricView pushAudioFrameWithFrame:frame isEnd:isEnd];
 }
-//是否有打分数据
+// 是否有打分数据
 - (BOOL)hasPitchConotent {
   return [self.lyricView hasPitchConotent];
 }
-//展示最终分数
+// 展示最终分数
 - (void)lyricActionViewLevel:(NEOpusLevel)level
                  resultModel:(NEPitchPlayResultModel *)playResultModel {
   [self.lyricView showFinalScoreView:playResultModel andLevel:level];
@@ -338,17 +338,17 @@
   [self.lyricView hideScoreView];
 }
 
-//暂停打分
+// 暂停打分
 - (void)pitchPause {
   [self.lyricView pitchPause];
 }
 
-//开始打分：初始化自动启动，中间暂停才需要调用
+// 开始打分：初始化自动启动，中间暂停才需要调用
 - (void)pitchStart {
   [self.lyricView pitchStart];
 }
 
-//销毁打分
+// 销毁打分
 - (void)pitchDestroy {
   [self.lyricView pitchDestroy];
 }

@@ -43,12 +43,10 @@
 
       UIImage *image =
           [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:info.avatar]]];
-      NSData *data = UIImageJPEGRepresentation(image, 0.5);
-      UIImage *resultImage = [UIImage imageWithData:data];
       CGSize size = CGSizeMake(20, 20);
       UIGraphicsBeginImageContext(size);
       [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
-      resultImage = UIGraphicsGetImageFromCurrentImageContext();
+      UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
       UIGraphicsEndImageContext();
       // 1.加载原图
       UIImage *newImage = [self circleImageWithImage:resultImage

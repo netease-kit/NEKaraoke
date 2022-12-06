@@ -75,18 +75,24 @@
                     isSelf:isSelf];
   __weak typeof(self) weakSelf = self;
   cell.cancelBlock = ^{  // 取消申请
-    if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(cancelRequestSeat:)]) {
-      [weakSelf.delegate cancelRequestSeat:item];
+    __strong typeof(self) strongSelf = weakSelf;
+    if (strongSelf.delegate &&
+        [strongSelf.delegate respondsToSelector:@selector(cancelRequestSeat:)]) {
+      [strongSelf.delegate cancelRequestSeat:item];
     }
   };
   cell.rejectBlock = ^{  // 拒绝
-    if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(rejectRequestSeat:)]) {
-      [weakSelf.delegate rejectRequestSeat:item];
+    __strong typeof(self) strongSelf = weakSelf;
+    if (strongSelf.delegate &&
+        [strongSelf.delegate respondsToSelector:@selector(rejectRequestSeat:)]) {
+      [strongSelf.delegate rejectRequestSeat:item];
     }
   };
   cell.allowBlock = ^{  // 允许
-    if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(allowRequestSeat:)]) {
-      [weakSelf.delegate allowRequestSeat:item];
+    __strong typeof(self) strongSelf = weakSelf;
+    if (strongSelf.delegate &&
+        [strongSelf.delegate respondsToSelector:@selector(allowRequestSeat:)]) {
+      [strongSelf.delegate allowRequestSeat:item];
     }
   };
   return cell;

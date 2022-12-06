@@ -23,39 +23,39 @@
                                      NESongPreloadProtocol,
                                      NESongPointProtocol,
                                      UITextFieldDelegate>
-//顶部切换视图
+// 顶部切换视图
 @property(nonatomic, strong) UIView *mainTopView;
-//搜索父视图
+// 搜索父视图
 @property(nonatomic, strong) UIView *searchMainView;
-//搜索子视图
+// 搜索子视图
 @property(nonatomic, strong) UIView *searchSuperView;
-//搜索TextFiled
+// 搜索TextFiled
 @property(nonatomic, strong) UITextField *searchTextField;
-//是否处于搜索中
+// 是否处于搜索中
 @property(nonatomic, assign) BOOL isSearching;
-//搜索图标
+// 搜索图标
 @property(nonatomic, strong) UIImageView *searchImageView;
-//搜索清空按钮
+// 搜索清空按钮
 @property(nonatomic, strong) UIButton *searchClearButton;
 
 @property(nonatomic, strong) UITableView *pickSongsTableView;
 @property(nonatomic, strong) UITableView *pickedSongsTableView;
-//点歌按钮
+// 点歌按钮
 @property(nonatomic, strong) UIButton *pickSongButton;
-//已点按钮
+// 已点按钮
 @property(nonatomic, strong) UIButton *pickedSongButton;
 
 // button底部light
 @property(nonatomic, strong) UILabel *lightLabel;
 
-//当前是否选中点歌菜单的记录
+// 当前是否选中点歌菜单的记录
 @property(nonatomic, assign) bool pointButtonSelected;
 
 @property(nonatomic, strong) NEKaraokeRoomInfo *detail;
 
 @property(nonatomic, strong) NEKaraokeSongEmptyView *emptyView;
 
-//当前点歌数据：用于麦位申请的时候
+// 当前点歌数据：用于麦位申请的时候
 @property(nonatomic, strong) NEKaraokeSongItem *currentOrderSong;
 
 @end
@@ -118,7 +118,7 @@
   }];
   self.backgroundColor = [UIColor clearColor];
   //    [UIColor karaoke_colorWithHex:color_313D3C];
-  //顶部视图
+  // 顶部视图
   self.mainTopView = [[UIButton alloc] init];
   [self addSubview:self.mainTopView];
   [self.mainTopView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -423,7 +423,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   if (tableView == self.pickSongsTableView) {
-    //歌曲列表页面
+    // 歌曲列表页面
     NEKaraokePointSongTableViewCell *cell =
         [tableView dequeueReusableCellWithIdentifier:@"Identifier" forIndexPath:indexPath];
     if ([NEKaraokePickSongEngine sharedInstance].pickSongArray.count <= indexPath.row) {
@@ -468,8 +468,8 @@
       @strongify(self) NSString *logInfo =
           [NSString stringWithFormat:@"点击开始下载文件:%@", item.songId];
       [NEKaraokeSongLog successLog:karaokeSongLog desc:logInfo];
-      //此处需要家逻辑
-      //是否在麦上
+      // 此处需要家逻辑
+      // 是否在麦上
       if (self.isUserOnSeat) {
         bool isOnSeat = self.isUserOnSeat();
         if (isOnSeat) {
@@ -489,7 +489,7 @@
           [NEKaraokeSongLog successLog:karaokeSongLog desc:downloadingLogInfo];
           [[NEKaraokePickSongEngine sharedInstance] preloadSong:item.songId channel:item.channel];
         } else {
-          //申请上麦
+          // 申请上麦
           if (self.applyOnseat) {
             self.currentOrderSong = item;
             self.applyOnseat();
@@ -515,7 +515,7 @@
       cell.songNumberLabel.hidden = NO;
       cell.statueLabel.hidden = YES;
       if ([self.detail.anchor.userUuid isEqualToString:[NEKaraokeKit shared].localMember.account]) {
-        //是主播
+        // 是主播
         if (indexPath.row > 1) {
           cell.topButton.hidden = NO;
         } else {
@@ -524,19 +524,19 @@
 
         cell.cancelButton.hidden = NO;
       } else {
-        //是自己点的
+        // 是自己点的
         if ([item.account isEqualToString:[NEKaraokeKit shared].localMember.account]) {
           cell.topButton.hidden = YES;
           cell.cancelButton.hidden = NO;
         } else {
-          //其他人的歌
+          // 其他人的歌
           cell.topButton.hidden = YES;
           cell.cancelButton.hidden = YES;
         }
       }
 
       cell.clickCancel = ^{
-        //点击取消
+        // 点击取消
         [[NEKaraokeKit shared]
             deleteSongWithOrderId:item.orderId
                          callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
@@ -547,7 +547,7 @@
                          }];
       };
       cell.clickTop = ^{
-        //点击置顶
+        // 点击置顶
         [[NEKaraokeKit shared]
             topSongWithOrderId:item.orderId
                       callback:^(NSInteger code, NSString *_Nullable msg, id _Nullable obj) {
@@ -571,8 +571,8 @@
     cell.songDurationLabel.hidden = NO;
     // duration暂时不做处理
     cell.songDurationLabel.text = [self formatSeconds:[item oc_songTime]];
-    //歌曲状态 -2 已唱 -1 删除 0:等待唱 1 唱歌中
-    //状态第一行直接显示正在演唱
+    // 歌曲状态 -2 已唱 -1 删除 0:等待唱 1 唱歌中
+    // 状态第一行直接显示正在演唱
     cell.statueLabel.text = @"正在演唱";
     return cell;
   }
@@ -678,13 +678,13 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-  //按下搜索
-  //收回键盘
+  // 按下搜索
+  // 收回键盘
   [self endEditing:YES];
   if (self.searchTextField.text.length <= 0) {
     return YES;
   }
-  //请求接口
+  // 请求接口
   self.isSearching = YES;
   [[NEKaraokePickSongEngine sharedInstance] resetPageNumber];
   [[NEKaraokePickSongEngine sharedInstance] updateSongArray];

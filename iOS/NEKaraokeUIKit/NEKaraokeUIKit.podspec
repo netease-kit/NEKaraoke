@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'NEKaraokeUIKit'
-  s.version          = '1.3.0'
+  s.version          = '1.4.0'
   s.summary          = 'A short description of NEKaraokeUIKit.'
 
 # This description is used to generate tags and improve search results.
@@ -28,7 +28,7 @@ TODO: Add long description of the pod here.
   s.source           = { :git => 'https://github.com/Ginger/NEKaraokeUIKit.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '10.0'
 
   s.source_files = 'NEKaraokeUIKit/Classes/**/*'
   
@@ -38,19 +38,20 @@ TODO: Add long description of the pod here.
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'NEKaraokeKit', '1.3.1'
+  s.dependency 'NEKaraokeKit', '1.4.0'
   s.dependency 'Masonry'
   s.dependency 'BlocksKit'
   s.dependency 'libextobjc'
-  s.dependency 'NELyricUIKit', '1.3.1'
+  s.dependency 'NELyricUIKit', '1.4.0'
   s.dependency 'M80AttributedLabel'
-  s.dependency 'NEAudioEffectUIKit', '1.3.0'
-  s.dependency 'NEAudioEffectKit', '1.3.0'
-  s.dependency 'NECopyrightedMedia', '1.3.1'
+  s.dependency 'NEAudioEffectUIKit', '1.4.0'
+  s.dependency 'NEAudioEffectKit', '1.4.0'
+  s.dependency 'NECopyrightedMedia', '1.4.0'
   s.dependency 'lottie-ios', '2.5.3'
   s.dependency 'Toast'
   s.dependency 'MJRefresh'
   s.dependency 'SDWebImage'
-  s.dependency 'NEPitchUIKit', '1.3.1'
+  s.dependency 'NEPitchUIKit', '1.4.0'
   s.dependency 'YXAlog_iOS'
+#  s.dependency 'NEPitchKit_framework'
 end

@@ -30,18 +30,17 @@
                                        NEKaraokeSeatViewDelegate,
                                        NEKaraokeSeatListVCDelegate,
                                        NEKaraokeCopyrightedMediaListener>
-//是否打过分
+// 是否打过分
 @property(nonatomic, assign) BOOL hasMarked;
-//是否断网
+// 是否断网
 @property(nonatomic, assign) BOOL loseNetwork;
 /// 网络监听器
 @property(nonatomic, strong) NEKaraokeReachability *reachability;
+@property(nonatomic, assign) BOOL preloadSong;
+@property(nonatomic, assign) BOOL mute;
 @end
 
-@implementation NEKaraokeViewController {
-  bool _preloadSong;
-  bool _mute;
-}
+@implementation NEKaraokeViewController
 - (instancetype)initWithRole:(NEKaraokeViewRole)role detail:(NEKaraokeRoomInfo *)detail {
   if ([super init]) {
     self.role = role;
@@ -113,62 +112,6 @@
     // 无网toast
     [NEKaraokeToast showToast:@"网络连接断开"];
     self.loseNetwork = true;
-  } else {
-    if (!self.loseNetwork) {
-      return;
-    }
-    self.loseNetwork = false;
-    // 有网查询一波
-    [NEKaraokeToast showToast:@"网络重连成功"];
-    [self getSeatInfo];
-    [self fetchPickSongList];
-    @weakify(self)
-        // 拉取演唱信息
-        [NEKaraokeKit.shared requestPlayingSongInfo:^(NSInteger code, NSString *_Nullable msg,
-                                                      NEKaraokeSongModel *_Nullable songModel) {
-          if (code != 0) {
-            [NEKaraokeToast
-                showToast:[NSString stringWithFormat:@"查询歌曲失败 %zd %@", code, msg]];
-            return;
-          }
-          if (!songModel) {
-            return;
-          }
-          if ([songModel.account isEqualToString:NEKaraokeKit.shared.localMember.account] ||
-              [songModel.assistantUuid isEqualToString:NEKaraokeKit.shared.localMember.account]) {
-            // 自己是主唱或者合唱，直接切歌
-            [[NEKaraokeKit shared]
-                nextSongWithOrderId:songModel.orderId
-                           callback:^(NSInteger c, NSString *_Nullable m, id _Nullable o){
-
-                           }];
-          } else {
-            if (songModel.oc_songStatus == 0 ||
-                songModel.oc_songStatus == 1) {  // 暂停或者演唱中 下载歌词并展示
-              [[NEKaraokeKit shared]
-                  preloadSongLyric:songModel.songId
-                           channel:songModel.oc_channel
-                          callback:^(NSString *_Nullable content, NSString *_Nullable lyricType,
-                                     NSError *_Nullable error) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                              @strongify(self) if (!content.length) {
-                                [self showNoLyricView:songModel];
-                              }
-                              else {
-                                [self.lyricActionView
-                                    setLyricContent:content
-                                          lyricType:songModel.oc_channel == MIGU ? NELyricTypeKas
-                                                                                 : NELyricTypeYrc];
-                                self.lyricActionView.lyricSeekBtnHidden = true;
-                                self.lyricActionView.lyricDuration = songModel.oc_songTime;
-                                [self.lyricActionView
-                                    showSubview:NEKaraokeLyricActionSubviewTypeLyric];
-                              }
-                            });
-                          }];
-            }
-          }
-        }];
   }
 }
 - (BOOL)checkNetwork {
@@ -341,7 +284,7 @@
                                   [NEKaraokeToast showToast:@"请先开启麦克风权限"];
                                   return;
                                 }
-                                //申请上麦
+                                // 申请上麦
                                 @strongify(view) @weakify(view)[NEKaraokeKit.shared
                                     requestSeat:^(NSInteger code, NSString *_Nullable msg,
                                                   id _Nullable obj) {
@@ -697,6 +640,66 @@
   });
 }
 
+- (void)onMemberJoinChatroom:(NSArray<NEKaraokeMember *> *)members {
+  for (NEKaraokeMember *member in members) {
+    if ([member.account isEqualToString:NEKaraokeKit.shared.localMember.account] &&
+        self.loseNetwork) {
+      self.loseNetwork = false;
+      // 有网查询一波
+      [NEKaraokeToast showToast:@"网络重连成功"];
+      [self getSeatInfo];
+      [self fetchPickSongList];
+      @weakify(self)
+          // 拉取演唱信息
+          [NEKaraokeKit.shared requestPlayingSongInfo:^(NSInteger code, NSString *_Nullable msg,
+                                                        NEKaraokeSongModel *_Nullable songModel) {
+            if (code != 0) {
+              [NEKaraokeToast
+                  showToast:[NSString stringWithFormat:@"查询歌曲失败 %zd %@", code, msg]];
+              return;
+            }
+            if (!songModel) {
+              return;
+            }
+            if ([songModel.account isEqualToString:NEKaraokeKit.shared.localMember.account] ||
+                [songModel.assistantUuid isEqualToString:NEKaraokeKit.shared.localMember.account]) {
+              // 自己是主唱或者合唱，直接切歌
+              [[NEKaraokeKit shared]
+                  nextSongWithOrderId:songModel.orderId
+                             callback:^(NSInteger c, NSString *_Nullable m, id _Nullable o){
+                             }];
+            } else {
+              if (songModel.oc_songStatus == 0 ||
+                  songModel.oc_songStatus == 1) {  // 暂停或者演唱中 下载歌词并展示
+                [[NEKaraokeKit shared]
+                    preloadSongLyric:songModel.songId
+                             channel:songModel.oc_channel
+                            callback:^(NSString *_Nullable content, NSString *_Nullable lyricType,
+                                       NSError *_Nullable error) {
+                              dispatch_async(dispatch_get_main_queue(), ^{
+                                @strongify(self) if (!content.length) {
+                                  [self showNoLyricView:songModel];
+                                }
+                                else {
+                                  [self.lyricActionView setLyricContent:content
+                                                              lyricType:songModel.oc_channel == MIGU
+                                                                            ? NELyricTypeKas
+                                                                            : NELyricTypeYrc];
+                                  self.lyricActionView.lyricSeekBtnHidden = true;
+                                  self.lyricActionView.lyricDuration = songModel.oc_songTime;
+                                  [self.lyricActionView
+                                      showSubview:NEKaraokeLyricActionSubviewTypeLyric];
+                                }
+                              });
+                            }];
+              }
+            }
+          }];
+      return;
+    }
+  }
+}
+
 - (void)onMemberLeaveRoom:(NSArray<NEKaraokeMember *> *)members {
   NSMutableArray *messages = [NSMutableArray array];
   for (NEKaraokeMember *member in members) {
@@ -960,7 +963,7 @@
       [self configControlView:songMode];
       // 听众不播放
       if ([self isAudience:songModel]) break;
-      //开始唱歌前添加保护 ：最终打分 + 图片解码时间超过3s ，隐藏打分View
+      // 开始唱歌前添加保护 ：最终打分 + 图片解码时间超过3s ，隐藏打分View
       dispatch_async(dispatch_get_main_queue(), ^{
         [self.lyricActionView hideScoreView];
       });
@@ -1084,6 +1087,11 @@
                   }];
       [self.taskQueue removeTask];
       if ([songModel.account isEqualToString:NEKaraokeKit.shared.localMember.account]) {  // 是自己
+        // 恢复升降调
+        // TODO: 先注释升降调
+        //        [self.audioManager setEffectPitchWithEffectId:NEKaraokeKit.AccompanyEffectId
+        //        pitch:0]; [self.audioManager
+        //        setEffectPitchWithEffectId:NEKaraokeKit.OriginalEffectId pitch:0];
         // 本地保存
         self.localOrderSong = [self covertToOrderSong:songModel];
         if (NEKaraokeKit.shared.allMemberList.count > 1) {
@@ -1180,7 +1188,7 @@
   }
 }
 - (void)onSongPlayingPosition:(uint64_t)postion {
-  if (postion < self.time) return;
+  if (postion < self.time || self.time < 0) return;
   // 出现position突变
   if (postion - self.time > 1000) {
     [NEKaraokeLog
@@ -1209,8 +1217,8 @@
   }
 }
 - (void)onSongPlayingCompleted {
-  //此处添加展示打分 添加延迟
-  //判断是否为独唱
+  // 此处添加展示打分 添加延迟
+  // 判断是否为独唱
   NEKaraokeSongMode songMode = [self fetchCurrentSongMode];
   // 自己独唱 展示打分
   if ([self isAnchorWithSelf]) {
@@ -1222,7 +1230,7 @@
           dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
       dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
         [NEKaraokeSongLog successLog:karaokeSongLog desc:@"隐藏打分"];
-        //隐藏歌词组件
+        // 隐藏歌词组件
         [self.lyricActionView showSubview:NEKaraokeLyricActionSubviewTypeChooseSong];
         [self showControlView:NO];
         [self.lyricActionView hideScoreView];
@@ -1305,8 +1313,8 @@
                                    NEKaraokeSongModel *_Nullable songModel) {
                           if (code == 0) {
                             NSInteger singMode = [songModel oc_singMode];
-                            if (singMode == 0 || singMode == 2) {  //下载全部内容
-                              @strongify(self) self->_preloadSong = true;
+                            if (singMode == 0 || singMode == 2) {  // 下载全部内容
+                              @strongify(self) self.preloadSong = true;
                               [[NEKaraokeKit shared] preloadSong:songModel.songId
                                                          channel:(int)songModel.oc_channel
                                                          observe:self];
@@ -1424,7 +1432,7 @@
                                                              song.songName]];
 }
 - (void)onSongDeleted:(NEKaraokeOrderSongModel *)song {
-  [self sendChatroomNotifyMessage:[NSString stringWithFormat:@"%@ 取消《%@》",
+  [self sendChatroomNotifyMessage:[NSString stringWithFormat:@"%@ 删除了歌曲《%@》",
                                                              song.actionOperator.userName,
                                                              song.songName]];
 }
@@ -1477,7 +1485,7 @@
             } else {
               markLevel = NEOpusLevelS;
             }
-            //结束 开始打分
+            // 结束 开始打分
             [NEKaraokeSongLog successLog:karaokeSongLog desc:@"展示打分"];
             @strongify(self)[self.lyricActionView lyricActionViewLevel:markLevel
                                                            resultModel:playResultModel];

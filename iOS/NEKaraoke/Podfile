@@ -11,6 +11,11 @@ target 'NEKaraoke' do
 
   # Pods for NEKaraoke
   pod 'NEKaraokeUIKit', :path => '../NEKaraokeUIKit/NEKaraokeUIKit.podspec'
+  pod 'NERtcSDK/RtcBasic','4.6.29'
+  pod 'NERtcSDK/Beauty','4.6.29'
+  pod 'NERtcSDK/FaceDetect','4.6.29'
+  pod 'NERtcSDK/Segment','4.6.29'
+  pod 'NIMSDK_LITE','9.6.4'
 
   pod 'YXLogin'
 

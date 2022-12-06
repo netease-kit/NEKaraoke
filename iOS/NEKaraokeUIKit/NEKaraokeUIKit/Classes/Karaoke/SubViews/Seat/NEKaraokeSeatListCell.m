@@ -43,7 +43,7 @@
     make.width.mas_equalTo(40);
   }];
   [self.avatarImage mas_makeConstraints:^(MASConstraintMaker *make) {
-    make.size.mas_equalTo(CGSizeMake(45, 45));
+    make.size.mas_equalTo(CGSizeMake(30, 30));
     make.centerY.mas_equalTo(0);
     make.left.equalTo(self.numberLabel.mas_right).offset(7);
   }];
@@ -113,7 +113,7 @@
 - (UIImageView *)avatarImage {
   if (!_avatarImage) {
     _avatarImage = [[UIImageView alloc] initWithFrame:CGRectZero];
-    _avatarImage.layer.cornerRadius = 22.5;
+    _avatarImage.layer.cornerRadius = 15;
     _avatarImage.layer.masksToBounds = YES;
   }
   return _avatarImage;

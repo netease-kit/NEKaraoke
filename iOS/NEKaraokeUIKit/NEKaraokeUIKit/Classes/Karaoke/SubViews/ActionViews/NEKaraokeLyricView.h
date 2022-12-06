@@ -26,24 +26,24 @@ NS_ASSUME_NONNULL_BEGIN
            lyricContent:(NSString *)lyricContent
               lyricType:(NELyricType)lyricType;
 
-//数据推送
-//最后一条数据isEnd 为YES
+// 数据推送
+// 最后一条数据isEnd 为YES
 - (void)pushAudioFrameWithFrame:(NEKaraokeAudioFrame *)frame isEnd:(BOOL)isEnd;
 
-//是否有打分数据
+// 是否有打分数据
 - (BOOL)hasPitchConotent;
-//展示最终分数
+// 展示最终分数
 - (void)showFinalScoreView:(NEPitchPlayResultModel *)playResultModel andLevel:(NEOpusLevel)level;
-//隐藏最终分数
+// 隐藏最终分数
 - (void)hideScoreView;
 
-//暂停打分
+// 暂停打分
 - (void)pitchPause;
 
-//开始打分：初始化自动启动，中间暂停才需要调用
+// 开始打分：初始化自动启动，中间暂停才需要调用
 - (void)pitchStart;
 
-//销毁打分
+// 销毁打分
 - (void)pitchDestroy;
 
 /// 设置路径

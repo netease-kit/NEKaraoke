@@ -108,6 +108,7 @@
   }];
 
   NEKaraokeMusicWaveView *wave = [[NEKaraokeMusicWaveView alloc] init];
+  wave.backgroundColor = [UIColor clearColor];
   [self addSubview:wave];
   [wave mas_makeConstraints:^(MASConstraintMaker *make) {
     make.left.equalTo(self).offset(60);
