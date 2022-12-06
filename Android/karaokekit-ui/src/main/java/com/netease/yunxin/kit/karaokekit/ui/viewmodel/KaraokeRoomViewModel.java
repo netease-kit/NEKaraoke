@@ -20,6 +20,7 @@ import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeGiftModel;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeMember;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeOrderSongModel;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeRoomInfo;
+import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSeatInfo;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSeatItem;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSeatRequestItem;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSongModel;
@@ -28,11 +29,13 @@ import com.netease.yunxin.kit.karaokekit.ui.R;
 import com.netease.yunxin.kit.karaokekit.ui.chatroom.ChatRoomMsgCreator;
 import com.netease.yunxin.kit.karaokekit.ui.helper.SeatHelper;
 import com.netease.yunxin.kit.karaokekit.ui.listener.MyKaraokeListener;
+import com.netease.yunxin.kit.karaokekit.ui.listener.NEKaraokeCallbackWrapper;
 import com.netease.yunxin.kit.karaokekit.ui.model.ApplySeatModel;
 import com.netease.yunxin.kit.karaokekit.ui.model.OnSeatModel;
 import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUtils;
 import com.netease.yunxin.kit.karaokekit.ui.utils.SeatUtils;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class KaraokeRoomViewModel extends ViewModel {
@@ -364,10 +367,50 @@ public class KaraokeRoomViewModel extends ViewModel {
     memberCountData.postValue(NEKaraokeKit.getInstance().getAllMemberList().size());
   }
 
+  public void updateSeat() {
+    NEKaraokeKit.getInstance()
+        .getSeatInfo(
+            new NEKaraokeCallbackWrapper<NEKaraokeSeatInfo>() {
+
+              @Override
+              public void onSuccess(@Nullable NEKaraokeSeatInfo seatInfo) {
+                if (seatInfo != null) {
+
+                  List<OnSeatModel> onSeatModelList =
+                      SeatUtils.transNESeatItem2OnSeatModel(seatInfo.getSeatItems());
+                  onSeatListData.postValue(onSeatModelList);
+
+                  List<OnSeatModel> onSeatModels = new ArrayList<>();
+                  if (onSeatModelList != null) {
+                    for (OnSeatModel onSeatModel : onSeatModelList) {
+                      if (onSeatModel.getStatus() == ApplySeatModel.SEAT_STATUS_ON_SEAT) {
+                        onSeatModels.add(onSeatModel);
+                      }
+                    }
+                  }
+                  Collections.sort(onSeatModels);
+                  SeatHelper.getInstance().setOnSeatItems(onSeatModels);
+                  currentSeatState.postValue(
+                      SeatUtils.isCurrentOnSeat()
+                          ? CURRENT_SEAT_STATE_ON_SEAT
+                          : (SeatUtils.isCurrentApplyingSeat()
+                              ? CURRENT_SEAT_STATE_APPLYING
+                              : CURRENT_SEAT_STATE_IDLE));
+                }
+              }
+
+              @Override
+              public void onError(int code, @Nullable String msg) {
+                ALog.e(TAG, "getSeatInfo failed code = " + code + " msg = " + msg);
+              }
+            });
+  }
+
   @Override
   public void onCleared() {
     super.onCleared();
     NEKaraokeKit.getInstance().removeKaraokeListener(listener);
+    SeatHelper.getInstance().destroy();
   }
 
   public MutableLiveData<Integer> getCurrentSeatState() {

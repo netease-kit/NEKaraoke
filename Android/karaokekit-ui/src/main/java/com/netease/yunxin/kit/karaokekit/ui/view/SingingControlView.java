@@ -9,6 +9,7 @@ import static com.netease.yunxin.kit.copyrightedmedia.api.SongResType.TYPE_ACCOM
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.netease.yunxin.kit.alog.ALog;
 import com.netease.yunxin.kit.common.image.ImageLoader;
 import com.netease.yunxin.kit.common.ui.utils.ToastUtils;
@@ -39,8 +41,9 @@ import com.netease.yunxin.kit.karaokekit.api.NEKaraokeChorusActionType;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCopyrightedMediaListener;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeSongMode;
-import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSongModel;
+import com.netease.yunxin.kit.karaokekit.api.model.*;
 import com.netease.yunxin.kit.karaokekit.audioeffect.api.NEAudioEffectManager;
+import com.netease.yunxin.kit.karaokekit.audioeffect.ui.NEAudioEffectUIConstants;
 import com.netease.yunxin.kit.karaokekit.audioeffect.ui.ToneDialogFragment;
 import com.netease.yunxin.kit.karaokekit.impl.utils.ScreenUtil;
 import com.netease.yunxin.kit.karaokekit.lyric.ui.widget.NELyricView;
@@ -190,7 +193,10 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
                 if (songModelChangeListener != null) {
                   songModelChangeListener.onSongModelChange(currentSongModel);
                 }
-                if (karaokeSongModel != null && !TextUtils.isEmpty(karaokeSongModel.getSongId())) {
+                if (karaokeSongModel != null
+                    && !TextUtils.isEmpty(karaokeSongModel.getSongId())
+                    && (karaokeSongModel.getSongStatus() == NEKaraokeSongStatus.PAUSE
+                        || karaokeSongModel.getSongStatus() == NEKaraokeSongStatus.PLAY)) {
                   switchKTVState(KTV_STATE_SINGING);
                   initLyricView();
                 }
@@ -1296,7 +1302,13 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
   @Override
   public void clickEffectView() {
     FragmentActivity activity = (FragmentActivity) getContext();
-    new ToneDialogFragment().show(activity.getSupportFragmentManager(), TAG);
+    Bundle bundle = new Bundle();
+    bundle.putInt(
+        NEAudioEffectUIConstants.INTENT_CURRENT_EFFECT_ID,
+        NEKaraokeKit.getInstance().currentSongIdForAudioEffect());
+    BottomSheetDialogFragment fragment = new ToneDialogFragment();
+    fragment.setArguments(bundle);
+    fragment.show(activity.getSupportFragmentManager(), TAG);
   }
 
   @Override
@@ -1337,6 +1349,10 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
   public void clickNextSong() {
     ALog.d(TAG, "clickNextSong");
     if (!NetUtils.checkNetwork(getContext())) {
+      return;
+    }
+
+    if (currentSongModel == null) {
       return;
     }
 

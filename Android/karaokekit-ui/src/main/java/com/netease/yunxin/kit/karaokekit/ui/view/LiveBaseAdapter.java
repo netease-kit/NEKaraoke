@@ -44,16 +44,16 @@ public abstract class LiveBaseAdapter<T>
   protected abstract LiveViewHolder onCreateViewHolder(View itemView);
 
   @Override
-  public void onBindViewHolder(@NonNull LiveViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull LiveBaseAdapter.LiveViewHolder holder, int position) {
     T itemData = getItem(position);
     onBindViewHolder(holder, itemData, position);
   }
 
-  protected void onBindViewHolder(LiveViewHolder holder, T itemData, int position) {
+  protected void onBindViewHolder(LiveBaseAdapter.LiveViewHolder holder, T itemData, int position) {
     onBindViewHolder(holder, itemData);
   }
 
-  protected void onBindViewHolder(LiveViewHolder holder, T itemData) {}
+  protected void onBindViewHolder(LiveBaseAdapter.LiveViewHolder holder, T itemData) {}
 
   public void updateDataSource(List<T> newDataSource) {
     dataSource.clear();

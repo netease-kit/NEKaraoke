@@ -43,4 +43,14 @@ public class SeatHelper {
   public void setApplySeatList(List<ApplySeatModel> applySeatList) {
     this.applySeatList = applySeatList;
   }
+
+  public void destroy() {
+    if (applySeatList != null) {
+      applySeatList.clear();
+    }
+
+    if (onSeatItems != null) {
+      onSeatItems.clear();
+    }
+  }
 }
