@@ -120,7 +120,7 @@
 2. 开启 Android 设备的开发者选项，通过 USB 连接线将 Android 设备接入电脑。
 3. 通过 Android Studio 打开项目，在 app\src\main\java\com\netease\yunxin\app\karaoke\config\AppConfig.java  文件中配置应用的 App Key。
 ```
-    private static final String APP_KEY = "your app key";private final static String APP_KEY = "your app key";
+    private static final String APP_KEY = "your app key";
 ```
 4. 在 Android Studio 中，单击 Sync Project with Gradle Files 按钮，同步工程依赖。
 5. 选中设备直接运行，即可体验 Demo。
