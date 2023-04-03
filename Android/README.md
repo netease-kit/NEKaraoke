@@ -5,37 +5,89 @@
 ```
 > 对示例项目源码的目录结构进行说明，方便客户快速了解并定制。
 ┌
-├── NEKaraokeCreateViewController              # 创建K歌房视图控制器
-│   ├── NEKaraokeCreateTextField               # 房间名输入框
-│   ├── NEKaraokeCreateCheckBox                # 合唱模式选择器
-│   └── UIButton                               # 创建房间按钮
-│
-├── NEKaraokeViewController                    # K歌房视图控制器
-│   ├── NEKaraokeHeaderView                    # 头部视图，包含人数、房间名等信息
-│   ├── NEKaraokeControlView                   # 控制视图，包含调音、暂停、切歌、原唱按钮
-│   ├── NEKaraokeSeatView                      # 麦位信息视图
-│   ├── NEKaraokeInputToolBar                  # 底部工具栏，包含输入框等控件
-│   ├── NEKaraokeChatView                      # 聊天室视图，显示系统通知消息、普通文本消息以及礼物消息
-│   ├── NEKaraokeKeyboardToolbarView           # 聊天室文本输入框
-│   ├── NEKaraokeAnimationView                 # 礼物动画视图
-│   ├── NEKaraokeRoomInfo                      # 当前K歌房信息
-│   ├── NEAudioEffectViewController            # 音效调节界面
-│   ├── NEAudioEffectManager                   # 音效管理类
-│   ├── NSMutableArray<NEKaraokeSeatItem *>    # 麦位信息
-│   ├── NEKaraokeOrderSongModel                # 当前演唱歌曲信息
-│   └── NEKaraokeLyricActionView               # 核心控制视图
-│       ├── NEKaraokeChooseView                # 核心控制视图 - 点歌视图
-│       ├── NEKaraokeChorusWaitView            # 核心控制视图 - 合唱准备视图
-│       ├── NEKaraokeLyricView                 # 核心控制视图 - 歌词、打分展示视图
-│       ├── NEKaraokeMatchView                 # 核心控制视图 - 合唱匹配视图
-│       ├── NEKaraokeNoLyricView               # 核心控制视图 - 无歌词提示视图
-│       └── NEKaraokeWaitView                  # 核心控制视图 - 独唱准备视图
-|
-├── NEKaraokeListViewController                # K歌房列表视图控制器
-│   ├── NEKaraokeListEmptyView                 # 空列表提示视图
-│   └── NEKaraokeListViewCell                  # K歌房信息预览
-│
-└── NEKaraokePickSongView                      # 点歌台弹出框 
+├── NEKaraokeUI.java                 # KaraokeUI入口 
+├── NEKaraokeUIConstants.java        # 常量
+├── activity
+│   ├── AppStatusConstant.java       # App状态常量
+│   ├── AppStatusManager.java        # App状态管理 
+│   ├── BaseActivity.java            # Activity基础类
+│   └── KaraokeRoomActivity.java     # Karaoke房间类
+├── adapter
+│   ├── BaseAdapter.java             #Adapter基类
+│   ├── BaseViewHolder.java          # ViewHolder基类 
+│   ├── OrderAdapter.java            # 点歌列表适配器
+│   ├── OrderLoadMoreDecorator.java  # 加载更多
+│   └── OrderedAdapter.java          # 已点歌曲列表适配器
+├── chatroom
+│   ├── ChatMessageSpannableStr.kt   # 聊天室消息文本管理
+│   ├── ChatRoomMsgCreator.kt        # 聊天室消息构造器
+│   └── VerticalImageSpan.kt         # 自定义ImageSpan
+├── dialog
+│   ├── ArrangeMicroDialog.kt         # 主播端排麦列表弹窗
+│   ├── AudienceArrangeMicroDialog.kt # 观众端申请上麦列表弹窗
+│   ├── BaseBottomDialog.kt            # 弹窗基类
+│   ├── BaseBottomDialogFragment.java  # 弹窗基类
+│   ├── BaseDialogFragment.java   #DialogFragment弹窗基类
+│   ├── BottomBaseDialog.kt  # Dialog基类
+│   ├── CommonDialog.java
+│   ├── GiftDialog.kt        # 礼物弹窗
+│   ├── OrderListFragment.java  # 点歌列表 
+│   ├── OrderSongDialog.java  # 点歌弹窗
+│   ├── OrderSongViewModel.kt  # 点歌ViewModel
+│   └── OrderedListFragment.java  # 已点歌曲列表
+├── fragment
+│   ├── BaseFragment.kt              # Fragment基类
+│   └── KaraokeRoomListFragment.java  # Karaoke房间列表
+├── gift
+│   ├── GiftCache.kt    # 礼物缓存
+│   ├── GiftInfo.kt     # 礼物模型
+│   ├── GiftRender.kt   # 礼物渲染 
+│   └── ui
+│       └── GifAnimationView.kt  # 礼物视图
+├── helper
+│   └── SeatHelper.java     # 麦位帮助类
+├── list
+│   ├── ApplySeatListAdapter.kt  # 麦位申请列表
+│   ├── AudienceApplySeatListAdapter.kt # 麦位申请列表适配器
+│   └── KaraokeListAdapter.java # 房间列表适配器
+├── listener
+│   ├── MyKaraokeListener.java  # Karaoke事件监听
+│   ├── NEKaraokeCallbackWrapper.java # 回调类
+├── model
+│   ├── ApplySeatModel.java  # 申请麦位数据模型
+│   ├── KaraokeOrderSongModel.java # 点歌模型
+│   ├── KaraokeRoomModel.java # 房间模型
+│   ├── LyricBusinessModel.java # 歌词业务模型
+│   ├── OnSeatModel.java  # 麦位信息
+│   └── VoiceRoomSeat.java # 麦位信息
+├── statusbar
+│   └── StatusBarConfig.java  # 状态栏配置
+├── tone
+│   ├── ToneContract.java   # 音效协议类
+│   ├── ToneDialogFragment.java # 音效弹窗
+│   └── ToneViewModel.java  # 音效ViewModel
+├── utils                   # 工具类
+│   ├── ClickUtils.kt       # 处理点击事件
+├── view
+│   ├── ChatMsgListAdapter.kt   # 聊天列表适配器
+│   ├── ChatRoomMsgRecyclerView.kt # 聊天信息列表
+│   ├── CircleImageView.java   # 圆形ImageView
+│   ├── ExTextView.java   # 输入框
+│   ├── FooterView.kt     # 自定义上拉加载UI
+│   ├── GridRadioGroup.java  # 合唱选项选择器 
+│   ├── HeadImageView.java  # 麦位头像
+│   ├── HeaderView.kt  # 自定义下拉刷新UI
+│   ├── ISingViewController.java  # 唱歌模块UI控制器
+│   ├── LiveBaseAdapter.kt   # 适配器基类
+│   ├── NESkipPreludeView.kt # 跳过前奏UI
+│   ├── NESoloSingView.kt  # 独唱UI
+│   ├── SeatView.java     # 麦位UI
+│   ├── SingingControlView.java   # 房间页顶部视图
+│   └── seat
+│       ├── SeatAdapter.java  # 麦位UI适配器
+│       └── SeatViewHolder.java  # 麦位UI ViewHolder
+└── viewmodel
+    └── KaraokeRoomViewModel.kt  # 房间ViewModel
 
 ```
 
