@@ -1,0 +1,547 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5EA6A34D2AE7E25100C28946 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA6A34C2AE7E25100C28946 /* AppDelegate.swift */; };
+		5EA6A3562AE7E25400C28946 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5EA6A3552AE7E25400C28946 /* Assets.xcassets */; };
+		5EA6A3592AE7E25400C28946 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EA6A3572AE7E25400C28946 /* LaunchScreen.storyboard */; };
+		5ECB298C2B04D31D0032FE04 /* karaoke.json in Resources */ = {isa = PBXBuildFile; fileRef = 5ECB298B2B04D31C0032FE04 /* karaoke.json */; };
+		5EED903D2AE8AEDC005F959A /* Configs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED903B2AE8AEDA005F959A /* Configs.swift */; };
+		5EED903E2AE8AEDC005F959A /* AppKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED903C2AE8AEDC005F959A /* AppKey.swift */; };
+		5EED90552AE8AEF3005F959A /* NPTCheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED90422AE8AEF0005F959A /* NPTCheckBox.swift */; };
+		5EED90562AE8AEF3005F959A /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED90432AE8AEF0005F959A /* String+Extension.swift */; };
+		5EED90572AE8AEF3005F959A /* Device+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED90442AE8AEF0005F959A /* Device+Extension.swift */; };
+		5EED90582AE8AEF3005F959A /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED90452AE8AEF0005F959A /* Color+Extension.swift */; };
+		5EED90592AE8AEF3005F959A /* NPTReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED90462AE8AEF0005F959A /* NPTReachability.swift */; };
+		5EED905A2AE8AEF3005F959A /* NPTFeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED904A2AE8AEF2005F959A /* NPTFeedbackViewController.swift */; };
+		5EED905B2AE8AEF3005F959A /* NPTUserAgreementWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED904B2AE8AEF2005F959A /* NPTUserAgreementWindow.swift */; };
+		5EED905C2AE8AEF3005F959A /* NPTHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED904C2AE8AEF2005F959A /* NPTHomeViewController.swift */; };
+		5EED905D2AE8AEF3005F959A /* NPTAboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED904E2AE8AEF3005F959A /* NPTAboutViewController.swift */; };
+		5EED905E2AE8AEF3005F959A /* NPTNetworkDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED904F2AE8AEF3005F959A /* NPTNetworkDetailView.swift */; };
+		5EED905F2AE8AEF3005F959A /* NPTBlackListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED90502AE8AEF3005F959A /* NPTBlackListViewController.swift */; };
+		5EED90602AE8AEF3005F959A /* NPTPersonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED90512AE8AEF3005F959A /* NPTPersonViewController.swift */; };
+		5EED90612AE8AEF3005F959A /* NPTWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED90522AE8AEF3005F959A /* NPTWebViewController.swift */; };
+		5EED90622AE8AEF3005F959A /* NPTNormalSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EED90532AE8AEF3005F959A /* NPTNormalSettingViewController.swift */; };
+		5EED906C2AE8B6D2005F959A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5EED906E2AE8B6D2005F959A /* Localizable.strings */; };
+		A36459EE94A267741F0B06E6 /* Pods_NEKaraoke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79BABFB96D7DA57817B041B9 /* Pods_NEKaraoke.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5EA6A3492AE7E25100C28946 /* NEKaraoke.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NEKaraoke.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5EA6A34C2AE7E25100C28946 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		5EA6A3552AE7E25400C28946 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5EA6A3582AE7E25400C28946 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5EA6A35A2AE7E25400C28946 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5ECB298B2B04D31C0032FE04 /* karaoke.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = karaoke.json; sourceTree = "<group>"; };
+		5EED903B2AE8AEDA005F959A /* Configs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configs.swift; sourceTree = "<group>"; };
+		5EED903C2AE8AEDC005F959A /* AppKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppKey.swift; sourceTree = "<group>"; };
+		5EED90422AE8AEF0005F959A /* NPTCheckBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPTCheckBox.swift; sourceTree = "<group>"; };
+		5EED90432AE8AEF0005F959A /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		5EED90442AE8AEF0005F959A /* Device+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Device+Extension.swift"; sourceTree = "<group>"; };
+		5EED90452AE8AEF0005F959A /* Color+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
+		5EED90462AE8AEF0005F959A /* NPTReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPTReachability.swift; sourceTree = "<group>"; };
+		5EED904A2AE8AEF2005F959A /* NPTFeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPTFeedbackViewController.swift; sourceTree = "<group>"; };
+		5EED904B2AE8AEF2005F959A /* NPTUserAgreementWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPTUserAgreementWindow.swift; sourceTree = "<group>"; };
+		5EED904C2AE8AEF2005F959A /* NPTHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPTHomeViewController.swift; sourceTree = "<group>"; };
+		5EED904E2AE8AEF3005F959A /* NPTAboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPTAboutViewController.swift; sourceTree = "<group>"; };
+		5EED904F2AE8AEF3005F959A /* NPTNetworkDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPTNetworkDetailView.swift; sourceTree = "<group>"; };
+		5EED90502AE8AEF3005F959A /* NPTBlackListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPTBlackListViewController.swift; sourceTree = "<group>"; };
+		5EED90512AE8AEF3005F959A /* NPTPersonViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPTPersonViewController.swift; sourceTree = "<group>"; };
+		5EED90522AE8AEF3005F959A /* NPTWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPTWebViewController.swift; sourceTree = "<group>"; };
+		5EED90532AE8AEF3005F959A /* NPTNormalSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPTNormalSettingViewController.swift; sourceTree = "<group>"; };
+		5EED906D2AE8B6D2005F959A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5EED906F2AE8B75D005F959A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		5EED90702AE8B76C005F959A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		79BABFB96D7DA57817B041B9 /* Pods_NEKaraoke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NEKaraoke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1527A863D588DD143C6499C /* Pods-NEKaraoke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NEKaraoke.debug.xcconfig"; path = "Target Support Files/Pods-NEKaraoke/Pods-NEKaraoke.debug.xcconfig"; sourceTree = "<group>"; };
+		EFA72E3913CF00E60E9C98D4 /* Pods-NEKaraoke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NEKaraoke.release.xcconfig"; path = "Target Support Files/Pods-NEKaraoke/Pods-NEKaraoke.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5EA6A3462AE7E25100C28946 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A36459EE94A267741F0B06E6 /* Pods_NEKaraoke.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5EA6A3402AE7E25100C28946 = {
+			isa = PBXGroup;
+			children = (
+				5EA6A34B2AE7E25100C28946 /* NEKaraoke */,
+				5EA6A34A2AE7E25100C28946 /* Products */,
+				89A0D02CC6C003CBA8149CD9 /* Pods */,
+				65C30B6AB25841EC13288FCA /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		5EA6A34A2AE7E25100C28946 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5EA6A3492AE7E25100C28946 /* NEKaraoke.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5EA6A34B2AE7E25100C28946 /* NEKaraoke */ = {
+			isa = PBXGroup;
+			children = (
+				5EA6A34C2AE7E25100C28946 /* AppDelegate.swift */,
+				5EED903C2AE8AEDC005F959A /* AppKey.swift */,
+				5EA6A3552AE7E25400C28946 /* Assets.xcassets */,
+				5EED903B2AE8AEDA005F959A /* Configs.swift */,
+				5EED90492AE8AEF2005F959A /* Home */,
+				5EA6A35A2AE7E25400C28946 /* Info.plist */,
+				5EA6A3572AE7E25400C28946 /* LaunchScreen.storyboard */,
+				5EED904D2AE8AEF3005F959A /* Person */,
+				5EED903F2AE8AEEF005F959A /* Source */,
+				5EED90412AE8AEF0005F959A /* Utils */,
+				5EED906E2AE8B6D2005F959A /* Localizable.strings */,
+			);
+			path = NEKaraoke;
+			sourceTree = "<group>";
+		};
+		5EED903F2AE8AEEF005F959A /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				5ECB298B2B04D31C0032FE04 /* karaoke.json */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		5EED90412AE8AEF0005F959A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				5EED90422AE8AEF0005F959A /* NPTCheckBox.swift */,
+				5EED90432AE8AEF0005F959A /* String+Extension.swift */,
+				5EED90442AE8AEF0005F959A /* Device+Extension.swift */,
+				5EED90452AE8AEF0005F959A /* Color+Extension.swift */,
+				5EED90462AE8AEF0005F959A /* NPTReachability.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		5EED90492AE8AEF2005F959A /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				5EED904A2AE8AEF2005F959A /* NPTFeedbackViewController.swift */,
+				5EED904B2AE8AEF2005F959A /* NPTUserAgreementWindow.swift */,
+				5EED904C2AE8AEF2005F959A /* NPTHomeViewController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		5EED904D2AE8AEF3005F959A /* Person */ = {
+			isa = PBXGroup;
+			children = (
+				5EED904E2AE8AEF3005F959A /* NPTAboutViewController.swift */,
+				5EED904F2AE8AEF3005F959A /* NPTNetworkDetailView.swift */,
+				5EED90502AE8AEF3005F959A /* NPTBlackListViewController.swift */,
+				5EED90512AE8AEF3005F959A /* NPTPersonViewController.swift */,
+				5EED90522AE8AEF3005F959A /* NPTWebViewController.swift */,
+				5EED90532AE8AEF3005F959A /* NPTNormalSettingViewController.swift */,
+			);
+			path = Person;
+			sourceTree = "<group>";
+		};
+		65C30B6AB25841EC13288FCA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				79BABFB96D7DA57817B041B9 /* Pods_NEKaraoke.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		89A0D02CC6C003CBA8149CD9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E1527A863D588DD143C6499C /* Pods-NEKaraoke.debug.xcconfig */,
+				EFA72E3913CF00E60E9C98D4 /* Pods-NEKaraoke.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5EA6A3482AE7E25100C28946 /* NEKaraoke */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5EA6A35D2AE7E25400C28946 /* Build configuration list for PBXNativeTarget "NEKaraoke" */;
+			buildPhases = (
+				73A111F86C27EDA20AF96ADC /* [CP] Check Pods Manifest.lock */,
+				5EA6A3452AE7E25100C28946 /* Sources */,
+				5EA6A3462AE7E25100C28946 /* Frameworks */,
+				5EA6A3472AE7E25100C28946 /* Resources */,
+				AF7BD7490283E0372722E10F /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NEKaraoke;
+			productName = NEKaraoke;
+			productReference = 5EA6A3492AE7E25100C28946 /* NEKaraoke.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5EA6A3412AE7E25100C28946 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					5EA6A3482AE7E25100C28946 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 5EA6A3442AE7E25100C28946 /* Build configuration list for PBXProject "NEKaraoke" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = 5EA6A3402AE7E25100C28946;
+			productRefGroup = 5EA6A34A2AE7E25100C28946 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5EA6A3482AE7E25100C28946 /* NEKaraoke */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5EA6A3472AE7E25100C28946 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EED906C2AE8B6D2005F959A /* Localizable.strings in Resources */,
+				5EA6A3592AE7E25400C28946 /* LaunchScreen.storyboard in Resources */,
+				5ECB298C2B04D31D0032FE04 /* karaoke.json in Resources */,
+				5EA6A3562AE7E25400C28946 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		73A111F86C27EDA20AF96ADC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NEKaraoke-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AF7BD7490283E0372722E10F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NEKaraoke/Pods-NEKaraoke-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NEKaraoke/Pods-NEKaraoke-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NEKaraoke/Pods-NEKaraoke-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5EA6A3452AE7E25100C28946 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EED90612AE8AEF3005F959A /* NPTWebViewController.swift in Sources */,
+				5EED90582AE8AEF3005F959A /* Color+Extension.swift in Sources */,
+				5EED90572AE8AEF3005F959A /* Device+Extension.swift in Sources */,
+				5EED90562AE8AEF3005F959A /* String+Extension.swift in Sources */,
+				5EED905B2AE8AEF3005F959A /* NPTUserAgreementWindow.swift in Sources */,
+				5EED903D2AE8AEDC005F959A /* Configs.swift in Sources */,
+				5EED905C2AE8AEF3005F959A /* NPTHomeViewController.swift in Sources */,
+				5EED905A2AE8AEF3005F959A /* NPTFeedbackViewController.swift in Sources */,
+				5EED90602AE8AEF3005F959A /* NPTPersonViewController.swift in Sources */,
+				5EED90592AE8AEF3005F959A /* NPTReachability.swift in Sources */,
+				5EED90622AE8AEF3005F959A /* NPTNormalSettingViewController.swift in Sources */,
+				5EA6A34D2AE7E25100C28946 /* AppDelegate.swift in Sources */,
+				5EED905F2AE8AEF3005F959A /* NPTBlackListViewController.swift in Sources */,
+				5EED905E2AE8AEF3005F959A /* NPTNetworkDetailView.swift in Sources */,
+				5EED903E2AE8AEDC005F959A /* AppKey.swift in Sources */,
+				5EED90552AE8AEF3005F959A /* NPTCheckBox.swift in Sources */,
+				5EED905D2AE8AEF3005F959A /* NPTAboutViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		5EA6A3572AE7E25400C28946 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5EA6A3582AE7E25400C28946 /* Base */,
+				5EED906F2AE8B75D005F959A /* zh-Hans */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		5EED906E2AE8B6D2005F959A /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5EED906D2AE8B6D2005F959A /* en */,
+				5EED90702AE8B76C005F959A /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5EA6A35B2AE7E25400C28946 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		5EA6A35C2AE7E25400C28946 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5EA6A35E2AE7E25400C28946 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1527A863D588DD143C6499C /* Pods-NEKaraoke.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7C9A6NRV5L;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NEKaraoke/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.netease.NEKaraoke;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Wildcard_dev_XKit;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5EA6A35F2AE7E25400C28946 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EFA72E3913CF00E60E9C98D4 /* Pods-NEKaraoke.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7C9A6NRV5L;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NEKaraoke/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.netease.NEKaraoke;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Wildcard_dev_XKit;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5EA6A3442AE7E25100C28946 /* Build configuration list for PBXProject "NEKaraoke" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EA6A35B2AE7E25400C28946 /* Debug */,
+				5EA6A35C2AE7E25400C28946 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5EA6A35D2AE7E25400C28946 /* Build configuration list for PBXNativeTarget "NEKaraoke" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EA6A35E2AE7E25400C28946 /* Debug */,
+				5EA6A35F2AE7E25400C28946 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5EA6A3412AE7E25100C28946 /* Project object */;
+}
