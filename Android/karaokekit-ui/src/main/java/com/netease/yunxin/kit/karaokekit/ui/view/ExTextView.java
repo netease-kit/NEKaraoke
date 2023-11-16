@@ -8,13 +8,13 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.widget.TextView;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 
-public class ExTextView extends TextView {
-  private Drawable enableImg;
-  private Drawable disableImg;
+public class ExTextView extends AppCompatTextView {
+  private final Drawable enableImg;
+  private final Drawable disableImg;
 
   public ExTextView(Context context) {
     this(context, null);

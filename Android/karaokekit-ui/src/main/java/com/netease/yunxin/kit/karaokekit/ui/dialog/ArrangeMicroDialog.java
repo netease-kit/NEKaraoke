@@ -13,8 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.blankj.utilcode.util.ScreenUtils;
 import com.netease.yunxin.kit.common.ui.utils.ToastUtils;
+import com.netease.yunxin.kit.common.utils.ScreenUtils;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCallback;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
 import com.netease.yunxin.kit.karaokekit.ui.NEKaraokeUIConstants;
@@ -116,7 +116,7 @@ public class ArrangeMicroDialog extends BaseBottomDialog {
       params.gravity = Gravity.BOTTOM;
       // 使用ViewGroup.LayoutParams，以便Dialog 宽度充满整个屏幕
       params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-      params.height = ScreenUtils.getScreenHeight() / 2;
+      params.height = ScreenUtils.getDisplayHeight() / 2;
       window.setAttributes(params);
     }
     setCancelable(true); // 设置点击外部是否消失

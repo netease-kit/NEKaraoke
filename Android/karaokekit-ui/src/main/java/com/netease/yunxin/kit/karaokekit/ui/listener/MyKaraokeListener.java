@@ -11,12 +11,13 @@ import com.netease.yunxin.kit.karaokekit.api.NEKaraokeAudioOutputDevice;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeChorusActionType;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeEndReason;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeListener;
+import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeBatchGiftModel;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeChatTextMessage;
-import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeGiftModel;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeMember;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeOrderSongModel;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSeatItem;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSongModel;
+import com.netease.yunxin.kit.roomkit.api.model.NERoomConnectType;
 import java.util.List;
 
 public class MyKaraokeListener implements NEKaraokeListener {
@@ -54,7 +55,7 @@ public class MyKaraokeListener implements NEKaraokeListener {
       @NonNull NEKaraokeChorusActionType actionType, @NonNull NEKaraokeSongModel model) {}
 
   @Override
-  public void onReceiveGift(@NonNull NEKaraokeGiftModel rewardMsg) {}
+  public void onReceiveBatchGift(@NonNull NEKaraokeBatchGiftModel giftModel) {}
 
   @Override
   public void onSeatRequestSubmitted(int seatIndex, @NonNull String account) {}
@@ -80,7 +81,7 @@ public class MyKaraokeListener implements NEKaraokeListener {
   public void onSeatListChanged(@NonNull List<NEKaraokeSeatItem> seatItems) {}
 
   @Override
-  public void onSongListChanged() {}
+  public void onOrderedSongListChanged() {}
 
   @Override
   public void onSongOrdered(NEKaraokeOrderSongModel song) {}
@@ -102,4 +103,7 @@ public class MyKaraokeListener implements NEKaraokeListener {
 
   @Override
   public void onSongPlayingCompleted() {}
+
+  @Override
+  public void onRoomConnectStateChanged(@NonNull NERoomConnectType state) {}
 }

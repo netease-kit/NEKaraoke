@@ -18,7 +18,7 @@ public class ChatMsgListAdapter extends LiveBaseAdapter<CharSequence> {
 
   @Override
   protected int getLayoutId(int viewType) {
-    return R.layout.view_item_msg_content_layout;
+    return R.layout.karaoke_view_item_msg_content_layout;
   }
 
   @Override

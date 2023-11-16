@@ -18,15 +18,15 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="140dp"
-            android:background="@drawable/user_bg" />
+            android:background="@drawable/user_bg"
+            android:contentDescription="@string/app_default_content_description" />
 
-        <ImageView
+        <com.netease.yunxin.kit.entertainment.common.widget.HeadImageView
             android:id="@+id/iv_user_portrait"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="26dp"
-            android:layout_marginTop="110dp"
-            android:src="@drawable/account_circle" />
+            android:layout_marginTop="110dp"/>
 
         <TextView
             android:id="@+id/tv_user_name"
@@ -37,7 +37,7 @@
             android:layout_marginStart="14dp"
             android:layout_marginTop="65dp"
             android:textColor="@color/color_333333"
-            android:textSize="22dp"
+            android:textSize="22sp"
             test:text="User" />
 
     </RelativeLayout>
@@ -60,90 +60,12 @@
             android:layout_marginEnd="-20dp"
             android:background="@color/color_f5f8fc" />
 
-        <LinearLayout
+        <com.netease.yunxin.kit.entertainment.common.widget.SettingItemView
+            android:id="@+id/common_setting"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/pre_protocol" />
-
-            <TextView
-                android:id="@+id/tv_user_agreement"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/dimen_8"
-                android:gravity="center_vertical"
-                android:text="@string/app_user_agreement"
-                android:textColor="@color/color_333333"
-                android:textSize="16dp"
-                app:drawableEndCompat="@drawable/icon_right_arrow_light" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginEnd="-20dp"
-            android:background="@color/color_f5f8fc" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/pre_private" />
-
-            <TextView
-                android:id="@+id/tv_privacy_policy"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/dimen_8"
-                android:gravity="center_vertical"
-                android:text="@string/app_privacy_policy"
-                android:textColor="@color/color_333333"
-                android:textSize="16dp"
-                app:drawableEndCompat="@drawable/icon_right_arrow_light" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginEnd="-20dp"
-            android:background="@color/color_f5f8fc" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/pre_info" />
-
-            <TextView
-                android:id="@+id/tv_app_about"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/dimen_8"
-                android:gravity="center_vertical"
-                android:text="@string/app_about"
-                android:textColor="@color/color_333333"
-                android:textSize="16dp"
-                app:drawableEndCompat="@drawable/icon_right_arrow_light" />
-        </LinearLayout>
-
+            android:layout_height="46dp"
+            app:setting_item_icon="@drawable/icon_common_setting"
+            app:setting_item_title="@string/app_common_setting" />
 
         <View
             android:layout_width="match_parent"
@@ -152,31 +74,11 @@
             android:layout_marginEnd="-20dp"
             android:background="@color/color_f5f8fc" />
 
-        <TextView
-            android:id="@+id/tv_logout"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="20dp"
-            android:background="#06ffffff"
-            android:gravity="center"
-            android:text="@string/app_logout"
-            android:textColor="@color/color_e6605c"
-            android:textSize="17dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_nick_name" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
-
-    <TextView
-        android:id="@+id/tv_app_version"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="50dp"
-        android:textColor="@color/color_333333"
-        android:text="v1.0.0"/>
 
 </LinearLayout>

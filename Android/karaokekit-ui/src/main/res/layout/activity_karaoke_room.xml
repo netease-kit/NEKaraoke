@@ -5,6 +5,7 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cly_anchor_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,7 +21,7 @@
         android:ellipsize="middle"
         android:singleLine="true"
         android:textColor="@color/white"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,7 +37,7 @@
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:textColor="#ffffff"
-        android:textSize="12dp"
+        android:textSize="12sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/iv_leave_room" />
 
@@ -51,7 +52,8 @@
         android:padding="7dp"
         android:src="@drawable/close_icon"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/content_description_default" />
 
     <com.netease.yunxin.kit.karaokekit.ui.view.SingingControlView
         android:id="@+id/sing_control_view"
@@ -104,6 +106,7 @@
         android:hint="@string/karaoke_say_something"
         android:maxWidth="175dp"
         android:paddingStart="15dp"
+        android:paddingEnd="0dp"
         android:textColor="@color/white"
         android:textColorHint="#4cffffff"
         app:drawableStartCompat="@drawable/alpha_chat_room_icon"
@@ -128,12 +131,13 @@
             android:layout_height="36dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/dark_cycle_bg"
+            android:background="@drawable/ktv_dark_cycle_bg"
             android:padding="5dp"
-            android:src="@drawable/selector_room_micro_phone"
+            android:src="@drawable/ktv_selector_room_micro_phone"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/iv_mute_other_text" />
+            app:layout_constraintEnd_toStartOf="@+id/iv_mute_other_text"
+            android:contentDescription="@string/content_description_default" />
 
         <RelativeLayout
             android:id="@+id/rl_arrange_micro"
@@ -148,15 +152,16 @@
                 android:layout_height="36dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/dark_cycle_bg"
+                android:background="@drawable/ktv_dark_cycle_bg"
                 android:padding="5dp"
-                android:src="@drawable/arrange_micro" />
+                android:src="@drawable/arrange_micro"
+                android:contentDescription="@string/content_description_default" />
 
             <TextView
                 android:id="@+id/tv_arrange_micro_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="7dp"
+                android:textSize="7sp"
                 android:textColor="@color/black"
                 android:visibility="gone"
                 android:layout_marginBottom="25dp"
@@ -164,9 +169,9 @@
                 android:minWidth="12dp"
                 android:minHeight="12dp"
                 android:gravity="center"
-                android:text="0"
                 android:includeFontPadding="false"
-                android:background="@drawable/shape_corner_6_bg_white"/>
+                android:background="@drawable/shape_corner_6_bg_white"
+                tools:ignore="SmallSp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -182,15 +187,16 @@
                 android:layout_height="36dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/dark_cycle_bg"
+                android:background="@drawable/ktv_dark_cycle_bg"
                 android:padding="5dp"
-                android:src="@drawable/music" />
+                android:src="@drawable/music"
+                android:contentDescription="@string/content_description_default" />
 
             <TextView
                 android:id="@+id/tv_music_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="7dp"
+                android:textSize="7sp"
                 android:textColor="@color/black"
                 android:visibility="gone"
                 android:layout_marginBottom="25dp"
@@ -198,10 +204,10 @@
                 android:minWidth="12dp"
                 android:minHeight="12dp"
                 android:gravity="center"
-                android:text="0"
                 android:paddingStart="@dimen/dimen_2"
                 android:paddingEnd="@dimen/dimen_2"
-                android:background="@drawable/shape_corner_6_bg_white"/>
+                android:background="@drawable/shape_corner_6_bg_white"
+                tools:ignore="SmallSp" />
         </RelativeLayout>
 
         <ImageView
@@ -210,10 +216,11 @@
             android:layout_height="36dp"
             android:layout_marginEnd="@dimen/dp_10"
             android:layout_weight="1"
-            android:background="@drawable/dark_cycle_bg"
+            android:background="@drawable/ktv_dark_cycle_bg"
             android:padding="5dp"
             android:src="@drawable/gift"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:contentDescription="@string/content_description_default" />
 
     </LinearLayout>
 
@@ -231,10 +238,10 @@
         android:singleLine="true"
         android:textColor="#ffffff"
         android:textColorHint="#ccffffff"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
+        app:layout_constraintStart_toStartOf="parent"
+        android:autofillHints=""
+        android:inputType="text" />
 </androidx.constraintlayout.widget.ConstraintLayout>

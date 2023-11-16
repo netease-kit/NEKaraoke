@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="56dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/color_313d3c">
 
     <TextView
@@ -31,7 +32,7 @@
 
     <TextView
         android:id="@+id/tv_anchor_name"
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:singleLine="true"

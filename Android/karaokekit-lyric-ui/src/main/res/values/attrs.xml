@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (c) 2022 NetEase, Inc. All rights reserved. -->
+<!-- Use of this source code is governed by a MIT license that can be -->
+<!-- found in the LICENSE file. -->
+<resources>
+    <declare-styleable name="NELyricView">
+        <attr name="lineSpace" format="dimension" />
+        <attr name="defaultTextSizeSp" format="dimension" />
+        <attr name="highLightTextSizeSp" format="dimension" />
+        <attr name="defaultTextColor" format="reference|color" />
+        <attr name="highLightTextColor" format="reference|color" />
+        <attr name="highLightBgTextColor" format="reference|color" />
+
+
+    </declare-styleable>
+
+</resources>

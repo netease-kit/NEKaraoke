@@ -5,7 +5,7 @@
 package com.netease.yunxin.kit.karaokekit.ui.gift;
 
 import android.util.SparseArray;
-import com.blankj.utilcode.util.Utils;
+import com.netease.yunxin.kit.entertainment.common.utils.Utils;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 import java.util.ArrayList;
 import java.util.List;

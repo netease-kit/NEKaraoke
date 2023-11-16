@@ -74,7 +74,6 @@ public class KaraokeOrderSongModel {
     this.songCover = songCover;
   }
 
-  @NonNull
   public List<NECopyrightedSinger> getSingers() {
     return singers;
   }

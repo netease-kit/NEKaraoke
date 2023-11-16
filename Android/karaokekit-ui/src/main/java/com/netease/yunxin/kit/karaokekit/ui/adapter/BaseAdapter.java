@@ -15,7 +15,7 @@ import com.netease.yunxin.kit.karaokekit.ui.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseAdapter<T> extends RecyclerView.Adapter {
+public abstract class BaseAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   public static final int TYPE_HEADER = 0;
   public static final int TYPE_NORMAL = 1;

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2022 NetEase, Inc. All rights reserved. -->
+<!-- Use of this source code is governed by a MIT license that can be -->
+<!-- found in the LICENSE file. -->
+
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="karaoke">Online Karaoke</string>
+    <string name="karaoke_ten_thousand">10K</string>
+    <string name="karaoke_million">million</string>
+    <string name="karaoke_coin">Coin</string>
+    <string name="karaoke_pull_to_refresh">Swipe down to update</string>
+    <string name="karaoke_release_to_refresh">Release to update</string>
+    <string name="karaoke_refreshing">Updating…</string>
+    <string name="karaoke_have_no_more">No more</string>
+    <string name="karaoke_load_more">Swipe up to load</string>
+    <string name="karaoke_empty_live">No live</string>
+    <string name="karaoke_empty_apply_seat">No requests</string>
+    <string name="karaoke_start_live">Start</string>
+    <string name="karaoke_room_name">Room name</string>
+    <string name="karaoke_user_name">User name</string>
+    <string name="karaoke_create_room">Create Room</string>
+    <string name="karaoke_create">Create</string>
+    <string name="karaoke_say_something">Let\'s have a talk~</string>
+    <string name="karaoke_donate">donated </string>
+    <string name="karaoke_count"> </string>
+    <string name="karaoke_has_leave_seat">left</string>
+    <string name="karaoke_has_success_enter_seat">joined</string>
+    <string name="karaoke_enter_room">Join</string>
+    <string name="karaoke_leave_room">Leave</string>
+    <string name="karaoke_on_seat_request">Request</string>
+    <string name="karaoke_on_seat">joined as speaker</string>
+    <string name="karaoke_down_seat">left</string>
+    <string name="karaoke_cancel_on_seat_request">Cancel request</string>
+    <string name="karaoke_on_seat_reject">request rejected</string>
+    <string name="karaoke_kickout_seat">Kicked</string>
+    <string name="karaoke_kickout_seat_confirm">Kick the participant?</string>
+    <string name="karaoke_down_seat_confirm">Leave the seat?</string>
+
+    <string name="karaoke_glow_stick">Glow stick</string>
+    <string name="karaoke_arrange">Get Done</string>
+    <string name="karaoke_sports_car">Sports car</string>
+    <string name="karaoke_rockets">Rocket</string>
+    <string name="karaoke_authorization_failed">Authorization failed</string>
+    <string name="karaoke_micro_phone_is_close">Microphone turned off</string>
+    <string name="karaoke_micro_phone_is_open">Microphone turned on</string>
+    <string name="karaoke_has_applyed_waiting_for_pass">You already sent the request, wait for a while</string>
+    <string name="karaoke_apply_seate_to_host">Request the seat for fun</string>
+    <string name="karaoke_applyed_failed">Failed to request the seat</string>
+    <string name="karaoke_online_member_count"> %d participants online</string>
+    <string name="karaoke_room_already_closed">Room already closed</string>
+    <string name="karaoke_send_gift">Send gift</string>
+    <string name="karaoke_network_error">Network error, try again later</string>
+    <string name="karaoke_reward_failed">Failed to send the gift</string>
+    <string name="karaoke_send">Send</string>
+    <string name="karaoke_apply_on_seat_default">Request (0)</string>
+    <string name="karaoke_apply_on_seat">Request (%d)</string>
+    <string name="karaoke_agree_on_seat">Allow</string>
+    <string name="karaoke_cancel_on_seat">Cancel</string>
+    <string name="karaoke_refuse_on_seat">Reject</string>
+    <string name="karaoke_sure">OK</string>
+    <string name="karaoke_cancel">Cancel</string>
+    <string name="karaoke_set_sound">Tune</string>
+    <string name="karaoke_pause">Pause</string>
+    <string name="karaoke_resume">Play</string>
+    <string name="karaoke_next_song">Next</string>
+    <string name="karaoke_origin_close">Original song track: off</string>
+    <string name="karaoke_origin_open">Original song track: on</string>
+    <string name="karaoke_host">Host</string>
+    <string name="join_chrous">Join</string>
+    <string name="solo">Solo</string>
+    <string name="matching">Matching…</string>
+    <string name="matching_with_time">Matching %s</string>
+    <string name="chorus_loading" tools:ignore="TypographyEllipsis">Backing track loading...</string>
+    <string name="chorus_loading_with_time">%s loading…</string>
+    <string name="karaoke_tip">Wear a headphone to avoid echos when singing</string>
+    <string name="turn_to_you">your turn</string>
+    <string name="song_name"> %s </string>
+    <string name="give_up">Quit</string>
+    <string name="prepare_single">%s get prepared</string>
+    <string name="prepare_chorus">%s, %s get prepared</string>
+    <string name="play_delay"> seconds and play</string>
+    <string name="go_on_play">Continue</string>
+    <string name="karaoke_order_song">Pick songs</string>
+    <string name="in_solo">Solo</string>
+    <string name="in_solo_tip">Whether to start solo</string>
+    <string name="wait_for_solo">Waiting for solo</string>
+    <string name="wait_for_solo_with_time">Waiting for solo in %s</string>
+    <string name="karaoke_singing">Singing</string>
+    <string name="karaoke_host_close_room">Host closed KTV room</string>
+    <string name="karaoke_host_confirm_close_room_title">Leave the Karaoke room?</string>
+    <string name="karaoke_host_confirm_close_room_content">As the owner, if you exit the room, all other participants will also leave.</string>
+    <string name="karaoke_on_seat_confirm_close_room_title"> You are voice chatting, leave the karaoke room?</string>
+    <string name="karaoke_on_seat_first">Only participants on seat can pick songs, send a request for seat.</string>
+    <string name="karaoke_apply_seat">Request</string>
+    <string name="order_song_apply_seat">Only participants on seat can pick songs, send a request for seat.</string>
+    <string name="apply_seat">Request</string>
+
+
+    <string name="song_ordered">picked %s</string>
+    <string name="song_deleted">deleted %s</string>
+    <string name="song_switched">next</string>
+    <string name="song_top">pinned %s</string>
+    <string name="song_pause">paused %s</string>
+    <string name="song_start">singing %s</string>
+    <string name="song_restart">singing %s</string>
+
+    <string name="karaoke_tab_to_order">Pick</string>
+    <string name="karaoke_tab_ordered">(%1$d) picked</string>
+    <string name="nobody_ordered">No participants have picked songs</string>
+    <string name="no_music">No songs</string>
+    <string name="song_state_singing">Singing</string>
+    <string name="global_search_hint">Search</string>
+    <string name="preloading_failure">Failed to load: %d, %s</string>
+    <string name="order_song_success">picked</string>
+    <string name="order_song_failure">Failed to pick: %d, %s</string>
+    <string name="song_already_ordered">Song already picked</string>
+    <string name="err_order_song_count_exceed_limit">Each participant can pick up to 2 songs</string>
+    <string name="err_room_order_song_count_exceed_limit">Each room can puck up to 10 songs</string>
+    <string name="downloading">Downloading…</string>
+    <string name="download_fail">Failed to download the backing track</string>
+    <string name="song_current_time">%s/%s</string>
+    <string name="did_not_find_right_result">No matches found</string>
+    <string name="copyright_token_has_expired">Copyright token expired, try again later</string>
+    <string name="get_song_list_failed">Failed to load the playlist</string>
+    <string name="content_description_default"> </string>
+    <string name="has_no_song">No songs</string>
+    <string name="input_room_name">Enter room name</string>
+    <string name="intelligence_chorus">Smart chorus(apply the chorus mode based on the network and device model)</string>
+    <string name="serial_chorus">Relay chorus</string>
+    <string name="realtime_chorus">Live chorus</string>
+    <string name="room_name_length_tip">Enter up to 15 characters</string>
+    <string name="room_name_can_not_empty">Room name required</string>
+    <string name="room_name_prefix">Online Karaoke</string>
+    <string name="app_karaoke_room_desc">Experience a product-grade kit, live chorus, low-latency in-ear monitoring, a rich song library, and non-stop joy in singing!</string>
+</resources>

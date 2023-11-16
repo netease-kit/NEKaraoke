@@ -26,8 +26,7 @@ import com.netease.yunxin.kit.karaokekit.ui.utils.SoloSingTimer;
 
 public class NESoloSingView extends FrameLayout {
   private static final String TAG = "NESoloSingView";
-  private Context context;
-  private final float LINE_HEIGHT = 10f;
+  private final float LINE_HEIGHT = 7f;
   private final int BOTTOM_COLOR = Color.WHITE;
   private final int DRAW_COLOR = Color.parseColor("#ff3764");
   private final int LINEAR_GRADIENT_START_COLOR = Color.parseColor("#334BF0FB");
@@ -41,8 +40,7 @@ public class NESoloSingView extends FrameLayout {
   private SoloSingTimer updateUITimer = null;
   private long timerPosition = 0;
   private boolean paused = false;
-  private boolean hasAdjustTimeStamp = false;
-  private Runnable runnable =
+  private final Runnable runnable =
       new Runnable() {
 
         @Override
@@ -50,16 +48,15 @@ public class NESoloSingView extends FrameLayout {
           if (paused) {
             return;
           }
-          timerPosition += PERIOD;
           if (getVisibility() == VISIBLE) {
             soloSingViewBinding.gradeView.update(timerPosition);
           }
+          timerPosition += PERIOD;
         }
       };
 
   public NESoloSingView(@NonNull Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
-    this.context = context;
     soloSingViewBinding =
         KaraokeSoloSingViewBinding.inflate(LayoutInflater.from(context), this, true);
     init();
@@ -113,15 +110,11 @@ public class NESoloSingView extends FrameLayout {
   }
 
   void update(long timestamp) {
-    if (!hasAdjustTimeStamp) {
-      timerPosition = timestamp;
-      hasAdjustTimeStamp = true;
-    }
+    timerPosition = timestamp;
   }
 
   void seek(long startTime) {
     ALog.d(TAG, "seek,startTime:$startTime");
-    timerPosition = startTime;
     soloSingViewBinding.gradeView.seekTime(startTime);
   }
 
@@ -176,9 +169,9 @@ public class NESoloSingView extends FrameLayout {
   void start() {
     ALog.d(TAG, "start");
     paused = false;
-    hasAdjustTimeStamp = false;
+    timerPosition = 0;
+    destroyTimer();
     if (updateUITimer == null) {
-      timerPosition = 0;
       updateUITimer = new SoloSingTimer(runnable);
     }
     updateUITimer.scheduleAtFixedRate(0, PERIOD);
@@ -197,7 +190,6 @@ public class NESoloSingView extends FrameLayout {
   void destroyTimer() {
     timerPosition = 0;
     paused = false;
-    hasAdjustTimeStamp = false;
     if (updateUITimer != null) {
       updateUITimer.destroy();
       updateUITimer = null;

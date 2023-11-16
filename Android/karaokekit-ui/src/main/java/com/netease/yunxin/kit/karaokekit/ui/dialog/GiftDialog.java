@@ -20,7 +20,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.blankj.utilcode.util.Utils;
+import com.netease.yunxin.kit.entertainment.common.utils.Utils;
 import com.netease.yunxin.kit.karaokekit.impl.utils.ScreenUtil;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 import com.netease.yunxin.kit.karaokekit.ui.gift.GiftCache;
@@ -30,7 +30,7 @@ import java.util.List;
 
 public class GiftDialog extends BottomBaseDialog {
   private GiftSendListener sendListener;
-  private RecyclerView.ItemDecoration itemDecoration =
+  private final RecyclerView.ItemDecoration itemDecoration =
       new RecyclerView.ItemDecoration() {
 
         @Override
@@ -67,7 +67,7 @@ public class GiftDialog extends BottomBaseDialog {
   @Override
   protected void renderBottomView(FrameLayout parent) {
     View bottomView =
-        LayoutInflater.from(getContext()).inflate(R.layout.view_dialog_bottom_gift, parent);
+        LayoutInflater.from(getContext()).inflate(R.layout.karaoke_view_dialog_bottom_gift, parent);
     // 礼物列表初始化
     RecyclerView rvGiftList = bottomView.findViewById(R.id.rv_dialog_gift_list);
     rvGiftList.setLayoutManager(
@@ -119,7 +119,7 @@ public class GiftDialog extends BottomBaseDialog {
 
     @Override
     protected int getLayoutId(int viewType) {
-      return R.layout.view_item_dialog_gift;
+      return R.layout.karaoke_view_item_dialog_gift;
     }
 
     @Override

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.netease.yunxin.kit.common.image.ImageLoader;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 import com.netease.yunxin.kit.karaokekit.ui.model.ApplySeatModel;
-import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUtils;
+import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUIUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class AudienceApplySeatListAdapter extends RecyclerView.Adapter<RecyclerV
       ImageLoader.with(context.getApplicationContext())
           .circleLoad(seatItem.getAvatar(), ((LiveItemHolder) holder).ivAnchor);
       ((LiveItemHolder) holder).tvPosition.setText(String.format("%02d", (position + 1)));
-      if (KaraokeUtils.isMySelf(seatItem.getUuid())) {
+      if (KaraokeUIUtils.isLocalAccount(seatItem.getUuid())) {
         ((LiveItemHolder) holder).tvCancelOnSeat.setVisibility(View.VISIBLE);
         ((LiveItemHolder) holder)
             .tvCancelOnSeat.setOnClickListener(v -> onItemClickListener.onCancelClick(seatItem));

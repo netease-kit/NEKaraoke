@@ -6,7 +6,7 @@ package com.netease.yunxin.kit.karaokekit.ui.chatroom;
 
 import android.content.Context;
 import android.graphics.Color;
-import com.blankj.utilcode.util.Utils;
+import com.netease.yunxin.kit.entertainment.common.utils.Utils;
 import com.netease.yunxin.kit.karaokekit.impl.utils.ScreenUtil;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 

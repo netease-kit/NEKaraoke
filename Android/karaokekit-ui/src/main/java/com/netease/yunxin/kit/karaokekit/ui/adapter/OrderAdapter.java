@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
-import com.blankj.utilcode.util.CollectionUtils;
 import com.netease.yunxin.kit.alog.ALog;
 import com.netease.yunxin.kit.common.ui.activities.adapter.CommonMoreAdapter;
 import com.netease.yunxin.kit.common.ui.activities.viewholder.BaseMoreViewHolder;
@@ -28,17 +27,19 @@ import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
 import com.netease.yunxin.kit.copyrightedmedia.api.NEErrorCode;
 import com.netease.yunxin.kit.copyrightedmedia.api.NESongPreloadCallback;
 import com.netease.yunxin.kit.copyrightedmedia.api.SongResType;
+import com.netease.yunxin.kit.entertainment.common.utils.NetUtils;
+import com.netease.yunxin.kit.entertainment.common.utils.Utils;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
 import com.netease.yunxin.kit.karaokekit.ui.R;
-import com.netease.yunxin.kit.karaokekit.ui.databinding.OrderItemLayoutBinding;
+import com.netease.yunxin.kit.karaokekit.ui.databinding.KaraokeOrderItemLayoutBinding;
 import com.netease.yunxin.kit.karaokekit.ui.model.KaraokeOrderSongModel;
 import com.netease.yunxin.kit.karaokekit.ui.utils.MediaUtils;
-import com.netease.yunxin.kit.karaokekit.ui.utils.NetUtils;
 import com.netease.yunxin.kit.karaokekit.ui.viewmodel.OrderSongViewModel;
 import java.util.List;
 
 /** team message read state adapter */
-public class OrderAdapter extends CommonMoreAdapter<KaraokeOrderSongModel, OrderItemLayoutBinding> {
+public class OrderAdapter
+    extends CommonMoreAdapter<KaraokeOrderSongModel, KaraokeOrderItemLayoutBinding> {
   private static final String TAG = "OrderAdapter";
   private OrderSongViewModel orderSongViewModel;
 
@@ -70,17 +71,18 @@ public class OrderAdapter extends CommonMoreAdapter<KaraokeOrderSongModel, Order
 
   @NonNull
   @Override
-  public BaseMoreViewHolder<KaraokeOrderSongModel, OrderItemLayoutBinding> getViewHolder(
+  public BaseMoreViewHolder<KaraokeOrderSongModel, KaraokeOrderItemLayoutBinding> getViewHolder(
       @NonNull ViewGroup parent, int viewType) {
-    OrderItemLayoutBinding binding =
-        OrderItemLayoutBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+    KaraokeOrderItemLayoutBinding binding =
+        KaraokeOrderItemLayoutBinding.inflate(
+            LayoutInflater.from(parent.getContext()), parent, false);
     return new OrderedItemViewHolder(binding);
   }
 
   public class OrderedItemViewHolder
-      extends BaseMoreViewHolder<KaraokeOrderSongModel, OrderItemLayoutBinding> {
+      extends BaseMoreViewHolder<KaraokeOrderSongModel, KaraokeOrderItemLayoutBinding> {
 
-    public OrderedItemViewHolder(@NonNull OrderItemLayoutBinding binding) {
+    public OrderedItemViewHolder(@NonNull KaraokeOrderItemLayoutBinding binding) {
       super(binding);
     }
 
@@ -93,8 +95,12 @@ public class OrderAdapter extends CommonMoreAdapter<KaraokeOrderSongModel, Order
         getBinding().songCover.setData(item.getSongCover(), "");
       }
       getBinding().songName.setText(item.getSongName());
-      if (CollectionUtils.isNotEmpty(item.getSingers())) {
-        getBinding().userName.setText(item.getSingers().get(0).getSingerName());
+      if (item.getSingers() != null && !item.getSingers().isEmpty()) {
+        getBinding()
+            .userName
+            .setText(
+                Utils.getApp()
+                    .getString(R.string.singer, item.getSingers().get(0).getSingerName()));
       }
       int channelIconRes = getChannelIconRes(item.getChannel());
       getBinding().channelIcon.setImageResource(channelIconRes);

@@ -12,15 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.blankj.utilcode.util.CollectionUtils;
 import com.netease.yunxin.kit.common.ui.fragments.BaseFragment;
 import com.netease.yunxin.kit.karaokekit.ui.adapter.OrderedAdapter;
-import com.netease.yunxin.kit.karaokekit.ui.databinding.OrderedListLayoutBinding;
+import com.netease.yunxin.kit.karaokekit.ui.databinding.KaraokeOrderedListLayoutBinding;
 import com.netease.yunxin.kit.karaokekit.ui.viewmodel.OrderSongViewModel;
 
 /** chat message read state page */
 public class OrderedListFragment extends BaseFragment {
-  private OrderedListLayoutBinding binding;
+  private KaraokeOrderedListLayoutBinding binding;
   private OrderedAdapter adapter;
   private OrderSongViewModel orderSongViewModel;
 
@@ -31,7 +30,7 @@ public class OrderedListFragment extends BaseFragment {
       @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
     orderSongViewModel = new ViewModelProvider(requireActivity()).get(OrderSongViewModel.class);
-    binding = OrderedListLayoutBinding.inflate(inflater, container, false);
+    binding = KaraokeOrderedListLayoutBinding.inflate(inflater, container, false);
     initView();
     initData();
     return binding.getRoot();
@@ -47,7 +46,7 @@ public class OrderedListFragment extends BaseFragment {
         .observe(
             getViewLifecycleOwner(),
             orderSongs -> {
-              if (CollectionUtils.isNotEmpty(orderSongs)) {
+              if (orderSongs != null && !orderSongs.isEmpty()) {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.llyEmpty.setVisibility(View.GONE);
                 adapter.refresh(orderSongs);

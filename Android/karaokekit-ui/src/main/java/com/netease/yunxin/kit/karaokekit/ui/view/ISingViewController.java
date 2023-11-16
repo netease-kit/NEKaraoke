@@ -43,8 +43,8 @@ public interface ISingViewController {
   void agreeAddChorus(String chorusId);
 
   /// 是否是主唱
-  boolean isAnchor();
+  boolean isLocalMain();
 
   /// 是否是副唱
-  boolean isAssistant();
+  boolean isLocalAssistant();
 }

@@ -12,10 +12,11 @@ import android.view.WindowManager;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
-import com.blankj.utilcode.util.ScreenUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.netease.yunxin.kit.common.ui.adapter.BaseFragmentAdapter;
+import com.netease.yunxin.kit.common.utils.ScreenUtils;
+import com.netease.yunxin.kit.entertainment.common.fragment.BaseBottomDialogFragment;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 import com.netease.yunxin.kit.karaokekit.ui.viewmodel.OrderSongViewModel;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class OrderSongDialog extends BaseBottomDialogFragment {
 
   @Override
   protected int getResourceLayout() {
-    return R.layout.dialog_ordered_music_layout;
+    return R.layout.karaoke_dialog_ordered_music_layout;
   }
 
   @Override
@@ -51,9 +52,9 @@ public class OrderSongDialog extends BaseBottomDialogFragment {
     tabLayout = rootView.findViewById(R.id.tabLayout);
 
     tabToOrder = tabLayout.newTab();
-    tabToOrder.setText(getString(R.string.tab_to_order));
+    tabToOrder.setText(getString(R.string.karaoke_tab_to_order));
     tabOrdered = tabLayout.newTab();
-    tabOrdered.setText(getString(R.string.tab_ordered, 0));
+    tabOrdered.setText(getString(R.string.karaoke_tab_ordered, 0));
     tabLayout.addTab(tabOrdered);
     tabLayout.addTab(tabToOrder);
 
@@ -69,10 +70,10 @@ public class OrderSongDialog extends BaseBottomDialogFragment {
             (tab, position) -> {
               switch (position) {
                 case 0:
-                  tab.setText(getString(R.string.tab_to_order));
+                  tab.setText(getString(R.string.karaoke_tab_to_order));
                   break;
                 case 1:
-                  tab.setText(getString(R.string.tab_ordered, 0));
+                  tab.setText(getString(R.string.karaoke_tab_ordered, 0));
                   break;
                 default:
                   break;
@@ -90,7 +91,7 @@ public class OrderSongDialog extends BaseBottomDialogFragment {
             getViewLifecycleOwner(),
             orderSongs -> {
               Objects.requireNonNull(tabLayout.getTabAt(1))
-                  .setText(getString(R.string.tab_ordered, orderSongs.size()));
+                  .setText(getString(R.string.karaoke_tab_ordered, orderSongs.size()));
             });
   }
 
@@ -98,13 +99,13 @@ public class OrderSongDialog extends BaseBottomDialogFragment {
   protected void initParams() {
     Window window = getDialog().getWindow();
     if (window != null) {
-      window.setBackgroundDrawableResource(R.drawable.shape_utils_dialog_bg);
+      window.setBackgroundDrawableResource(R.drawable.shape_order_song_dialog_bg);
 
       WindowManager.LayoutParams params = window.getAttributes();
       params.gravity = Gravity.BOTTOM;
       // 使用ViewGroup.LayoutParams，以便Dialog 宽度充满整个屏幕
       params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-      params.height = ScreenUtils.getScreenHeight() * 3 / 4;
+      params.height = ScreenUtils.getDisplayHeight() * 3 / 4;
       window.setAttributes(params);
     }
     setCancelable(true); //设置点击外部是否消失
