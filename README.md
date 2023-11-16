@@ -23,12 +23,10 @@ K 歌按场景分为独唱和合唱。除了基础的 K 歌功能，还支持多
 
 # 效果演示
 
->内容拷贝场景方案文档的 “体验Demo ”章节。包括Demo的二维码和界面效果图展示。
->如果前面功能列表中已经有界面截图，这里可以不再添加界面截图。
->您可以扫描下方二维码，下载并体验在线 K 歌 Demo App。
+> 您可以扫描下方二维码，下载并体验demo。
 
-| iOS                                                          | Android                                                      |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| iOS    | Android  |
+|  ----  | ----  |
 | ![](pic/download_ios.png)  |  ![](pic/download_android.png) | 
 
 在线 KTV Demo 的界面效果图如下所示：
@@ -52,3 +50,5 @@ K 歌按场景分为独唱和合唱。除了基础的 K 歌功能，还支持多
 - [PK连麦](https://github.com/netease-kit/OnlinePK)
 - [在线教育](https://github.com/netease-kit/WisdomEducation)
 - [多人视频通话](https://github.com/netease-kit/NEGroupCall)
+- [一起听](https://github.com/netease-kit/NEListenTogether)
+- [云信娱乐社交服务端 Nemo](https://github.com/netease-kit/nemo)
