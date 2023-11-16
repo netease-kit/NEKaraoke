@@ -26,7 +26,8 @@
             android:id="@+id/iv_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:contentDescription="@string/content_description_default" />
 
         <RelativeLayout
             android:id="@+id/rly_music_singing"
@@ -69,8 +70,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/dimen_20"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/dimen_20"
                 android:paddingBottom="@dimen/dimen_10"
                 android:gravity="center_vertical"
                 android:visibility="gone"
@@ -86,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_14"
                     android:textColor="@color/color_80FFFFFF"
-                    android:layout_marginLeft="@dimen/dp_4"
+                    android:layout_marginStart="@dimen/dp_4"
                     />
             </LinearLayout>
         </RelativeLayout>
@@ -128,7 +129,7 @@
                     android:layout_width="@dimen/dimen_54_dp"
                     android:layout_height="@dimen/dimen_54_dp"
                     android:visibility="gone"
-                    android:layout_marginLeft="@dimen/dimen_40"
+                    android:layout_marginStart="@dimen/dimen_40"
                      />
 
                 <com.netease.yunxin.kit.karaokekit.ui.view.HeadImageView
@@ -183,16 +184,16 @@
             android:id="@+id/tv_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/order_song"
+            android:text="@string/karaoke_order_song"
             android:textSize="16sp"
             android:layout_gravity="center_horizontal"
             android:paddingTop="@dimen/dimen_5"
             android:paddingBottom="@dimen/dimen_5"
             android:paddingStart="@dimen/dimen_10"
             android:paddingEnd="@dimen/dimen_10"
-            android:drawableLeft="@drawable/mic_icon"
             android:background="@drawable/round_red_bg"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            app:drawableLeftCompat="@drawable/mic_icon" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -209,7 +210,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/karaoke_lines"/>
+            android:background="@drawable/karaoke_lines"
+            android:contentDescription="@string/content_description_default" />
 
     </LinearLayout>
 
@@ -218,7 +220,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:text="0"
         android:visibility="gone"
         tools:visibility="visible"
         android:textColor="@color/color_ff4f4f" />
@@ -229,7 +230,6 @@
         android:id="@+id/lly_control"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_marginStart="@dimen/dimen_10"
         android:layout_marginTop="@dimen/dimen_10"
         android:visibility="gone"

@@ -9,14 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import com.blankj.utilcode.util.Utils;
 import com.netease.yunxin.kit.alog.ALog;
+import com.netease.yunxin.kit.entertainment.common.utils.Utils;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCallback;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeChorusActionType;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeEndReason;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
+import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeBatchGiftModel;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeChatTextMessage;
-import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeGiftModel;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeMember;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeOrderSongModel;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeRoomInfo;
@@ -32,8 +32,9 @@ import com.netease.yunxin.kit.karaokekit.ui.listener.MyKaraokeListener;
 import com.netease.yunxin.kit.karaokekit.ui.listener.NEKaraokeCallbackWrapper;
 import com.netease.yunxin.kit.karaokekit.ui.model.ApplySeatModel;
 import com.netease.yunxin.kit.karaokekit.ui.model.OnSeatModel;
-import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUtils;
-import com.netease.yunxin.kit.karaokekit.ui.utils.SeatUtils;
+import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeSeatUtils;
+import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUIUtils;
+import com.netease.yunxin.kit.roomkit.api.model.NERoomConnectType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,12 +49,12 @@ public class KaraokeRoomViewModel extends ViewModel {
   MutableLiveData<Integer> currentSeatState = new MutableLiveData<>();
 
   MutableLiveData<NEKaraokeEndReason> errorData = new MutableLiveData<>();
+  MutableLiveData<NERoomConnectType> roomConnectState = new MutableLiveData<>();
 
   MutableLiveData<CharSequence> chatRoomMsgData = new MutableLiveData<>();
-
   MutableLiveData<Integer> memberCountData = new MutableLiveData<>();
 
-  MutableLiveData<NEKaraokeGiftModel> rewardData = new MutableLiveData<>();
+  MutableLiveData<NEKaraokeBatchGiftModel> rewardData = new MutableLiveData<>();
 
   MutableLiveData<List<OnSeatModel>> onSeatListData = new MutableLiveData<>();
 
@@ -73,15 +74,15 @@ public class KaraokeRoomViewModel extends ViewModel {
           chatRoomMsgData.postValue(
               ChatRoomMsgCreator.createText(
                   NEKaraokeUI.getInstance().getApplication(),
-                  KaraokeUtils.isHost(message.getFromUserUuid()),
+                  KaraokeUIUtils.isHost(message.getFromUserUuid()),
                   message.getFromNick(),
                   content));
         }
 
         @Override
-        public void onReceiveGift(@NonNull NEKaraokeGiftModel rewardMsg) {
+        public void onReceiveBatchGift(@NonNull NEKaraokeBatchGiftModel giftModel) {
           ALog.i(TAG, "onReceiveGift");
-          rewardData.postValue(rewardMsg);
+          rewardData.postValue(giftModel);
         }
 
         @Override
@@ -103,7 +104,7 @@ public class KaraokeRoomViewModel extends ViewModel {
         public void onMemberJoinRoom(@NonNull List<NEKaraokeMember> members) {
           for (NEKaraokeMember member : members) {
             ALog.d(TAG, "onMemberJoinRoom :${member.name}");
-            if (!KaraokeUtils.isMySelf(member.getAccount())) {
+            if (!KaraokeUIUtils.isLocalAccount(member.getAccount())) {
               chatRoomMsgData.postValue(ChatRoomMsgCreator.createRoomEnter(member.getName()));
             }
           }
@@ -121,14 +122,28 @@ public class KaraokeRoomViewModel extends ViewModel {
         }
 
         @Override
+        public void onMemberJoinChatroom(@NonNull List<NEKaraokeMember> members) {
+          for (NEKaraokeMember member : members) {
+            ALog.d(TAG, "onMemberJoinChatroom :$member.name");
+          }
+        }
+
+        @Override
+        public void onMemberLeaveChatroom(@NonNull List<NEKaraokeMember> members) {
+          for (NEKaraokeMember member : members) {
+            ALog.d(TAG, "onMemberJoinChatroom :$member.name");
+          }
+        }
+
+        @Override
         public void onSeatRequestSubmitted(int seatIndex, @NonNull String account) {
-          if (TextUtils.equals(account, SeatUtils.getCurrentUuid())) {
+          if (TextUtils.equals(account, KaraokeSeatUtils.getCurrentUuid())) {
             currentSeatState.postValue(CURRENT_SEAT_STATE_APPLYING);
           }
-          if (!TextUtils.isEmpty(SeatUtils.getMemberNick(account))) {
+          if (!TextUtils.isEmpty(KaraokeSeatUtils.getMemberNick(account))) {
             chatRoomMsgData.postValue(
                 ChatRoomMsgCreator.createSeatMessage(
-                    SeatUtils.getMemberNick(account),
+                    KaraokeSeatUtils.getMemberNick(account),
                     Utils.getApp().getString(R.string.karaoke_on_seat_request)));
           }
           getSeatRequestList();
@@ -137,14 +152,14 @@ public class KaraokeRoomViewModel extends ViewModel {
         @Override
         public void onSeatRequestApproved(
             int seatIndex, @NonNull String account, @NonNull String operateBy) {
-          if (TextUtils.equals(account, SeatUtils.getCurrentUuid())) {
+          if (TextUtils.equals(account, KaraokeSeatUtils.getCurrentUuid())) {
             currentSeatState.postValue(CURRENT_SEAT_STATE_ON_SEAT);
           }
-          if (!KaraokeUtils.isHost(account)) {
-            if (!TextUtils.isEmpty(SeatUtils.getMemberNick(account))) {
+          if (!KaraokeUIUtils.isHost(account)) {
+            if (!TextUtils.isEmpty(KaraokeSeatUtils.getMemberNick(account))) {
               chatRoomMsgData.postValue(
                   ChatRoomMsgCreator.createSeatMessage(
-                      SeatUtils.getMemberNick(account),
+                      KaraokeSeatUtils.getMemberNick(account),
                       Utils.getApp().getString(R.string.karaoke_on_seat)));
             }
           }
@@ -153,13 +168,13 @@ public class KaraokeRoomViewModel extends ViewModel {
 
         @Override
         public void onSeatRequestCancelled(int seatIndex, @NonNull String account) {
-          if (TextUtils.equals(account, SeatUtils.getCurrentUuid())) {
+          if (TextUtils.equals(account, KaraokeSeatUtils.getCurrentUuid())) {
             currentSeatState.postValue(CURRENT_SEAT_STATE_IDLE);
           }
-          if (!TextUtils.isEmpty(SeatUtils.getMemberNick(account))) {
+          if (!TextUtils.isEmpty(KaraokeSeatUtils.getMemberNick(account))) {
             chatRoomMsgData.postValue(
                 ChatRoomMsgCreator.createSeatMessage(
-                    SeatUtils.getMemberNick(account),
+                    KaraokeSeatUtils.getMemberNick(account),
                     Utils.getApp().getString(R.string.karaoke_cancel_on_seat_request)));
           }
           getSeatRequestList();
@@ -168,27 +183,27 @@ public class KaraokeRoomViewModel extends ViewModel {
         @Override
         public void onSeatRequestRejected(
             int seatIndex, @NonNull String account, @NonNull String operateBy) {
-          if (TextUtils.equals(account, SeatUtils.getCurrentUuid())) {
+          if (TextUtils.equals(account, KaraokeSeatUtils.getCurrentUuid())) {
             currentSeatState.postValue(CURRENT_SEAT_STATE_IDLE);
           }
           getSeatRequestList();
-          if (!TextUtils.isEmpty(SeatUtils.getMemberNick(account))) {
+          if (!TextUtils.isEmpty(KaraokeSeatUtils.getMemberNick(account))) {
             chatRoomMsgData.postValue(
                 ChatRoomMsgCreator.createSeatMessage(
-                    SeatUtils.getMemberNick(account),
+                    KaraokeSeatUtils.getMemberNick(account),
                     Utils.getApp().getString(R.string.karaoke_on_seat_reject)));
           }
         }
 
         @Override
         public void onSeatLeave(int seatIndex, @NonNull String account) {
-          if (TextUtils.equals(account, SeatUtils.getCurrentUuid())) {
+          if (TextUtils.equals(account, KaraokeSeatUtils.getCurrentUuid())) {
             currentSeatState.postValue(CURRENT_SEAT_STATE_IDLE);
           }
-          if (!TextUtils.isEmpty(SeatUtils.getMemberNick(account))) {
+          if (!TextUtils.isEmpty(KaraokeSeatUtils.getMemberNick(account))) {
             chatRoomMsgData.postValue(
                 ChatRoomMsgCreator.createSeatMessage(
-                    SeatUtils.getMemberNick(account),
+                    KaraokeSeatUtils.getMemberNick(account),
                     Utils.getApp().getString(R.string.karaoke_down_seat)));
           }
         }
@@ -196,19 +211,19 @@ public class KaraokeRoomViewModel extends ViewModel {
         @Override
         public void onSeatListChanged(@NonNull List<NEKaraokeSeatItem> seatItems) {
           ALog.i(TAG, "onSeatListChanged seatItems = $seatItems");
-          onSeatListData.postValue(SeatUtils.transNESeatItem2OnSeatModel(seatItems));
+          onSeatListData.postValue(KaraokeSeatUtils.transNESeatItem2OnSeatModel(seatItems));
         }
 
         @Override
         public void onSeatKicked(
             int seatIndex, @NonNull String account, @NonNull String operateBy) {
-          if (TextUtils.equals(account, SeatUtils.getCurrentUuid())) {
+          if (TextUtils.equals(account, KaraokeSeatUtils.getCurrentUuid())) {
             currentSeatState.postValue(CURRENT_SEAT_STATE_IDLE);
           }
-          if (!TextUtils.isEmpty(SeatUtils.getMemberNick(account))) {
+          if (!TextUtils.isEmpty(KaraokeSeatUtils.getMemberNick(account))) {
             chatRoomMsgData.postValue(
                 ChatRoomMsgCreator.createSeatMessage(
-                    SeatUtils.getMemberNick(account),
+                    KaraokeSeatUtils.getMemberNick(account),
                     Utils.getApp().getString(R.string.karaoke_kickout_seat)));
           }
         }
@@ -265,6 +280,11 @@ public class KaraokeRoomViewModel extends ViewModel {
         }
 
         @Override
+        public void onRoomConnectStateChanged(@NonNull NERoomConnectType state) {
+          roomConnectState.postValue(state);
+        }
+
+        @Override
         public void onRtcChannelError(int code) {
           if (code == 30015) {
             errorData.postValue(NEKaraokeEndReason.valueOf("END_OF_RTC"));
@@ -272,51 +292,60 @@ public class KaraokeRoomViewModel extends ViewModel {
         }
 
         @Override
-        public void onSongListChanged() {
-          ALog.i(TAG, "onSongListChanged");
+        public void onOrderedSongListChanged() {
+          ALog.i(TAG, "onOrderedSongListChanged");
           songListData.postValue(true);
         }
 
         @Override
         public void onSongOrdered(NEKaraokeOrderSongModel song) {
           ALog.i(TAG, "onSongOrdered song = $song");
-          if (song.getOperator() != null && song.getOperator().getUserName() != null) {
+          if (song.getOperatorUser() != null && song.getOperatorUser().getUserName() != null) {
             chatRoomMsgData.postValue(
                 ChatRoomMsgCreator.createSongMessage(
-                    song.getOperator().getUserName(),
-                    Utils.getApp().getString(R.string.song_ordered, song.getSongName())));
+                    song.getOperatorUser().getUserName(),
+                    Utils.getApp()
+                        .getString(
+                            R.string.song_ordered,
+                            song.getOrderSongResultDto().getOrderSong().getSongName())));
           }
         }
 
         @Override
         public void onSongDeleted(NEKaraokeOrderSongModel song) {
           ALog.i(TAG, "onSongDeleted song = $song");
-          if (song.getOperator() != null && song.getOperator().getUserName() != null) {
+          if (song.getOperatorUser() != null && song.getOperatorUser().getUserName() != null) {
             chatRoomMsgData.postValue(
                 ChatRoomMsgCreator.createSongMessage(
-                    song.getOperator().getUserName(),
-                    Utils.getApp().getString(R.string.song_deleted, song.getSongName())));
+                    song.getOperatorUser().getUserName(),
+                    Utils.getApp()
+                        .getString(
+                            R.string.song_deleted,
+                            song.getOrderSongResultDto().getOrderSong().getSongName())));
           }
         }
 
         @Override
         public void onSongTopped(NEKaraokeOrderSongModel song) {
           ALog.i(TAG, "onSongTopped song = $song");
-          if (song.getOperator() != null && song.getOperator().getUserName() != null) {
+          if (song.getOperatorUser() != null && song.getOperatorUser().getUserName() != null) {
             chatRoomMsgData.postValue(
                 ChatRoomMsgCreator.createSongMessage(
-                    song.getOperator().getUserName(),
-                    Utils.getApp().getString(R.string.song_top, song.getSongName())));
+                    song.getOperatorUser().getUserName(),
+                    Utils.getApp()
+                        .getString(
+                            R.string.song_top,
+                            song.getOrderSongResultDto().getOrderSong().getSongName())));
           }
         }
 
         @Override
         public void onNextSong(NEKaraokeOrderSongModel song) {
           ALog.i(TAG, "onSongNext song = $song");
-          if (song.getOperator() != null && song.getOperator().getUserName() != null) {
+          if (song.getOperatorUser() != null && song.getOperatorUser().getUserName() != null) {
             chatRoomMsgData.postValue(
                 ChatRoomMsgCreator.createSongMessage(
-                    song.getOperator().getUserName(),
+                    song.getOperatorUser().getUserName(),
                     Utils.getApp().getString(R.string.song_switched)));
           }
         }
@@ -377,7 +406,7 @@ public class KaraokeRoomViewModel extends ViewModel {
                 if (seatInfo != null) {
 
                   List<OnSeatModel> onSeatModelList =
-                      SeatUtils.transNESeatItem2OnSeatModel(seatInfo.getSeatItems());
+                      KaraokeSeatUtils.transNESeatItem2OnSeatModel(seatInfo.getSeatItems());
                   onSeatListData.postValue(onSeatModelList);
 
                   List<OnSeatModel> onSeatModels = new ArrayList<>();
@@ -391,9 +420,9 @@ public class KaraokeRoomViewModel extends ViewModel {
                   Collections.sort(onSeatModels);
                   SeatHelper.getInstance().setOnSeatItems(onSeatModels);
                   currentSeatState.postValue(
-                      SeatUtils.isCurrentOnSeat()
+                      KaraokeSeatUtils.isCurrentOnSeat()
                           ? CURRENT_SEAT_STATE_ON_SEAT
-                          : (SeatUtils.isCurrentApplyingSeat()
+                          : (KaraokeSeatUtils.isCurrentApplyingSeat()
                               ? CURRENT_SEAT_STATE_APPLYING
                               : CURRENT_SEAT_STATE_IDLE));
                 }
@@ -421,6 +450,10 @@ public class KaraokeRoomViewModel extends ViewModel {
     return errorData;
   }
 
+  public MutableLiveData<NERoomConnectType> getRoomConnectState() {
+    return roomConnectState;
+  }
+
   public MutableLiveData<CharSequence> getChatRoomMsgData() {
     return chatRoomMsgData;
   }
@@ -429,7 +462,7 @@ public class KaraokeRoomViewModel extends ViewModel {
     return memberCountData;
   }
 
-  public MutableLiveData<NEKaraokeGiftModel> getRewardData() {
+  public MutableLiveData<NEKaraokeBatchGiftModel> getRewardData() {
     return rewardData;
   }
 

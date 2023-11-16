@@ -4,7 +4,7 @@
 
 package com.netease.yunxin.kit.karaokekit.ui.utils;
 
-import com.blankj.utilcode.util.Utils;
+import com.netease.yunxin.kit.entertainment.common.utils.Utils;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 import java.text.DecimalFormat;
 

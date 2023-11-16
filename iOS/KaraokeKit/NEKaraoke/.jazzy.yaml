@@ -1,0 +1,9 @@
+author: Topredator
+#author_url: “” # 作者地址链接
+theme: apple # 样式 apple| fullwidth |
+module_version: 1.0.0 # 文档版本号
+output: "APIDocs" # 文档输出位置
+min_acl: public # 权限控制
+#readme: # README 路径（路径需要引号）
+xcodebuild_arguments: ["-project", "Pods/Pods.xcodeproj", "-target", "NEKaraokeKit"]
+

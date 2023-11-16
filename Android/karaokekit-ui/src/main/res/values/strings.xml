@@ -7,7 +7,7 @@
     <string name="karaoke">在线K歌</string>
     <string name="karaoke_ten_thousand">w</string>
     <string name="karaoke_million">million</string>
-    <string name="karaoke_coin">coins</string>
+    <string name="karaoke_coin">云币</string>
     <string name="karaoke_pull_to_refresh">下拉更新</string>
     <string name="karaoke_release_to_refresh">松开更新</string>
     <string name="karaoke_refreshing">更新中...</string>
@@ -49,7 +49,7 @@
     <string name="karaoke_online_member_count">在线%d人</string>
     <string name="karaoke_room_already_closed">房间已经被关闭了</string>
     <string name="karaoke_send_gift">送礼物</string>
-    <string name="karaoke_network_error">网络连接断开，请稍后重试</string>
+    <string name="karaoke_network_error">网络异常，请稍后重试</string>
     <string name="karaoke_reward_failed">打赏礼物失败</string>
     <string name="karaoke_send">发送</string>
     <string name="karaoke_apply_on_seat_default">申请上麦(0)</string>
@@ -59,8 +59,6 @@
     <string name="karaoke_refuse_on_seat">拒绝</string>
     <string name="karaoke_sure">确定</string>
     <string name="karaoke_cancel">取消</string>
-    <string name="karaoke_net_error">网络似乎未连接</string>
-
     <string name="karaoke_set_sound">调音</string>
     <string name="karaoke_pause">暂停</string>
     <string name="karaoke_resume">播放</string>
@@ -72,7 +70,7 @@
     <string name="solo">独唱</string>
     <string name="matching">合唱匹配中</string>
     <string name="matching_with_time">合唱匹配中%s</string>
-    <string name="chorus_loading">伴奏加载中...</string>
+    <string name="chorus_loading" tools:ignore="TypographyEllipsis">伴奏加载中...</string>
     <string name="chorus_loading_with_time">%s伴奏加载中...</string>
     <string name="karaoke_tip">唱歌时请佩戴耳机避免回音</string>
     <string name="turn_to_you">轮到你了</string>
@@ -82,7 +80,7 @@
     <string name="prepare_chorus">%s、%s请准备</string>
     <string name="play_delay">秒后播放</string>
     <string name="go_on_play">继续播放</string>
-    <string name="order_song">我要点歌</string>
+    <string name="karaoke_order_song">我要点歌</string>
     <string name="in_solo">进入独唱</string>
     <string name="in_solo_tip">是否开始独唱</string>
     <string name="wait_for_solo">等待进入独唱</string>
@@ -106,8 +104,8 @@
     <string name="song_start">正在演唱歌曲《%s》</string>
     <string name="song_restart">正在演唱歌曲《%s》</string>
 
-    <string name="tab_to_order">点歌</string>
-    <string name="tab_ordered">已点(%1$d)</string>
+    <string name="karaoke_tab_to_order">点歌</string>
+    <string name="karaoke_tab_ordered">已点(%1$d)</string>
     <string name="nobody_ordered">还没有人点歌哦</string>
     <string name="no_music">没有歌曲哦</string>
     <string name="song_state_singing">正在演唱</string>
@@ -124,6 +122,15 @@
     <string name="did_not_find_right_result">没有找到合适的结果</string>
     <string name="copyright_token_has_expired">版权token过期，请稍后再试</string>
     <string name="get_song_list_failed">歌曲列表加载失败</string>
-
+    <string name="content_description_default"> </string>
+    <string name="has_no_song">没有歌哦</string>
+    <string name="input_room_name">请输入房间名称</string>
+    <string name="intelligence_chorus">智能合唱(基于网络设备情况智能选择合唱策略)</string>
+    <string name="serial_chorus">串行合唱</string>
+    <string name="realtime_chorus">实时合唱</string>
+    <string name="room_name_length_tip">最多可以输入15个字</string>
+    <string name="room_name_can_not_empty">房间名称不能为空</string>
+    <string name="room_name_prefix">在线K歌</string>
+    <string name="app_karaoke_room_desc">产品级组件、实时合唱、低延迟耳返、丰富曲库，天籁之音K不停</string>
 
 </resources>

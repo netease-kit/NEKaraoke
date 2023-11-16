@@ -6,7 +6,4 @@
 /build
 /captures
 .externalNativeBuild
-.cxx
-/.idea
-**/*.iml
-**/build
+/config/config.properties

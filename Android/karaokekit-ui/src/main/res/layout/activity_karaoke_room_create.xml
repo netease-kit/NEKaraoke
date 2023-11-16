@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2022 NetEase, Inc. All rights reserved. -->
+<!-- Use of this source code is governed by a MIT license that can be -->
+<!-- found in the LICENSE file. -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="14dp"
+    android:paddingRight="14dp">
+
+    <RelativeLayout
+        android:id="@+id/rly_title"
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/close_icon"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:contentDescription="@string/content_description_default" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/karaoke_create_room"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_17" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_383a55" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/create_room_round_bg"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="@string/karaoke_room_name"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/et_room_name"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/edit_round_bg"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp"
+            android:textSize="14sp"
+            android:autofillHints=""
+            android:hint="@string/input_room_name"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:paddingBottom="8dp"
+            android:text="@string/karaoke_user_name"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/edit_round_bg"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp"
+            android:textSize="14sp"
+            android:textColor="@color/white_40"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/create_room_round_bg"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <com.netease.yunxin.kit.karaokekit.ui.view.GridRadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:numColumns="1"
+            app:horizontalSpacing="10dp"
+            app:verticalSpacing="28dp">
+
+            <RadioButton
+                android:id="@+id/rb_intelligence_chorus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/intelligence_chorus"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/rb_serial_chorus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/serial_chorus"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/rb_realtime_chorus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/realtime_chorus"
+                android:textColor="@color/white" />
+        </com.netease.yunxin.kit.karaokekit.ui.view.GridRadioGroup>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_create_room"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/shape_create_room_btn_chat_room_bg"
+        android:gravity="center"
+        android:text="@string/karaoke_create"
+        android:textColor="#ffffffff"
+        android:textSize="16sp" />
+
+</LinearLayout>

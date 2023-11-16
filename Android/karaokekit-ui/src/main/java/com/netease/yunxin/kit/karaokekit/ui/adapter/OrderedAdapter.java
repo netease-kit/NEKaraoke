@@ -19,19 +19,19 @@ import com.netease.yunxin.kit.common.ui.utils.ToastUtils;
 import com.netease.yunxin.kit.common.ui.widgets.datepicker.DateFormatUtils;
 import com.netease.yunxin.kit.common.utils.SizeUtils;
 import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
-import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeOrderSongModel;
+import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeOrderSongResult;
 import com.netease.yunxin.kit.karaokekit.ui.NEKaraokeUIConstants;
 import com.netease.yunxin.kit.karaokekit.ui.R;
-import com.netease.yunxin.kit.karaokekit.ui.databinding.OrderedItemLayoutBinding;
-import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUtils;
+import com.netease.yunxin.kit.karaokekit.ui.databinding.KaraokeOrderedItemLayoutBinding;
+import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUIUtils;
 import com.netease.yunxin.kit.karaokekit.ui.viewmodel.OrderSongViewModel;
 import java.util.Locale;
 import java.util.Objects;
 
 /** team message read state adapter */
 public class OrderedAdapter
-    extends CommonMoreAdapter<NEKaraokeOrderSongModel, OrderedItemLayoutBinding> {
-  private OrderSongViewModel orderSongViewModel;
+    extends CommonMoreAdapter<NEKaraokeOrderSongResult, KaraokeOrderedItemLayoutBinding> {
+  private final OrderSongViewModel orderSongViewModel;
 
   public OrderedAdapter(OrderSongViewModel orderSongViewModel) {
     this.orderSongViewModel = orderSongViewModel;
@@ -39,22 +39,23 @@ public class OrderedAdapter
 
   @NonNull
   @Override
-  public BaseMoreViewHolder<NEKaraokeOrderSongModel, OrderedItemLayoutBinding> getViewHolder(
-      @NonNull ViewGroup parent, int viewType) {
-    OrderedItemLayoutBinding binding =
-        OrderedItemLayoutBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+  public BaseMoreViewHolder<NEKaraokeOrderSongResult, KaraokeOrderedItemLayoutBinding>
+      getViewHolder(@NonNull ViewGroup parent, int viewType) {
+    KaraokeOrderedItemLayoutBinding binding =
+        KaraokeOrderedItemLayoutBinding.inflate(
+            LayoutInflater.from(parent.getContext()), parent, false);
     return new OrderedItemViewHolder(binding);
   }
 
   public class OrderedItemViewHolder
-      extends BaseMoreViewHolder<NEKaraokeOrderSongModel, OrderedItemLayoutBinding> {
+      extends BaseMoreViewHolder<NEKaraokeOrderSongResult, KaraokeOrderedItemLayoutBinding> {
 
-    public OrderedItemViewHolder(@NonNull OrderedItemLayoutBinding binding) {
+    public OrderedItemViewHolder(@NonNull KaraokeOrderedItemLayoutBinding binding) {
       super(binding);
     }
 
     @Override
-    public void bind(NEKaraokeOrderSongModel item) {
+    public void bind(NEKaraokeOrderSongResult item) {
       getBinding().songCover.setCornerRadius(SizeUtils.dp2px(5));
       if (getBindingAdapterPosition() == 0) {
         getBinding().musicIcon.setVisibility(View.VISIBLE);
@@ -63,15 +64,18 @@ public class OrderedAdapter
         getBinding().musicIcon.setVisibility(View.GONE);
         getBinding().songOrder.setVisibility(View.VISIBLE);
       }
-      if (item.getStatus() == STATUS_SINGING || getBindingAdapterPosition() == 0) {
+      if (item.getOrderSong().getStatus() == STATUS_SINGING || getBindingAdapterPosition() == 0) {
         getBinding().songSinging.setVisibility(View.VISIBLE);
         getBinding().orderCancel.setVisibility(View.GONE);
-      } else if (item.getStatus() == STATUS_WAIT) {
+      } else if (item.getOrderSong().getStatus() == STATUS_WAIT) {
         getBinding().songSinging.setVisibility(View.GONE);
-        if (KaraokeUtils.isCurrentHost()
-            || Objects.equals(KaraokeUtils.getCurrentAccount(), item.getUserUuid())) {
+        if (KaraokeUIUtils.isLocalHost()
+            || Objects.equals(
+                KaraokeUIUtils.getLocalAccount(), item.getOrderSong().getUserUuid())) {
           getBinding().orderCancel.setVisibility(View.VISIBLE);
-          getBinding().orderCancel.setOnClickListener(v -> deleteSong(v, item.getOrderId()));
+          getBinding()
+              .orderCancel
+              .setOnClickListener(v -> deleteSong(v, item.getOrderSong().getOrderId()));
         } else {
           getBinding().orderCancel.setVisibility(View.GONE);
         }
@@ -79,9 +83,9 @@ public class OrderedAdapter
         getBinding().songSinging.setVisibility(View.GONE);
         getBinding().orderCancel.setVisibility(View.GONE);
       }
-      if (getBindingAdapterPosition() > 1 && KaraokeUtils.isCurrentHost()) {
+      if (getBindingAdapterPosition() > 1 && KaraokeUIUtils.isLocalHost()) {
         getBinding().songTop.setVisibility(View.VISIBLE);
-        getBinding().songTop.setOnClickListener(v -> topSong(v, item.getOrderId()));
+        getBinding().songTop.setOnClickListener(v -> topSong(v, item.getOrderSong().getOrderId()));
       } else {
         getBinding().songTop.setVisibility(View.GONE);
       }
@@ -89,22 +93,22 @@ public class OrderedAdapter
       getBinding()
           .songOrder
           .setText(String.format(Locale.CHINA, "%02d", getBindingAdapterPosition()));
-      if (TextUtils.isEmpty(item.getSongCover())) {
+      if (TextUtils.isEmpty(item.getOrderSong().getSongCover())) {
         getBinding().songCover.setData(R.drawable.icon_song_cover, "");
       } else {
-        getBinding().songCover.setData(item.getSongCover(), "");
+        getBinding().songCover.setData(item.getOrderSong().getSongCover(), "");
       }
 
-      getBinding().songName.setText(item.getSongName());
-      if (TextUtils.isEmpty(item.getIcon())) {
+      getBinding().songName.setText(item.getOrderSong().getSongName());
+      if (TextUtils.isEmpty(item.getOrderSongUser().getIcon())) {
         getBinding().userAvatar.setData(R.drawable.default_avatar, "");
       } else {
-        getBinding().userAvatar.setData(item.getIcon(), "");
+        getBinding().userAvatar.setData(item.getOrderSongUser().getIcon(), "");
       }
 
-      getBinding().songName.setText(item.getSongName());
-      getBinding().userName.setText(item.getUserName());
-      getBinding().songSize.setText(DateFormatUtils.long2StrHS(item.getSongTime()));
+      getBinding().songName.setText(item.getOrderSong().getSongName());
+      getBinding().userName.setText(item.getOrderSongUser().getUserName());
+      getBinding().songSize.setText(DateFormatUtils.long2StrHS(item.getOrderSong().getSongTime()));
     }
   }
 

@@ -13,15 +13,25 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import com.blankj.utilcode.util.NetworkUtils;
-import com.blankj.utilcode.util.PermissionUtils;
-import com.blankj.utilcode.util.ToastUtils;
-import com.gyf.immersionbar.ImmersionBar;
 import com.netease.yunxin.kit.alog.ALog;
+import com.netease.yunxin.kit.common.ui.utils.ToastX;
+import com.netease.yunxin.kit.common.utils.PermissionUtils;
+import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
+import com.netease.yunxin.kit.copyrightedmedia.api.SongScene;
+import com.netease.yunxin.kit.entertainment.common.RoomConstants;
+import com.netease.yunxin.kit.entertainment.common.activity.BaseActivity;
+import com.netease.yunxin.kit.entertainment.common.model.RoomModel;
+import com.netease.yunxin.kit.entertainment.common.utils.ClickUtils;
+import com.netease.yunxin.kit.entertainment.common.utils.InputUtils;
+import com.netease.yunxin.kit.entertainment.common.utils.NetUtils;
+import com.netease.yunxin.kit.entertainment.common.utils.ReportUtils;
+import com.netease.yunxin.kit.entertainment.common.utils.ViewUtils;
 import com.netease.yunxin.kit.karaokekit.api.NEJoinKaraokeOptions;
 import com.netease.yunxin.kit.karaokekit.api.NEJoinKaraokeParams;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCallback;
@@ -30,11 +40,11 @@ import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCopyrightedMediaListener;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeEndReason;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeRole;
-import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeGiftModel;
+import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeBatchGiftModel;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeRoomInfo;
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSongModel;
 import com.netease.yunxin.kit.karaokekit.impl.utils.ScreenUtil;
-import com.netease.yunxin.kit.karaokekit.ui.NEKaraokeUIConstants;
+import com.netease.yunxin.kit.karaokekit.ui.NEKaraokeUI;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 import com.netease.yunxin.kit.karaokekit.ui.chatroom.ChatRoomMsgCreator;
 import com.netease.yunxin.kit.karaokekit.ui.databinding.ActivityKaraokeRoomBinding;
@@ -49,17 +59,13 @@ import com.netease.yunxin.kit.karaokekit.ui.gift.ui.GifAnimationView;
 import com.netease.yunxin.kit.karaokekit.ui.listener.NEKaraokeCallbackWrapper;
 import com.netease.yunxin.kit.karaokekit.ui.model.ApplySeatModel;
 import com.netease.yunxin.kit.karaokekit.ui.model.KaraokeOrderSongModel;
-import com.netease.yunxin.kit.karaokekit.ui.model.KaraokeRoomModel;
-import com.netease.yunxin.kit.karaokekit.ui.statusbar.StatusBarConfig;
-import com.netease.yunxin.kit.karaokekit.ui.utils.ClickUtils;
-import com.netease.yunxin.kit.karaokekit.ui.utils.InputUtils;
-import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUtils;
-import com.netease.yunxin.kit.karaokekit.ui.utils.NetUtils;
-import com.netease.yunxin.kit.karaokekit.ui.utils.SeatUtils;
-import com.netease.yunxin.kit.karaokekit.ui.utils.ViewUtils;
+import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeSeatUtils;
+import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUIUtils;
 import com.netease.yunxin.kit.karaokekit.ui.view.SingingControlView;
 import com.netease.yunxin.kit.karaokekit.ui.viewmodel.KaraokeRoomViewModel;
 import com.netease.yunxin.kit.karaokekit.ui.viewmodel.OrderSongViewModel;
+import com.netease.yunxin.kit.roomkit.api.model.NERoomConnectType;
+import java.util.ArrayList;
 import java.util.List;
 import kotlin.Unit;
 
@@ -67,84 +73,53 @@ public class KaraokeRoomActivity extends BaseActivity
     implements NEKaraokeCopyrightedMediaEventHandler {
 
   protected static final String TAG = "KaraokeRoomActivity";
-
+  private static final String RECORD_AUDIO_PERMISSION = Manifest.permission.RECORD_AUDIO;
+  public static final String TAG_REPORT_PAGE_KARAOKE_ROOM_DETAIL = "page_ktv_chatroom";
   protected static final String ARRANGE_MICRO_DIALOG_TAG = "arrangeMicroDialog";
-
   protected static final String AUDIENCE_ARRANGE_MICRO_DIALOG_TAG = "audienceArrangeMicroDialog";
-
   protected ActivityKaraokeRoomBinding binding;
-
-  protected NEKaraokeRoomInfo roomInfo;
-
-  protected KaraokeRoomModel roomModel;
-
+  protected RoomModel roomInfo;
   protected KaraokeRoomViewModel karaokeRoomViewModel;
-
   protected ArrangeMicroDialog arrangeMicroDialog = null;
-
   protected AudienceArrangeMicroDialog audienceArrangeMicroDialog = null;
-
   protected final FragmentManager fm = getSupportFragmentManager();
-
   private List<ApplySeatModel> applySeatItems;
-
   protected int currentSeatState = KaraokeRoomViewModel.CURRENT_SEAT_STATE_IDLE;
-
   private OrderSongViewModel orderSongViewModel;
-
   private GiftDialog giftDialog;
-
   private final GiftRender giftRender = new GiftRender();
 
-  private boolean isLastDisconnected;
-
-  protected final NetworkUtils.OnNetworkStatusChangedListener netWorkStatusChangeListener =
-      new NetworkUtils.OnNetworkStatusChangedListener() {
-
-        @Override
-        public void onDisconnected() {
-          ALog.i(TAG, "network disconnected");
-          isLastDisconnected = true;
-          onNetworkDisconnected();
-        }
-
-        @Override
-        public void onConnected(NetworkUtils.NetworkType networkType) {
-          ALog.i(TAG, "network onConnected");
-          if (isLastDisconnected) {
-            onNetworkConnected(networkType.name());
-            isLastDisconnected = false;
-          }
-        }
-      };
+  private final ActivityResultLauncher<String> requestPermissionLauncher =
+      registerForActivityResult(
+          new ActivityResultContracts.RequestPermission(),
+          isGranted -> {
+            if (isGranted) {
+              joinRoom(
+                  roomInfo.getRoomUuid(),
+                  roomInfo.getNick(),
+                  roomInfo.getLiveRecordId(),
+                  roomInfo.getRole());
+            } else {
+              ToastX.showShortToast(R.string.need_permission_audio);
+              finish();
+            }
+          });
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     binding = ActivityKaraokeRoomBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
-    int barHeight = ImmersionBar.getStatusBarHeight(this);
-    binding.clyAnchorInfo.setPadding(
-        binding.clyAnchorInfo.getPaddingLeft(),
-        binding.clyAnchorInfo.getPaddingTop() + barHeight,
-        binding.clyAnchorInfo.getPaddingRight(),
-        binding.clyAnchorInfo.getPaddingBottom());
+    paddingStatusBarHeight(binding.getRoot());
     initIntent();
-    karaokeRoomViewModel =
-        new ViewModelProvider(
-                this, (ViewModelProvider.Factory) new ViewModelProvider.NewInstanceFactory())
-            .get(KaraokeRoomViewModel.class);
-    requestPermissionsIfNeeded();
-    orderSongViewModel =
-        new ViewModelProvider(
-                this, (ViewModelProvider.Factory) new ViewModelProvider.NewInstanceFactory())
-            .get(OrderSongViewModel.class);
+    karaokeRoomViewModel = new ViewModelProvider(this).get(KaraokeRoomViewModel.class);
+    orderSongViewModel = new ViewModelProvider(this).get(OrderSongViewModel.class);
     orderSongViewModel
         .getPerformOrderSongEvent()
         .observe(
             this,
             orderSong -> {
-              if (SeatUtils.isCurrentOnSeat()) {
+              if (KaraokeSeatUtils.isCurrentOnSeat()) {
                 orderSong(orderSong);
               } else {
                 showApplySeatDialog(
@@ -157,7 +132,7 @@ public class KaraokeRoomActivity extends BaseActivity
         .observe(
             this,
             orderSongs -> {
-              if (orderSongs.size() > 0) {
+              if (!orderSongs.isEmpty()) {
                 binding.tvMusicNum.setVisibility(View.VISIBLE);
                 binding.tvMusicNum.setText(String.valueOf(orderSongs.size()));
               } else {
@@ -166,12 +141,24 @@ public class KaraokeRoomActivity extends BaseActivity
             });
     initView();
     NEKaraokeKit.getInstance().setCopyrightedMediaEventHandler(this);
+    requestPermissionsIfNeeded();
+    NEKaraokeUI.getInstance().notifyEnterRoom();
+  }
+
+  @Override
+  protected boolean needTransparentStatusBar() {
+    return true;
+  }
+
+  @Override
+  protected ViewUtils.ModeType getStatusBarTextModeType() {
+    return ViewUtils.ModeType.NIGHT;
   }
 
   private void initView() {
-    binding.tvKaraokeRoomName.setText(roomModel.getRoomName());
+    binding.tvKaraokeRoomName.setText(roomInfo.getRoomName());
     binding.tvChatRoomMemberCount.setText(getString(R.string.karaoke_online_member_count, 0));
-    if (KaraokeUtils.isHostRole(roomModel.getRole())) {
+    if (KaraokeUIUtils.isHostRole(roomInfo.getRole())) {
       binding.ivGift.setVisibility(View.GONE);
     } else {
       binding.ivGift.setVisibility(View.VISIBLE);
@@ -181,38 +168,21 @@ public class KaraokeRoomActivity extends BaseActivity
   }
 
   private void initIntent() {
-    roomModel =
-        (KaraokeRoomModel) getIntent().getSerializableExtra(NEKaraokeUIConstants.INTENT_ROOM_MODEL);
+    roomInfo = (RoomModel) getIntent().getSerializableExtra(RoomConstants.INTENT_ROOM_MODEL);
   }
 
   /** 权限检查 */
   private void requestPermissionsIfNeeded() {
-    PermissionUtils.permission(
-            Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_PHONE_STATE)
-        .callback(
-            new PermissionUtils.FullCallback() {
 
-              @Override
-              public void onGranted(@NonNull List<String> granted) {
-                if (granted.size() == 3) {
-                  joinRoom(
-                      roomModel.getRoomUuid(),
-                      roomModel.getNick(),
-                      roomModel.getLiveRecordId(),
-                      roomModel.getRole());
-                }
-              }
-
-              @Override
-              public void onDenied(
-                  @NonNull List<String> deniedForever, @NonNull List<String> denied) {
-                ToastUtils.showShort(R.string.karaoke_authorization_failed);
-                finish();
-              }
-            })
-        .request();
+    if (PermissionUtils.hasPermissions(this, RECORD_AUDIO_PERMISSION)) {
+      joinRoom(
+          roomInfo.getRoomUuid(),
+          roomInfo.getNick(),
+          roomInfo.getLiveRecordId(),
+          roomInfo.getRole());
+    } else {
+      requestPermissionLauncher.launch(RECORD_AUDIO_PERMISSION);
+    }
   }
 
   protected void joinRoom(String roomUuid, String nick, long liveRecordId, String role) {
@@ -229,31 +199,31 @@ public class KaraokeRoomActivity extends BaseActivity
               @Override
               public void onSuccess(@Nullable NEKaraokeRoomInfo roomInfo) {
                 ALog.i(TAG, "joinRoom success");
-                KaraokeRoomActivity.this.roomInfo = roomInfo;
                 initViewAfterJoinRoom();
               }
 
               @Override
               public void onError(int code, @Nullable String msg) {
                 ALog.e(TAG, "joinRoom failed code = " + code + " msg = " + msg);
-                ToastUtils.showShort(R.string.karaoke_room_already_closed);
+                ToastX.showShortToast(R.string.karaoke_room_already_closed);
                 KaraokeRoomActivity.this.finish();
               }
             });
   }
 
   protected void initViewAfterJoinRoom() {
-    binding.singControlView.init();
+    NECopyrightedMedia.getInstance().setSongScene(SongScene.TYPE_KTV);
+    binding.singControlView.init(roomInfo);
     initListener();
     initDataObserve();
     initGiftAnimation();
     karaokeRoomViewModel.initDataOnJoinRoom();
     orderSongViewModel.refreshOrderSongs();
     binding.ivArrangeMicro.setImageResource(
-        KaraokeUtils.isCurrentHost() ? R.drawable.arrange_micro : R.drawable.on_micro);
+        KaraokeUIUtils.isLocalHost() ? R.drawable.arrange_micro : R.drawable.on_micro);
     binding.ivArrangeMicro.setBackgroundResource(
-        KaraokeUtils.isCurrentHost() ? R.drawable.dark_cycle_bg : R.drawable.red_cycle_bg);
-    if (KaraokeUtils.isCurrentHost()) {
+        KaraokeUIUtils.isLocalHost() ? R.drawable.ktv_dark_cycle_bg : R.drawable.red_cycle_bg);
+    if (KaraokeUIUtils.isLocalHost()) {
       applyOnSeat(null);
     } else {
       karaokeRoomViewModel.updateSeat();
@@ -277,7 +247,7 @@ public class KaraokeRoomActivity extends BaseActivity
   }
 
   protected void refreshAudioSwitchButton() {
-    if (SeatUtils.isCurrentOnSeat()) {
+    if (KaraokeSeatUtils.isCurrentOnSeat()) {
       binding.ivLocalAudioSwitch.setVisibility(View.VISIBLE);
     } else {
       binding.ivLocalAudioSwitch.setVisibility(View.GONE);
@@ -286,22 +256,22 @@ public class KaraokeRoomActivity extends BaseActivity
 
     switch (currentSeatState) {
       case KaraokeRoomViewModel.CURRENT_SEAT_STATE_APPLYING:
-        if (!KaraokeUtils.isCurrentHost()) {
+        if (!KaraokeUIUtils.isLocalHost()) {
           binding.ivArrangeMicro.setImageResource(R.drawable.arrange_micro);
-          binding.ivArrangeMicro.setBackgroundResource(R.drawable.dark_cycle_bg);
+          binding.ivArrangeMicro.setBackgroundResource(R.drawable.ktv_dark_cycle_bg);
           binding.tvArrangeMicroNum.setVisibility(View.VISIBLE);
         }
         break;
       case KaraokeRoomViewModel.CURRENT_SEAT_STATE_ON_SEAT:
-        if (!KaraokeUtils.isCurrentHost()) {
+        if (!KaraokeUIUtils.isLocalHost()) {
           binding.ivArrangeMicro.setImageResource(R.drawable.down_mircro);
-          binding.ivArrangeMicro.setBackgroundResource(R.drawable.dark_cycle_bg);
+          binding.ivArrangeMicro.setBackgroundResource(R.drawable.ktv_dark_cycle_bg);
           binding.tvArrangeMicroNum.setVisibility(View.GONE);
         }
 
         break;
       default:
-        if (!KaraokeUtils.isCurrentHost()) {
+        if (!KaraokeUIUtils.isLocalHost()) {
           binding.ivArrangeMicro.setImageResource(R.drawable.on_micro);
           binding.ivArrangeMicro.setBackgroundResource(R.drawable.red_cycle_bg);
           binding.tvArrangeMicroNum.setVisibility(View.GONE);
@@ -312,9 +282,11 @@ public class KaraokeRoomActivity extends BaseActivity
   @SuppressLint("MissingPermission")
   protected void initListener() {
     binding.ivLeaveRoom.setOnClickListener(v -> onClickLeaveBtn());
-    NetUtils.registerStateListener(netWorkStatusChangeListener);
     binding.tvRoomMsgInput.setOnClickListener(
-        view -> InputUtils.showSoftInput(binding.etRoomMsgInput));
+        view -> {
+          InputUtils.showSoftInput(KaraokeRoomActivity.this, binding.etRoomMsgInput);
+          binding.etRoomMsgInput.bringToFront();
+        });
     binding.etRoomMsgInput.setOnEditorActionListener(
         (textView, i, keyEvent) -> {
           if (textView == binding.etRoomMsgInput) {
@@ -322,7 +294,7 @@ public class KaraokeRoomActivity extends BaseActivity
               return true;
             }
             String input = binding.etRoomMsgInput.getText().toString();
-            InputUtils.hideSoftInput(binding.etRoomMsgInput);
+            InputUtils.hideSoftInput(KaraokeRoomActivity.this, binding.etRoomMsgInput);
             sendTextMsg(input);
             return true;
           }
@@ -331,7 +303,7 @@ public class KaraokeRoomActivity extends BaseActivity
     binding.ivLocalAudioSwitch.setOnClickListener(
         v -> {
           if (!NetUtils.isConnected()) {
-            ToastUtils.showShort(R.string.karaoke_network_error);
+            ToastX.showShortToast(R.string.karaoke_network_error);
             return;
           }
           if (binding.ivLocalAudioSwitch.isSelected()) {
@@ -341,7 +313,7 @@ public class KaraokeRoomActivity extends BaseActivity
                       @Override
                       public void onSuccess(@Nullable Unit unit) {
                         binding.ivLocalAudioSwitch.setSelected(false);
-                        ToastUtils.showShort(R.string.karaoke_micro_phone_is_open);
+                        ToastX.showShortToast(R.string.karaoke_micro_phone_is_open);
                       }
 
                       @Override
@@ -354,7 +326,7 @@ public class KaraokeRoomActivity extends BaseActivity
                       @Override
                       public void onSuccess(@Nullable Unit unit) {
                         binding.ivLocalAudioSwitch.setSelected(true);
-                        ToastUtils.showShort(R.string.karaoke_micro_phone_is_close);
+                        ToastX.showShortToast(R.string.karaoke_micro_phone_is_close);
                       }
 
                       @Override
@@ -381,17 +353,17 @@ public class KaraokeRoomActivity extends BaseActivity
         });
     binding.seatView.setItemClickListener(
         (model, position) -> {
-          if (KaraokeUtils.isCurrentHost()) {
+          if (KaraokeUIUtils.isLocalHost()) {
             if (model != null
                 && model.getUser() != null
-                && !KaraokeUtils.isMySelf(model.getAccount())) {
+                && !KaraokeUIUtils.isLocalAccount(model.getAccount())) {
               showKickOutSeatDialog(model.getUser().getAccount());
             }
           } else {
             if (model != null) {
               if (model.getUser() != null) {
-                if (SeatUtils.isOnSeat(model.getUser().getAccount())
-                    && KaraokeUtils.isMySelf(model.getAccount())) {
+                if (KaraokeSeatUtils.isOnSeat(model.getUser().getAccount())
+                    && KaraokeUIUtils.isLocalAccount(model.getAccount())) {
                   showDownSeatDialog();
                 }
               } else {
@@ -404,10 +376,10 @@ public class KaraokeRoomActivity extends BaseActivity
         });
     binding.rlArrangeMicro.setOnClickListener(
         v -> {
-          if (KaraokeUtils.isCurrentHost()) {
+          if (KaraokeUIUtils.isLocalHost()) {
             showArrangeMicroDialog();
           } else {
-            if (SeatUtils.isCurrentOnSeat()) {
+            if (KaraokeSeatUtils.isCurrentOnSeat()) {
               showDownSeatDialog();
             } else {
               if (currentSeatState == KaraokeRoomViewModel.CURRENT_SEAT_STATE_APPLYING) {
@@ -429,11 +401,15 @@ public class KaraokeRoomActivity extends BaseActivity
           if (giftDialog == null) {
             giftDialog = new GiftDialog(KaraokeRoomActivity.this);
           }
+          List<String> sendUserUuids = new ArrayList<>();
+          sendUserUuids.add(roomInfo.getAnchorUserUuid());
           giftDialog.show(
               giftId ->
                   NEKaraokeKit.getInstance()
-                      .sendGift(
+                      .sendBatchGift(
                           giftId,
+                          1,
+                          sendUserUuids,
                           new NEKaraokeCallbackWrapper<Unit>() {
 
                             @Override
@@ -441,7 +417,7 @@ public class KaraokeRoomActivity extends BaseActivity
 
                             @Override
                             public void onError(int code, @Nullable String msg) {
-                              ToastUtils.showShort(R.string.karaoke_reward_failed);
+                              ToastX.showShortToast(R.string.karaoke_reward_failed);
                             }
                           }));
         });
@@ -462,7 +438,8 @@ public class KaraokeRoomActivity extends BaseActivity
 
           @Override
           public void onStartSong(NEKaraokeSongModel songModel) {
-            if (binding.singControlView.isAnchor() || binding.singControlView.isAssistant()) {
+            if (binding.singControlView.isLocalMain()
+                || binding.singControlView.isLocalAssistant()) {
               unmuteMyAudio();
             }
           }
@@ -474,6 +451,9 @@ public class KaraokeRoomActivity extends BaseActivity
       if (!NetUtils.checkNetwork(KaraokeRoomActivity.this)) {
         return;
       }
+
+      ReportUtils.report(
+          KaraokeRoomActivity.this, TAG_REPORT_PAGE_KARAOKE_ROOM_DETAIL, "ktv_order_song");
 
       OrderSongDialog dialog = new OrderSongDialog();
       dialog.show(getSupportFragmentManager(), TAG);
@@ -496,10 +476,10 @@ public class KaraokeRoomActivity extends BaseActivity
       return;
     }
 
-    if (SeatUtils.isCurrentOnSeat()) {
+    if (KaraokeSeatUtils.isCurrentOnSeat()) {
       return;
     }
-    KaraokeUtils.showCommonDialog(
+    KaraokeUIUtils.showCommonDialog(
         KaraokeRoomActivity.this,
         title,
         null,
@@ -514,14 +494,16 @@ public class KaraokeRoomActivity extends BaseActivity
                   }
 
                   @Override
-                  public void onError(int code, @Nullable String msg) { // 1303
-                    ToastUtils.showShort(msg);
+                  public void onError(int code, @Nullable String msg) {
+                    if (msg != null) {
+                      ToastX.showShortToast(msg);
+                    }
                   }
                 }));
   }
 
   protected void showCloseRoomDialog() {
-    KaraokeUtils.showCommonDialog(
+    KaraokeUIUtils.showCommonDialog(
         KaraokeRoomActivity.this,
         getString(R.string.karaoke_host_confirm_close_room_title),
         getString(R.string.karaoke_host_confirm_close_room_content),
@@ -529,14 +511,14 @@ public class KaraokeRoomActivity extends BaseActivity
   }
 
   protected void showOnSeatAudienceCloseRoomDialog() {
-    KaraokeUtils.showCommonDialog(
+    KaraokeUIUtils.showCommonDialog(
         KaraokeRoomActivity.this,
         getString(R.string.karaoke_on_seat_confirm_close_room_title),
         v -> leaveRoom());
   }
 
   protected void showDownSeatDialog() {
-    KaraokeUtils.showCommonDialog(
+    KaraokeUIUtils.showCommonDialog(
         KaraokeRoomActivity.this,
         getString(R.string.karaoke_down_seat_confirm),
         v -> {
@@ -549,7 +531,9 @@ public class KaraokeRoomActivity extends BaseActivity
 
                     @Override
                     public void onFailure(int code, @Nullable String msg) {
-                      ToastUtils.showShort(msg);
+                      if (msg != null) {
+                        ToastX.showShortToast(msg);
+                      }
                     }
                   });
           NEKaraokeKit.getInstance().requestStopPlayingSong(null);
@@ -599,13 +583,28 @@ public class KaraokeRoomActivity extends BaseActivity
                     getString(R.string.karaoke_online_member_count, count)));
     karaokeRoomViewModel.getRewardData().observe(this, this::onUserReward);
     karaokeRoomViewModel
+        .getRoomConnectState()
+        .observe(
+            this,
+            neRoomConnectType -> {
+              //这里处理断网重连的逻辑，而不是使用onNetworkConnected，因为有可能应用层断网重连了，但是IM网络还是不通
+              if (neRoomConnectType == NERoomConnectType.Reconnect) {
+                ALog.i(TAG, "room connect state connected");
+                binding.singControlView.switchSongByNetwork();
+                onNetworkConnected();
+              } else {
+                ALog.i(TAG, "room connect state disConnected");
+                onNetworkDisconnected();
+              }
+            });
+    karaokeRoomViewModel
         .getErrorData()
         .observe(
             this,
             endReason -> {
               if (endReason == NEKaraokeEndReason.CLOSE_BY_MEMBER) {
-                if (!KaraokeUtils.isCurrentHost()) {
-                  ToastUtils.showShort(R.string.karaoke_host_close_room);
+                if (!KaraokeUIUtils.isLocalHost()) {
+                  ToastX.showShortToast(R.string.karaoke_host_close_room);
                 }
                 leaveRoom();
               } else if (endReason == NEKaraokeEndReason.END_OF_RTC) {
@@ -624,7 +623,7 @@ public class KaraokeRoomActivity extends BaseActivity
             seatList -> {
               binding.seatView.updateSeats(seatList);
               binding.tvArrangeMicroNum.setText(
-                  String.valueOf(SeatUtils.getApplyingOnSeatList().size()));
+                  String.valueOf(KaraokeSeatUtils.getApplyingOnSeatList().size()));
               if (arrangeMicroDialog != null && arrangeMicroDialog.isVisible()) {
                 arrangeMicroDialog.dismiss();
               }
@@ -638,11 +637,12 @@ public class KaraokeRoomActivity extends BaseActivity
         .observe(
             this,
             seatState -> {
-              currentSeatState = seatState;
-              refreshAudioSwitchButton();
-              if (KaraokeUtils.isCurrentHost()
-                  && currentSeatState == KaraokeRoomViewModel.CURRENT_SEAT_STATE_ON_SEAT) {
-                NEKaraokeKit.getInstance().unmuteMyAudio(null);
+              if (currentSeatState != seatState) {
+                currentSeatState = seatState;
+                refreshAudioSwitchButton();
+                if (currentSeatState == KaraokeRoomViewModel.CURRENT_SEAT_STATE_ON_SEAT) {
+                  NEKaraokeKit.getInstance().unmuteMyAudio(null);
+                }
               }
             });
     karaokeRoomViewModel
@@ -651,8 +651,8 @@ public class KaraokeRoomActivity extends BaseActivity
             this,
             applySeatModels -> {
               applySeatItems = applySeatModels;
-              if (KaraokeUtils.isCurrentHost()) {
-                if (applySeatModels.size() > 0) {
+              if (KaraokeUIUtils.isLocalHost()) {
+                if (!applySeatModels.isEmpty()) {
                   binding.tvArrangeMicroNum.setVisibility(View.VISIBLE);
                   binding.tvArrangeMicroNum.setText(String.valueOf(applySeatModels.size()));
                 } else {
@@ -669,7 +669,7 @@ public class KaraokeRoomActivity extends BaseActivity
         .observe(this, songList -> orderSongViewModel.refreshOrderSongs());
   }
 
-  protected void onUserReward(NEKaraokeGiftModel reward) {
+  protected void onUserReward(NEKaraokeBatchGiftModel reward) {
     if (roomInfo == null) {
       return;
     }
@@ -679,7 +679,7 @@ public class KaraokeRoomActivity extends BaseActivity
             reward.getSendNick(),
             1,
             GiftCache.getGift(reward.getGiftId()).getStaticIconResId()));
-    if (!KaraokeUtils.isCurrentHost()) {
+    if (!KaraokeUIUtils.isLocalHost()) {
       giftRender.addGift(GiftCache.getGift(reward.getGiftId()).getDynamicIconResId());
     }
   }
@@ -702,8 +702,8 @@ public class KaraokeRoomActivity extends BaseActivity
                   binding.crvMsgList.appendItem(
                       ChatRoomMsgCreator.createText(
                           KaraokeRoomActivity.this,
-                          KaraokeUtils.isCurrentHost(),
-                          KaraokeUtils.getCurrentName(),
+                          KaraokeUIUtils.isLocalHost(),
+                          KaraokeUIUtils.getLocalName(),
                           msg));
                 }
 
@@ -716,16 +716,13 @@ public class KaraokeRoomActivity extends BaseActivity
   }
 
   protected void onNetworkDisconnected() {
-    ToastUtils.showLong(R.string.karaoke_network_error);
-    ALog.d(TAG, "onDisconnected():" + System.currentTimeMillis());
+    ToastX.showShortToast(R.string.karaoke_network_error);
     if (giftDialog != null && giftDialog.isShowing()) {
       giftDialog.dismiss();
     }
   }
 
-  protected void onNetworkConnected(String networkType) {
-    ALog.i(TAG, "onNetworkConnected type = " + networkType);
-    binding.singControlView.clickNextSong();
+  protected void onNetworkConnected() {
     karaokeRoomViewModel.updateSeat();
   }
 
@@ -735,7 +732,7 @@ public class KaraokeRoomActivity extends BaseActivity
     int y = (int) ev.getRawY();
     // 键盘区域外点击收起键盘
     if (!ViewUtils.isInView(binding.etRoomMsgInput, x, y)) {
-      InputUtils.hideSoftInput(binding.etRoomMsgInput);
+      InputUtils.hideSoftInput(KaraokeRoomActivity.this, binding.etRoomMsgInput);
     }
     return super.dispatchTouchEvent(ev);
   }
@@ -762,7 +759,7 @@ public class KaraokeRoomActivity extends BaseActivity
   }
 
   protected void leaveRoom() {
-    if (KaraokeUtils.isCurrentHost()) {
+    if (KaraokeUIUtils.isLocalHost()) {
       NEKaraokeKit.getInstance()
           .endRoom(
               new NEKaraokeCallbackWrapper<Unit>() {
@@ -800,18 +797,13 @@ public class KaraokeRoomActivity extends BaseActivity
   }
 
   @Override
-  protected StatusBarConfig provideStatusBarConfig() {
-    return new StatusBarConfig.Builder().statusBarDarkFont(false).build();
-  }
-
-  @Override
   protected void onDestroy() {
+    NEKaraokeUI.getInstance().notifyExitRoom();
     super.onDestroy();
-    NetUtils.unregisterStateListener(netWorkStatusChangeListener);
   }
 
   private void nextSong(NEKaraokeSongModel song) {
-    if (isMySong(song)) {
+    if (KaraokeUIUtils.isLocalSong(song)) {
       if (NEKaraokeKit.getInstance().getAllMemberList().size() <= 1) {
         binding.singControlView.startSolo(song);
       } else {
@@ -819,20 +811,21 @@ public class KaraokeRoomActivity extends BaseActivity
       }
     }
     if (song != null) {
-      loadRes(song.getSongId(), song.getChannel());
+      if (song.getChannel() != null) {
+        loadRes(song.getSongId(), song.getChannel());
+      }
     }
   }
 
   private void unmuteMyAudio() {
-    boolean isAudioOn = NEKaraokeKit.getInstance().getLocalMember().isAudioOn();
-    if (!isAudioOn) {
+    if (KaraokeUIUtils.isLocalMute()) {
       NEKaraokeKit.getInstance()
           .unmuteMyAudio(
               new NEKaraokeCallback<Unit>() {
                 @Override
                 public void onSuccess(@Nullable Unit unit) {
                   binding.ivLocalAudioSwitch.setSelected(false);
-                  ToastUtils.showShort(R.string.karaoke_micro_phone_is_open);
+                  ToastX.showShortToast(R.string.karaoke_micro_phone_is_open);
                 }
 
                 @Override
@@ -843,18 +836,10 @@ public class KaraokeRoomActivity extends BaseActivity
     }
   }
 
-  private boolean isMySong(NEKaraokeSongModel song) {
-    if (song == null) {
-      return false;
-    }
-    return TextUtils.equals(
-        song.getUserUuid(), NEKaraokeKit.getInstance().getLocalMember().getAccount());
-  }
-
   private void loadRes(String songId, int channel) {
     boolean isExit = NEKaraokeKit.getInstance().isSongPreloaded(songId, channel);
+    ALog.d(TAG, "loadRes songId = " + songId + ", isExit = " + isExit);
     if (!isExit) {
-      ALog.d(TAG, "loadRes 1------>" + songId);
       NEKaraokeKit.getInstance()
           .preloadSong(
               songId,
@@ -862,22 +847,44 @@ public class KaraokeRoomActivity extends BaseActivity
               new NEKaraokeCopyrightedMediaListener() {
 
                 @Override
-                public void onPreloadStart(String songId, int channel) {}
+                public void onPreloadStart(String songId, int channel) {
+                  ALog.i(TAG, "onPreloadStart songId = " + songId + ", channel = " + channel);
+                }
 
                 @Override
-                public void onPreloadProgress(String songId, int channel, float progress) {}
+                public void onPreloadProgress(String songId, int channel, float progress) {
+                  ALog.d(
+                      TAG,
+                      "onPreloadProgress songId = "
+                          + songId
+                          + ", channel = "
+                          + channel
+                          + ", progress = "
+                          + progress);
+                }
 
                 @Override
                 public void onPreloadComplete(
-                    String songId, int channel, int errorCode, String msg) {}
+                    String songId, int channel, int errorCode, String msg) {
+                  ALog.i(
+                      TAG,
+                      "onPreloadComplete songId = "
+                          + songId
+                          + ", channel = "
+                          + channel
+                          + ", errorCode = "
+                          + errorCode
+                          + ", msg = "
+                          + msg);
+                }
               });
     }
   }
 
   private void onClickLeaveBtn() {
-    if (KaraokeUtils.isCurrentHost()) {
+    if (KaraokeUIUtils.isLocalHost()) {
       showCloseRoomDialog();
-    } else if (SeatUtils.isCurrentOnSeat()) {
+    } else if (KaraokeSeatUtils.isCurrentOnSeat()) {
       showOnSeatAudienceCloseRoomDialog();
     } else {
       leaveRoom();
@@ -886,9 +893,9 @@ public class KaraokeRoomActivity extends BaseActivity
 
   @Override
   public void onBackPressed() {
-    if (KaraokeUtils.isCurrentHost()) {
+    if (KaraokeUIUtils.isLocalHost()) {
       showCloseRoomDialog();
-    } else if (SeatUtils.isCurrentOnSeat()) {
+    } else if (KaraokeSeatUtils.isCurrentOnSeat()) {
       showOnSeatAudienceCloseRoomDialog();
     } else {
       leaveRoom();
@@ -899,7 +906,7 @@ public class KaraokeRoomActivity extends BaseActivity
   @Override
   public void onTokenExpired() {
     ALog.d(TAG, "onTokenExpired");
-    ToastUtils.showShort(R.string.copyright_token_has_expired);
+    ToastX.showShortToast(R.string.copyright_token_has_expired);
     NEKaraokeKit.getInstance().getSongDynamicTokenUntilSuccess(null);
   }
 }

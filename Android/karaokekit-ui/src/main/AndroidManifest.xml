@@ -24,12 +24,23 @@
             android:value="portrait|landscape" />
 
         <activity
+            android:name=".activity.KaraokeRoomListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <activity
+            android:name=".activity.KaraokeRoomCreateActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="fullSensor"
+            android:exported="false"
+            android:theme="@style/KaraokeRoomCreateTheme" />
+
+        <activity
             android:name=".activity.KaraokeRoomActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
     </application>
 

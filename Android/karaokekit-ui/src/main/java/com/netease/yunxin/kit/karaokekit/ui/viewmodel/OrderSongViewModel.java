@@ -15,14 +15,15 @@ import com.netease.yunxin.kit.copyrightedmedia.api.model.NECopyrightedSong;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCallback;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCopyrightedMediaListener;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit;
-import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeOrderSongModel;
+import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeOrderSongParams;
+import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeOrderSongResult;
 import com.netease.yunxin.kit.karaokekit.ui.model.KaraokeOrderSongModel;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderSongViewModel extends ViewModel {
   private NEKaraokeKit karaokeKit = NEKaraokeKit.getInstance();
-  private final MutableLiveData<List<NEKaraokeOrderSongModel>> orderSongListChangeEvent =
+  private final MutableLiveData<List<NEKaraokeOrderSongResult>> orderSongListChangeEvent =
       new MutableLiveData<>();
   private final MutableLiveData<KaraokeOrderSongModel> performOrderSongEvent =
       new MutableLiveData<>();
@@ -100,7 +101,7 @@ public class OrderSongViewModel extends ViewModel {
 
   public void refreshOrderSongs() {
     karaokeKit.getOrderedSongs(
-        new NEKaraokeCallback<List<NEKaraokeOrderSongModel>>() {
+        new NEKaraokeCallback<List<NEKaraokeOrderSongResult>>() {
 
           @Override
           public void onFailure(int code, @Nullable String msg) {
@@ -108,7 +109,7 @@ public class OrderSongViewModel extends ViewModel {
           }
 
           @Override
-          public void onSuccess(@Nullable List<NEKaraokeOrderSongModel> neKaraokeOrderSongModels) {
+          public void onSuccess(@Nullable List<NEKaraokeOrderSongResult> neKaraokeOrderSongModels) {
             ALog.i("getOrderSongs success");
             if (neKaraokeOrderSongModels != null) {
               orderSongListChangeEvent.postValue(neKaraokeOrderSongModels);
@@ -156,8 +157,8 @@ public class OrderSongViewModel extends ViewModel {
   public void orderSong(
       KaraokeOrderSongModel copyrightSong, NECopyrightedMedia.Callback<Boolean> callback) {
     karaokeKit.orderSong(
-        buildLocalOrderSong(copyrightSong),
-        new NEKaraokeCallback<NEKaraokeOrderSongModel>() {
+        buildOrderSongParams(copyrightSong),
+        new NEKaraokeCallback<NEKaraokeOrderSongResult>() {
 
           @Override
           public void onFailure(int code, @Nullable String msg) {
@@ -166,7 +167,7 @@ public class OrderSongViewModel extends ViewModel {
           }
 
           @Override
-          public void onSuccess(@Nullable NEKaraokeOrderSongModel neKaraokeOrderSongModel) {
+          public void onSuccess(@Nullable NEKaraokeOrderSongResult neKaraokeOrderSongModel) {
             ALog.i("orderSong success");
             callback.success(true);
           }
@@ -213,9 +214,9 @@ public class OrderSongViewModel extends ViewModel {
 
   public void nextSong() {
     if (orderSongListChangeEvent.getValue() != null
-        && orderSongListChangeEvent.getValue().size() > 0) {
+        && !orderSongListChangeEvent.getValue().isEmpty()) {
       karaokeKit.nextSong(
-          orderSongListChangeEvent.getValue().get(0).getOrderId(),
+          orderSongListChangeEvent.getValue().get(0).getOrderSong().getOrderId(),
           new NEKaraokeCallback<Void>() {
 
             @Override
@@ -231,16 +232,16 @@ public class OrderSongViewModel extends ViewModel {
     }
   }
 
-  private NEKaraokeOrderSongModel buildLocalOrderSong(KaraokeOrderSongModel copyrightSong) {
-    return new NEKaraokeOrderSongModel(
+  private NEKaraokeOrderSongParams buildOrderSongParams(KaraokeOrderSongModel copyrightSong) {
+    return new NEKaraokeOrderSongParams(
         copyrightSong.getSongId(),
         copyrightSong.getSongName(),
         copyrightSong.getSongCover(),
-        copyrightSong.getSongTime(),
-        copyrightSong.getChannel());
+        copyrightSong.getChannel(),
+        copyrightSong.getSongTime());
   }
 
-  public MutableLiveData<List<NEKaraokeOrderSongModel>> getOrderSongListChangeEvent() {
+  public MutableLiveData<List<NEKaraokeOrderSongResult>> getOrderSongListChangeEvent() {
     return orderSongListChangeEvent;
   }
 

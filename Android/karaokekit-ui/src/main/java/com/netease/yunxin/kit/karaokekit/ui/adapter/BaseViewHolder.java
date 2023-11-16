@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 package com.netease.yunxin.kit.karaokekit.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -152,6 +153,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
   }
 
   /** Add an action to set the alpha of a view. Can be called multiple times. Alpha between 0-1. */
+  @SuppressLint("ObsoleteSdkInt")
   public BaseViewHolder setAlpha(int viewId, float value) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
       getView(viewId).setAlpha(value);

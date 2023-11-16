@@ -1,0 +1,2 @@
+# NEKaraokeUIKit iOS ChangeLog
+

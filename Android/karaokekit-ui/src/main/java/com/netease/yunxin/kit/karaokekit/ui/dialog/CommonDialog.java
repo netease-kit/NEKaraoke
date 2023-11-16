@@ -47,7 +47,7 @@ public class CommonDialog extends Dialog {
   }
 
   protected @LayoutRes int contentLayoutId() {
-    return R.layout.view_dialog_common_layout;
+    return R.layout.karaoke_view_dialog_common_layout;
   }
 
   /** 页面渲染 */

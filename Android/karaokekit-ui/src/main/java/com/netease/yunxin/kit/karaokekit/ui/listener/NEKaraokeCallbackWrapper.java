@@ -5,8 +5,8 @@
 package com.netease.yunxin.kit.karaokekit.ui.listener;
 
 import androidx.annotation.Nullable;
-import com.blankj.utilcode.util.ToastUtils;
 import com.netease.yunxin.kit.common.network.NENetworkErrorCode;
+import com.netease.yunxin.kit.common.ui.utils.ToastX;
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeCallback;
 import com.netease.yunxin.kit.karaokekit.ui.R;
 
@@ -18,7 +18,7 @@ public abstract class NEKaraokeCallbackWrapper<T> implements NEKaraokeCallback<T
   @Override
   public void onFailure(int code, @Nullable String msg) {
     if (code == NENetworkErrorCode.DEFAULT) {
-      ToastUtils.showShort(R.string.karaoke_network_error);
+      ToastX.showShortToast(R.string.karaoke_network_error);
     }
     onError(code, msg);
   }

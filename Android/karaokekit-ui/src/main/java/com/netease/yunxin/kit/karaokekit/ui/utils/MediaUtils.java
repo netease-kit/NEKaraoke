@@ -5,6 +5,7 @@
 package com.netease.yunxin.kit.karaokekit.ui.utils;
 
 import android.media.MediaMetadataRetriever;
+import java.io.IOException;
 
 public class MediaUtils {
 
@@ -18,7 +19,11 @@ public class MediaUtils {
     } catch (Exception ex) {
       ex.printStackTrace();
     } finally {
-      mmr.release();
+      try {
+        mmr.release();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
     return duration;
   }

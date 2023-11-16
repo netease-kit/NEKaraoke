@@ -4,6 +4,7 @@
 <!-- found in the LICENSE file. -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,16 +13,16 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/iv_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/tv_empty"
-            android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/dp_10"
-            android:src="@drawable/icon_empty" />
+            android:src="@drawable/icon_empty"
+            android:contentDescription="@string/content_description_default" />
 
         <TextView
             android:id="@+id/tv_empty"
@@ -29,7 +30,6 @@
             android:layout_height="wrap_content"
             android:textColor="#505065"
             android:textSize="@dimen/text_size_14"
-            android:layout_centerInParent="true"
             android:text="@string/karaoke_empty_apply_seat" />
 
     </LinearLayout>

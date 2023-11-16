@@ -44,7 +44,7 @@ public abstract class BottomBaseDialog extends Dialog {
 
   @LayoutRes
   protected int contentLayoutId() {
-    return R.layout.view_dialog_utils_base;
+    return R.layout.karaoke_view_dialog_utils_base;
   }
 
   /** 页面渲染 */

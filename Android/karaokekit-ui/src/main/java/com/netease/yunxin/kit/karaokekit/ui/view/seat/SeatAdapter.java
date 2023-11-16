@@ -18,8 +18,8 @@ import com.netease.yunxin.kit.karaokekit.ui.R;
 import com.netease.yunxin.kit.karaokekit.ui.adapter.BaseAdapter;
 import com.netease.yunxin.kit.karaokekit.ui.model.OnSeatModel;
 import com.netease.yunxin.kit.karaokekit.ui.model.VoiceRoomSeat;
-import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUtils;
-import com.netease.yunxin.kit.karaokekit.ui.utils.SeatUtils;
+import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeSeatUtils;
+import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUIUtils;
 import java.util.ArrayList;
 
 public class SeatAdapter extends BaseAdapter<VoiceRoomSeat> {
@@ -68,7 +68,7 @@ public class SeatAdapter extends BaseAdapter<VoiceRoomSeat> {
           viewHolder.ivStatusHint.setVisibility(View.GONE);
         } else {
           viewHolder.ivStatusHint.setVisibility(View.VISIBLE);
-          viewHolder.ivStatusHint.setImageResource(R.drawable.audio_be_muted_status);
+          viewHolder.ivStatusHint.setImageResource(R.drawable.icon_audio_muted);
         }
         viewHolder.tvNick.setText(user != null ? user.getAccount() : "");
         viewHolder.circle.setVisibility(View.INVISIBLE);
@@ -98,7 +98,7 @@ public class SeatAdapter extends BaseAdapter<VoiceRoomSeat> {
       case VoiceRoomSeat.Status.AUDIO_CLOSED_AND_MUTED:
         viewHolder.iv_user_status.setVisibility(View.GONE);
         viewHolder.ivStatusHint.setVisibility(View.VISIBLE);
-        viewHolder.ivStatusHint.setImageResource(R.drawable.audio_be_muted_status);
+        viewHolder.ivStatusHint.setImageResource(R.drawable.icon_audio_muted);
         viewHolder.circle.setVisibility(View.INVISIBLE);
         viewHolder.applying.setVisibility(View.GONE);
         break;
@@ -115,15 +115,15 @@ public class SeatAdapter extends BaseAdapter<VoiceRoomSeat> {
 
     if (user != null) {
       if (user.isMute()) {
-        viewHolder.ivStatusHint.setImageResource(R.drawable.audio_be_muted_status);
+        viewHolder.ivStatusHint.setImageResource(R.drawable.icon_audio_muted);
       } else {
         viewHolder.ivStatusHint.setImageResource(R.drawable.icon_seat_open_micro);
         viewHolder.waveView.start();
       }
 
-      if (SeatUtils.isSinging(songModel, user.getAccount())) {
+      if (KaraokeSeatUtils.isSinging(songModel, user.getAccount())) {
         viewHolder.tvNick.setText(context.getText(R.string.karaoke_singing));
-      } else if (KaraokeUtils.isHost(user.getAccount())) {
+      } else if (KaraokeUIUtils.isHost(user.getAccount())) {
         viewHolder.tvNick.setText(context.getText(R.string.karaoke_host));
       }
     }
