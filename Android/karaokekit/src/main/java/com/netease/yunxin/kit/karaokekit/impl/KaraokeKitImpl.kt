@@ -365,32 +365,47 @@ internal class KaraokeKitImpl : NEKaraokeKit, CoroutineRunner() {
                 override fun onSuccess(data: Unit?) {
                     KaraokeLog.i(TAG, "joinRoom success")
 
-                    karaokeService.getRoomInfo(
+                    karaokeService.joinedKaraoke(
                         params.liveRecordId,
-                        object : NetRequestCallback<KaraokeRoomInfo> {
-                            override fun success(info: KaraokeRoomInfo?) {
-                                KaraokeLog.d(
-                                    TAG,
-                                    "joinRoom  getRoomInfo success"
-                                )
-                                callback?.onSuccess(
-                                    info?.let {
-                                        KaraokeUtils.karaokeRoomInfo2NEKaraokeRoomInfo(
-                                            it
-                                        )
-                                    }
-                                )
-                            }
-
+                        object : NetRequestCallback<Unit> {
                             override fun error(code: Int, msg: String?) {
-                                KaraokeLog.e(
+                                KaraokeLog.i(
                                     TAG,
-                                    "get room info after join room error: code = $code message = $msg"
+                                    "joinedKaraoke failed code = $code message = $msg"
                                 )
                                 callback?.onFailure(code, msg)
                             }
-                        }
-                    )
+
+                            override fun success(info: Unit?) {
+                                KaraokeLog.i(TAG, "joinedKaraoke success")
+                                karaokeService.getRoomInfo(
+                                    params.liveRecordId,
+                                    object : NetRequestCallback<KaraokeRoomInfo> {
+                                        override fun success(info: KaraokeRoomInfo?) {
+                                            KaraokeLog.d(
+                                                TAG,
+                                                "joinRoom  getRoomInfo success"
+                                            )
+                                            callback?.onSuccess(
+                                                info?.let {
+                                                    KaraokeUtils.karaokeRoomInfo2NEKaraokeRoomInfo(
+                                                        it
+                                                    )
+                                                }
+                                            )
+                                        }
+
+                                        override fun error(code: Int, msg: String?) {
+                                            KaraokeLog.e(
+                                                TAG,
+                                                "get room info after join room error: code = $code message = $msg"
+                                            )
+                                            callback?.onFailure(code, msg)
+                                        }
+                                    }
+                                )
+                            }
+                        })
                 }
 
                 override fun onError(code: Int, message: String?) {
