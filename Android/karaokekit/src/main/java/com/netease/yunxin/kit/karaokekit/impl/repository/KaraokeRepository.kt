@@ -85,6 +85,13 @@ class KaraokeRepository {
             karaokeApi.startKaraoke(params)
         }
 
+    suspend fun joinedKaraoke(liveRecordId: Long): Response<Unit> = withContext(Dispatchers.IO) {
+        val params = mapOf(
+            "liveRecordId" to liveRecordId
+        )
+        karaokeApi.joinedKaraoke(params)
+    }
+
     suspend fun stopKaraoke(liveRecordId: Long): Response<Unit> = withContext(Dispatchers.IO) {
         val params = mapOf(
             "liveRecordId" to liveRecordId

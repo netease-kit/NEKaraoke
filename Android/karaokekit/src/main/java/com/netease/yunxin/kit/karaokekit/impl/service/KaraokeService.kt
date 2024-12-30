@@ -65,6 +65,11 @@ interface KaraokeService : HttpErrorReporter {
     fun startKaraoke(param: StartKaraokeParam, callback: NetRequestCallback<KaraokeRoomInfo>)
 
     /**
+     * 加入成功后上报给服务器
+     */
+    fun joinedKaraoke(liveRecodeId: Long, callback: NetRequestCallback<Unit>)
+
+    /**
      * 获取房间 信息
      */
     fun getRoomInfo(liveRecordId: Long, callback: NetRequestCallback<KaraokeRoomInfo>)
