@@ -65,6 +65,7 @@ import com.netease.yunxin.kit.karaokekit.impl.utils.ScreenUtil
 import com.netease.yunxin.kit.karaokekit.impl.utils.TimerTaskUtil
 import com.netease.yunxin.kit.roomkit.api.NECallback2
 import com.netease.yunxin.kit.roomkit.api.NEErrorCode
+import com.netease.yunxin.kit.roomkit.api.NERoomChatMessage
 import com.netease.yunxin.kit.roomkit.api.NERoomKit
 import com.netease.yunxin.kit.roomkit.api.NERoomKitOptions
 import com.netease.yunxin.kit.roomkit.api.service.NEAuthEvent
@@ -625,12 +626,12 @@ internal class KaraokeKitImpl : NEKaraokeKit, CoroutineRunner() {
         })
     }
 
-    override fun sendTextMessage(content: String, callback: NEKaraokeCallback<Unit>?) {
+    override fun sendTextMessage(content: String, callback: NEKaraokeCallback<NERoomChatMessage>?) {
         KaraokeLog.logApi("sendTextMessage")
         myRoomService.sendTextMessage(
             content,
-            object : NECallback2<Unit>() {
-                override fun onSuccess(data: Unit?) {
+            object : NECallback2<NERoomChatMessage>() {
+                override fun onSuccess(data: NERoomChatMessage?) {
                     KaraokeLog.d(TAG, "sendTextMessage success")
                     callback?.onSuccess(data)
                 }
