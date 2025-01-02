@@ -8,6 +8,9 @@ package com.netease.yunxin.kit.karaokekit.impl.service
 
 import android.text.TextUtils
 import com.google.gson.JsonObject
+import com.netease.lava.nertc.sdk.NERtc
+import com.netease.lava.nertc.sdk.NERtcConstants
+import com.netease.lava.nertc.sdk.NERtcEx
 import com.netease.yunxin.kit.karaokekit.api.MUTE_VOICE_KEY
 import com.netease.yunxin.kit.karaokekit.api.MUTE_VOICE_VALUE_OFF
 import com.netease.yunxin.kit.karaokekit.api.MUTE_VOICE_VALUE_ON
@@ -122,9 +125,11 @@ internal class KaraokeRoomService : NERoomRtcStatsListener, NEPlayStateChangeCal
             NERoomRtcAudioProfile.HIGH_QUALITY_STEREO,
             NERoomRtcAudioScenario.MUSIC
         )
-        currentRoomContext?.rtcController?.setChannelProfile(
-            NERoomRtcChannelProfile.liveBroadcasting
-        )
+//        currentRoomContext?.rtcController?.setChannelProfile(
+//            NERoomRtcChannelProfile.liveBroadcasting
+//        )
+
+        NERtcEx.getInstance().setChannelProfile(NERtcConstants.RTCChannelProfile.Karaoke)
     }
 
     fun joinRoom(roomUuid: String, role: String, userName: String, callback: NECallback2<Unit>) {
@@ -282,7 +287,7 @@ internal class KaraokeRoomService : NERoomRtcStatsListener, NEPlayStateChangeCal
         )
     }
 
-    fun sendTextMessage(content: String, callback: NECallback2<Unit>) {
+    fun sendTextMessage(content: String, callback: NECallback2<NERoomChatMessage>) {
         currentRoomContext?.chatController?.sendBroadcastTextMessage(content, callback)
             ?: callback.onError(
                 NEErrorCode.FAILURE,
@@ -291,7 +296,7 @@ internal class KaraokeRoomService : NERoomRtcStatsListener, NEPlayStateChangeCal
     }
 
     fun kickMemberOut(userUuid: String, callback: NECallback2<Unit>) {
-        currentRoomContext?.kickMemberOut(userUuid, callback)
+        currentRoomContext?.kickMemberOut(userUuid, false, callback)
             ?: callback.onError(
                 NEErrorCode.FAILURE,
                 "roomContext is not exist ！"

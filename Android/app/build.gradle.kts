@@ -10,7 +10,7 @@ plugins {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         applicationId = "com.netease.yunxin.app.karaoke"
         minSdk = 21
@@ -48,4 +48,10 @@ dependencies {
     implementation("com.google.android.material:material:1.5.0") 
     implementation("com.netease.yunxin.kit:alog:1.1.0")
     implementation(project(":karaokekit-ui"))
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("com.netease.yunxin:nertc-base:5.6.40")
+    }
 }

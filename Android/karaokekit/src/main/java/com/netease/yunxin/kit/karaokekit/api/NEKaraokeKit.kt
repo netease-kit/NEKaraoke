@@ -26,6 +26,7 @@ import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSeatRequestItem
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeSongModel
 import com.netease.yunxin.kit.karaokekit.impl.KaraokeKitImpl
 import com.netease.yunxin.kit.karaokekit.impl.model.response.NEKaraokeDynamicToken
+import com.netease.yunxin.kit.roomkit.api.NERoomChatMessage
 
 /**
  * NEKaraokeKit 核心类
@@ -273,7 +274,7 @@ interface NEKaraokeKit {
      * @param callback 发送回调
      * <br>相关回调：调用改方法后，房间内其他成员都会触发[NEKaraokeListener.onReceiveTextMessage]回调
      */
-    fun sendTextMessage(content: String, callback: NEKaraokeCallback<Unit>? = null)
+    fun sendTextMessage(content: String, callback: NEKaraokeCallback<NERoomChatMessage>? = null)
 
     /**
      * 踢出房间内成员

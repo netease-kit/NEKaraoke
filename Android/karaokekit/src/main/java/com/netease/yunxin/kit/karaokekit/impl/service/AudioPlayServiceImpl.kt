@@ -30,9 +30,12 @@ import com.netease.yunxin.kit.roomkit.api.model.NERoomRtcAudioFrame
 import com.netease.yunxin.kit.roomkit.api.model.NERoomRtcAudioFrameOpMode
 import com.netease.yunxin.kit.roomkit.api.model.NERoomRtcAudioFrameRequestFormat
 import com.netease.yunxin.kit.roomkit.api.model.NERoomRtcAudioStreamType
+import com.netease.yunxin.kit.roomkit.api.model.NERoomSessionTypeEnum
 import com.netease.yunxin.kit.roomkit.api.model.NEVideoStreamType
-import com.netease.yunxin.kit.roomkit.api.service.NECustomMessage
 import com.netease.yunxin.kit.roomkit.api.service.NEMessageChannelListener
+import com.netease.yunxin.kit.roomkit.api.service.NERoomCustomMessage
+import com.netease.yunxin.kit.roomkit.api.service.NERoomRecentSession
+import com.netease.yunxin.kit.roomkit.api.service.NERoomSessionMessage
 import java.util.LinkedList
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.write
@@ -776,7 +779,57 @@ internal class AudioPlayServiceImpl :
     override fun onMixedAudioFrame(audioFrame: NERoomRtcAudioFrame) {
     }
 
-    override fun onReceiveCustomMessage(message: NECustomMessage) {
+    override fun onMemberJoinRtcChannel(members: List<NERoomMember>) {
+        members.forEach {
+            rtcController?.subscribeRemoteVideoStream(
+                it.uuid,
+                NEVideoStreamType.LOW
+            )
+        }
+    }
+
+    override fun onMemberLeaveRtcChannel(members: List<NERoomMember>) {
+        members.forEach {
+            rtcController?.unsubscribeRemoteVideoStream(
+                it.uuid,
+                NEVideoStreamType.LOW
+            )
+        }
+    }
+
+    override fun onAudioEffectFinished(effectId: Int) {
+        if (NEKaraokeConstant.EFFECT_ID_ACCOMPANY == effectId) {
+            playCallbacks.forEach {
+                it.onSongPlayCompleted()
+                KaraokeLog.d(
+                    tag,
+                    "onAudioEffectFinished effectId = $effectId"
+                )
+            }
+        }
+    }
+
+    private fun sendCustomMessage(userUuid: String, commandId: Int, data: String) {
+        roomContext?.roomUuid?.let {
+            NERoomKit.getInstance().messageChannelService.sendCustomMessage(
+                roomUuid = it,
+                userUuid,
+                commandId = commandId,
+                data = data,
+                object : NECallback2<Unit>() {
+                    override fun onSuccess(data: Unit?) {
+                        KaraokeLog.d(tag, "sendCustomMessage success")
+                    }
+
+                    override fun onError(code: Int, message: String?) {
+                        KaraokeLog.d(tag, "sendCustomMessage onError :$code")
+                    }
+                }
+            )
+        }
+    }
+
+    override fun onCustomMessageReceived(message: NERoomCustomMessage) {
         try {
             val json = JSONObject(message.data)
             val commandId = message.commandId
@@ -829,53 +882,19 @@ internal class AudioPlayServiceImpl :
         }
     }
 
-    override fun onMemberJoinRtcChannel(members: List<NERoomMember>) {
-        members.forEach {
-            rtcController?.subscribeRemoteVideoStream(
-                it.uuid,
-                NEVideoStreamType.LOW
-            )
-        }
+    override fun onSessionMessageAllDeleted(sessionId: String, sessionType: NERoomSessionTypeEnum) {
+        TODO("Not yet implemented")
     }
 
-    override fun onMemberLeaveRtcChannel(members: List<NERoomMember>) {
-        members.forEach {
-            rtcController?.unsubscribeRemoteVideoStream(
-                it.uuid,
-                NEVideoStreamType.LOW
-            )
-        }
+    override fun onSessionMessageDeleted(message: NERoomSessionMessage?) {
+        TODO("Not yet implemented")
     }
 
-    override fun onAudioEffectFinished(effectId: Int) {
-        if (NEKaraokeConstant.EFFECT_ID_ACCOMPANY == effectId) {
-            playCallbacks.forEach {
-                it.onSongPlayCompleted()
-                KaraokeLog.d(
-                    tag,
-                    "onAudioEffectFinished effectId = $effectId"
-                )
-            }
-        }
+    override fun onSessionMessageReceived(message: NERoomSessionMessage?) {
+        TODO("Not yet implemented")
     }
 
-    private fun sendCustomMessage(userUuid: String, commandId: Int, data: String) {
-        roomContext?.roomUuid?.let {
-            NERoomKit.getInstance().messageChannelService.sendCustomMessage(
-                roomUuid = it,
-                userUuid,
-                commandId = commandId,
-                data = data,
-                object : NECallback2<Unit>() {
-                    override fun onSuccess(data: Unit?) {
-                        KaraokeLog.d(tag, "sendCustomMessage success")
-                    }
-
-                    override fun onError(code: Int, message: String?) {
-                        KaraokeLog.d(tag, "sendCustomMessage onError :$code")
-                    }
-                }
-            )
-        }
+    override fun onSessionMessageRecentChanged(messages: List<NERoomRecentSession>?) {
+        TODO("Not yet implemented")
     }
 }

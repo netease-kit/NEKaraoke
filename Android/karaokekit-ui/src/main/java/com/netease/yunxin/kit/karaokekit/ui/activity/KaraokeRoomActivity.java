@@ -64,6 +64,7 @@ import com.netease.yunxin.kit.karaokekit.ui.utils.KaraokeUIUtils;
 import com.netease.yunxin.kit.karaokekit.ui.view.SingingControlView;
 import com.netease.yunxin.kit.karaokekit.ui.viewmodel.KaraokeRoomViewModel;
 import com.netease.yunxin.kit.karaokekit.ui.viewmodel.OrderSongViewModel;
+import com.netease.yunxin.kit.roomkit.api.NERoomChatMessage;
 import com.netease.yunxin.kit.roomkit.api.model.NERoomConnectType;
 import java.util.ArrayList;
 import java.util.List;
@@ -695,10 +696,10 @@ public class KaraokeRoomActivity extends BaseActivity
       NEKaraokeKit.getInstance()
           .sendTextMessage(
               msg,
-              new NEKaraokeCallbackWrapper<Unit>() {
+              new NEKaraokeCallbackWrapper<NERoomChatMessage>() {
 
                 @Override
-                public void onSuccess(Unit unit) {
+                public void onSuccess(NERoomChatMessage unit) {
                   binding.crvMsgList.appendItem(
                       ChatRoomMsgCreator.createText(
                           KaraokeRoomActivity.this,

@@ -25,8 +25,8 @@ android {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
@@ -37,6 +37,7 @@ dependencies {
     implementation("com.netease.yunxin.kit:alog:1.1.0")
     implementation("com.netease.yunxin.kit.common:common:1.3.1")
     implementation("com.netease.yunxin.kit.common:common-network:1.1.8")
-    api("com.netease.yunxin.kit.room:roomkit:1.22.0")
+    api("com.netease.yunxin.kit.room:roomkit:1.34.0")
     api("com.netease.yunxin.kit.copyrightedmedia:copyrightedmedia:1.8.0")
+    api("com.netease.yunxin:nertc-base:5.6.40")
 }
