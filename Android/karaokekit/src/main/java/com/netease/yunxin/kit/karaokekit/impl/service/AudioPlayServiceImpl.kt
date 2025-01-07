@@ -9,6 +9,9 @@ package com.netease.yunxin.kit.karaokekit.impl.service
 import android.media.AudioFormat
 import android.os.Handler
 import android.os.Looper
+import com.netease.lava.nertc.sdk.NERtcConstants
+import com.netease.lava.nertc.sdk.NERtcEx
+import com.netease.lava.nertc.sdk.audio.NERtcAudioFrameRequestFormat
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeAudioFormat
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeAudioFrame
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeConstant
@@ -103,7 +106,7 @@ internal class AudioPlayServiceImpl :
     ) {
         KaraokeLog.i(tag, "originPath : $originPath,  accompanyPath: $accompanyPath，songMode：$mode")
         reset()
-        rtcController?.setParameters("key_audio_external_audio_mix", true)
+        NERtcEx.getInstance().setChannelProfile(NERtcConstants.RTCChannelProfile.Karaoke)
         this.originPath = originPath
         this.realDelayTime = startTimeStamp
         this.accompanyPath = accompanyPath
@@ -182,7 +185,7 @@ internal class AudioPlayServiceImpl :
             }
         }
         rtcController?.setParameters("engine.audio.ktv.chrous", false)
-        rtcController?.setParameters("key_audio_external_audio_mix", false)
+        NERtcEx.getInstance().setChannelProfile(NERtcConstants.RTCChannelProfile.HIGHQUALITY_CHATROOM)
         rtcController?.disableLocalSubStreamAudio() // / 关闭主唱音频辅流
         rtcController?.stopEffect(NEKaraokeConstant.EFFECT_ID_ORIGIN)
         rtcController?.stopEffect(NEKaraokeConstant.EFFECT_ID_ACCOMPANY)
@@ -571,6 +574,13 @@ internal class AudioPlayServiceImpl :
             opMode = NERoomRtcAudioFrameOpMode.audioFrameOpModeReadOnly
         )
         rtcController?.setMixedAudioFrameParameters(mixRequestFormat)
+
+        val beforeMixRequestFormat = NERtcAudioFrameRequestFormat()
+        beforeMixRequestFormat.channels = 2
+        beforeMixRequestFormat.sampleRate = 48000
+        beforeMixRequestFormat.opMode = NERoomRtcAudioFrameOpMode.audioFrameOpModeReadOnly
+
+        NERtcEx.getInstance().setPlaybackBeforeMixingAudioFrameParameters(beforeMixRequestFormat)
     }
 
     /**

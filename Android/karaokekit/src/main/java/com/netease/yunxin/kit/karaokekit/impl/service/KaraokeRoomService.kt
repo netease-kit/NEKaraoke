@@ -121,15 +121,15 @@ internal class KaraokeRoomService : NERoomRtcStatsListener, NEPlayStateChangeCal
     }
 
     private fun setAudioProfile() {
-        currentRoomContext?.rtcController?.setAudioProfile(
-            NERoomRtcAudioProfile.HIGH_QUALITY_STEREO,
-            NERoomRtcAudioScenario.MUSIC
-        )
+//        currentRoomContext?.rtcController?.setAudioProfile(
+//            NERoomRtcAudioProfile.HIGH_QUALITY_STEREO,
+//            NERoomRtcAudioScenario.MUSIC
+//        )
 //        currentRoomContext?.rtcController?.setChannelProfile(
 //            NERoomRtcChannelProfile.liveBroadcasting
 //        )
+        NERtcEx.getInstance().setChannelProfile(NERtcConstants.RTCChannelProfile.HIGHQUALITY_CHATROOM)
 
-        NERtcEx.getInstance().setChannelProfile(NERtcConstants.RTCChannelProfile.Karaoke)
     }
 
     fun joinRoom(roomUuid: String, role: String, userName: String, callback: NECallback2<Unit>) {
