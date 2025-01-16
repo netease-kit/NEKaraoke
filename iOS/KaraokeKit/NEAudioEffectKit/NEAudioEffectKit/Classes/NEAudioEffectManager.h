@@ -41,6 +41,16 @@ NS_ASSUME_NONNULL_BEGIN
 /// 获取采集音量
 - (int)getRecordingSignalVolume;
 
+/// 设置播放音量 [0,400]， 80为原始音量
+/// @param volume 采集音量
+- (int)adjustPlaybackSignalVolume:(int)volume;
+
+/// 获取播放音量
+- (int)getPlaybackSignalVolume;
+
+/// 获取默认的播放音量
+- (int)getDefaultPlaybackSignalVolume;
+
 /// 设置混音音量
 /// @param volume 混音音量
 - (int)setAudioMixingVolume:(int)volume;

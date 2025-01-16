@@ -45,12 +45,12 @@ typedef NS_ENUM(NSInteger, NEKaraokeSeatRequestType) {
 @interface NEKaraokeViewController : UIViewController
 @property(nonatomic, strong) NEKaraokeHeaderView *headerView;            // 头部
 @property(nonatomic, strong) NEKaraokeLyricActionView *lyricActionView;  // 歌词及打分
-@property(nonatomic, strong) NEKaraokeControlView *controlView;  // 调音、暂停、切歌、原唱
-@property(nonatomic, strong) NEKaraokeSeatView *seatView;        // 麦位
-@property(nonatomic, strong) NEKaraokeInputToolBar *bottomView;      // 底部工具栏
-@property(nonatomic, strong) NESocialChatroomView *chatView;         // 聊天室消息列表
-@property(nonatomic, strong) NEKaraokeKeyboardToolbarView *toolBar;  // 键盘工具条
-@property(nonatomic, strong) NEKaraokeAnimationView *giftAnimation;  // 礼物动画
+@property(nonatomic, strong) NEKaraokeControlView *controlView;          // 调音、暂停、切歌、原唱
+@property(nonatomic, strong) NEKaraokeSeatView *seatView;                // 麦位
+@property(nonatomic, strong) NEKaraokeInputToolBar *bottomView;          // 底部工具栏
+@property(nonatomic, strong) NESocialChatroomView *chatView;             // 聊天室消息列表
+@property(nonatomic, strong) NEKaraokeKeyboardToolbarView *toolBar;      // 键盘工具条
+@property(nonatomic, strong) NEKaraokeAnimationView *giftAnimation;      // 礼物动画
 
 @property(nonatomic, assign) NEKaraokeViewRole role;  // 当前的角色
 @property(nonatomic, strong) NEKaraokeRoomInfo *detail;

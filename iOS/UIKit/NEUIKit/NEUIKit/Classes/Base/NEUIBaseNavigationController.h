@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface UIViewController (NEUINavigationItem)
+@interface UIViewController (NEUINavigationItem) <UIGestureRecognizerDelegate>
 @property(nonatomic, strong, readonly) NEUINavigationItem *ne_UINavigationItem;
 @end
 

@@ -117,7 +117,9 @@ typedef enum : NSUInteger {
         self.lineModel.layoutInfo.recordSingLyricCellLyricSize.height);
   }
 
-  { [self reloadLabelFrame]; }
+  {
+    [self reloadLabelFrame];
+  }
 }
 
 - (UIView *)lyricView {

@@ -5,8 +5,8 @@
 import Foundation
 import NERoomKit
 
-@objcMembers
 /// 文本聊天消息
+@objcMembers
 public class NEKaraokeChatTextMessage: NSObject {
   /// 消息来源
   public var fromUserUuid: String = ""

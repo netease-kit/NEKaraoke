@@ -46,6 +46,9 @@ typedef NS_ENUM(NSInteger, NEKaraokeClientEvent) {
 
 @property(nonatomic, assign) NSInteger configId;
 
+// 是否已经在房间内，携带忙碌信息
+@property(nonatomic, copy) BOOL (^canContinueAction)(void);
+
 + (NEKaraokeUIManager *)sharedInstance;
 
 - (void)initializeWithConfig:(NEKaraokeKitConfig *)config
@@ -58,12 +61,6 @@ typedef NS_ENUM(NSInteger, NEKaraokeClientEvent) {
                 callback:(void (^)(NSInteger, NSString *_Nullable, id _Nullable))callback;
 
 - (void)logoutWithCallback:(void (^)(NSInteger, NSString *_Nullable, id _Nullable))callback;
-
-/// 房间创建界面
-- (UINavigationController *)createViewController;
-
-/// 房间列表页
-- (UINavigationController *)roomListViewController;
 
 @end
 

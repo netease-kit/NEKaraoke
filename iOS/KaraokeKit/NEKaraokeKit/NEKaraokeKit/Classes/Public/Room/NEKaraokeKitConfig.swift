@@ -4,9 +4,9 @@
 
 import Foundation
 
+/// KaraokeKit 配置项
 @objcMembers
 
-/// KaraokeKit 配置项
 public class NEKaraokeKitConfig: NSObject {
   /// appKey 为karaoke服务的Key
   public var appKey: String = ""

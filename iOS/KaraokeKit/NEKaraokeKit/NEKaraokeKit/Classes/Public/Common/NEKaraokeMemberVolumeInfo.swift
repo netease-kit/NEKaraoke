@@ -5,8 +5,8 @@
 import Foundation
 import NERoomKit
 
-@objcMembers
 /// 用户音量信息
+@objcMembers
 public class NEKaraokeMemberVolumeInfo: NSObject {
   /// 成员ID
   public var userUuid: String = ""

@@ -5,8 +5,8 @@
 import Foundation
 import NERoomKit
 
-@objcMembers
 /// Karaoke 成员模型
+@objcMembers
 public class NEKaraokeMember: NSObject {
   /// 用户ID
   public var account: String = ""
@@ -21,6 +21,6 @@ public class NEKaraokeMember: NSObject {
     account = member.uuid
     name = member.name
     role = member.role.name
-    isAudioOn = member.properties["recordDevice"] == "on"
+    isAudioOn = member.isAudioOn
   }
 }

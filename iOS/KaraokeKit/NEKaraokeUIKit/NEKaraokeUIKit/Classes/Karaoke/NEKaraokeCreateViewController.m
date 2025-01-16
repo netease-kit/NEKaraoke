@@ -477,6 +477,10 @@
     [NEKaraokeToast showToast:NELocalizedString(@"请开启麦克风权限")];
     return;
   }
+  if ([NEKaraokeUIManager sharedInstance].canContinueAction &&
+      ![NEKaraokeUIManager sharedInstance].canContinueAction()) {
+    return;
+  };
   if ([NEKaraokeUIManager.sharedInstance.delegate respondsToSelector:@selector(inOtherRoom)] &&
       [NEKaraokeUIManager.sharedInstance.delegate inOtherRoom]) {
     __weak typeof(self) weakSelf = self;

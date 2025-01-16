@@ -5,8 +5,8 @@
 import Foundation
 
 /// 点歌协议模型
-@objcMembers
 /// 点歌返回模型
+@objcMembers
 public class NEKaraokeOrderSongModel: NSObject, Codable {
   public var orderSongResultDto: NEKaraokeOrderSongResult?
   // 下一首歌曲
@@ -17,8 +17,8 @@ public class NEKaraokeOrderSongModel: NSObject, Codable {
   public var operatorUser: NEKaraokeOrderSongOperatorUser?
 }
 
-@objcMembers
 /// 点歌返回模型
+@objcMembers
 public class NEKaraokeOrderSongResult: NSObject, Codable {
   public var orderSong: NEKaraokeOrderSongSongModel?
   public var orderSongUser: NEKaraokeOrderSongOperatorUser?
@@ -94,8 +94,8 @@ public class NEKaraokeOrderSongOperatorUser: NSObject, Codable {
   public var icon: String?
 }
 
-@objcMembers
 /// 点歌模型
+@objcMembers
 public class NEKaraokeOrderSongParams: NSObject {
   /// 歌曲标号
   public var songId: String = ""

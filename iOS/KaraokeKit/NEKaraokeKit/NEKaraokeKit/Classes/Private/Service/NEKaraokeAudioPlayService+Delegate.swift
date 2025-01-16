@@ -4,6 +4,7 @@
 
 import Foundation
 import NERoomKit
+import NERtcSDK
 
 extension NEKaraokeAudioPlayService: NERoomRtcAudioFrameObserver {
   func onRecordingAudioFrame(_ audioFrame: NERoomRtcAudioFrame) {
@@ -110,8 +111,7 @@ extension NEKaraokeAudioPlayService: NEMessageChannelListener {
         )
 
         if type == 0 { // 开始播放
-          // 开启AEC模式
-          roomContext.rtcController.setParameters(["key_audio_external_audio_mix": true])
+          NERtcEngine.shared().setChannelProfile(.karaoke)
 
           playOrginalAndAccompany(
             roomContext,

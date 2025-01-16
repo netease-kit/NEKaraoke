@@ -81,7 +81,10 @@
   // 麦克风按钮默认隐藏
   [self.bottomView setMicBtnSelected:YES];
   [self.bottomView isShowMicBtn:NO];
+    
+  [self.audioManager adjustPlaybackSignalVolume:100];
 }
+
 - (void)showControlView:(BOOL)flag {
   self.controlView.hidden = !flag;
   if (flag) {

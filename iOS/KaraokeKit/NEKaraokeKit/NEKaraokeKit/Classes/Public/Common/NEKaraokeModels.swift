@@ -26,8 +26,8 @@ public class NEKaraokeRoomInfo: NSObject {
   }
 }
 
-@objcMembers
 /// 主播信息
+@objcMembers
 public class NEKaraokeAnchor: NSObject {
   /// 用户编号
   public var userUuid: String?
@@ -46,8 +46,8 @@ public class NEKaraokeAnchor: NSObject {
   }
 }
 
-@objcMembers
 /// 直播信息
+@objcMembers
 public class NEKaraokeLiveModel: NSObject {
   /// 应用编号
   public var appId: String = ""
@@ -94,8 +94,8 @@ public class NEKaraokeLiveModel: NSObject {
   }
 }
 
-@objcMembers
 /// Karaoke 房间列表
+@objcMembers
 public class NEKaraokeRoomList: NSObject {
   /// 数据列表
   public var list: [NEKaraokeRoomInfo]?

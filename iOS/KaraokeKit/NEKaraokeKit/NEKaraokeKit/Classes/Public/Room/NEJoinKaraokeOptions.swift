@@ -4,6 +4,6 @@
 
 import Foundation
 
-@objcMembers
 /// 加入房间时配置
+@objcMembers
 public class NEJoinKaraokeOptions: NSObject {}

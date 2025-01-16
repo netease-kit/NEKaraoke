@@ -5,9 +5,9 @@
 import Foundation
 import NERoomKit
 
+/// 创建Karaoke房间参数
 @objcMembers
 
-/// 创建Karaoke房间参数
 public class NECreateKaraokeParams: NSObject {
   /// 房间名称
   public var title: String = ""

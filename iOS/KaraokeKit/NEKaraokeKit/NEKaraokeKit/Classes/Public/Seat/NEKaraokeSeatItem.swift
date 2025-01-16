@@ -5,8 +5,8 @@
 import Foundation
 import NERoomKit
 
-@objc
 /// 麦位状态
+@objc
 public enum NEKaraokeSeatItemStatus: Int {
   /// 麦位初始化 (无人，可上麦)
   case initial = 0
@@ -18,8 +18,8 @@ public enum NEKaraokeSeatItemStatus: Int {
   case closed = -1
 }
 
-@objcMembers
 /// 单个麦位信息
+@objcMembers
 public class NEKaraokeSeatItem: NSObject {
   /// 麦位位置
   public var index: Int = 0

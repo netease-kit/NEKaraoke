@@ -5,8 +5,8 @@
 import Foundation
 import NERoomKit
 
-@objcMembers
 /// 音频帧信息
+@objcMembers
 public class NEKaraokeAudioFrame: NSObject {
   /// 音频格式
   public var format: NEKaraokeAudioFormat
@@ -24,14 +24,14 @@ public class NEKaraokeAudioFrame: NSObject {
   }
 }
 
-@objc
 /// 音频类型
+@objc
 public enum NEKaraokeAudioType: Int {
   case pcm16 = 0
 }
 
-@objcMembers
 /// 音频格式
+@objcMembers
 public class NEKaraokeAudioFormat: NSObject {
   /// 音频类型
   public var type: NEKaraokeAudioType = .pcm16

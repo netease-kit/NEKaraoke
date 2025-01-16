@@ -5,8 +5,8 @@
 import Foundation
 import NERoomKit
 
-@objc
 /// 频谱子带索引 预设值。
+@objc
 public enum NEKaraokeAudioEqualizationBandFrequency: Int {
   /// 31 Hz.
   case band31 = 0
@@ -30,8 +30,8 @@ public enum NEKaraokeAudioEqualizationBandFrequency: Int {
   case band16K
 }
 
-@objcMembers
 /// 混响参数
+@objcMembers
 public class NEKaraokeReverbParam: NSObject {
   ///  湿信号，取值范围[0,1]，默认值0.0f
   public var wetGain: Float = 0.0

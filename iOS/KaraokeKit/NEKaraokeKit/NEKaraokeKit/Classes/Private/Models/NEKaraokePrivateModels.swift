@@ -12,8 +12,8 @@ class _NECreateLiveResponse: NSObject, Codable {
 
 // MARK: 开播
 
-@objcMembers
 /// 主播信息
+@objcMembers
 class _NECreateLiveAnchor: NSObject, Codable {
   /// 用户编号
   var userUuid: String?
@@ -25,8 +25,8 @@ class _NECreateLiveAnchor: NSObject, Codable {
   var icon: String?
 }
 
-@objcMembers
 /// 直播信息
+@objcMembers
 class _NECreateLiveLive: NSObject, Codable {
   /// 应用编号
   public var appId: String?
@@ -58,8 +58,8 @@ class _NECreateLiveLive: NSObject, Codable {
 
 // MARK: 直播列表
 
-@objcMembers
 /// 直播信息
+@objcMembers
 class _NEKaraokeListResponse: NSObject, Codable {
   var pageNum: Int?
   var pageSize: Int?
@@ -83,8 +83,8 @@ class _NEKaraokeListResponse: NSObject, Codable {
 
 // MARK: 直播详情
 
-@objcMembers
 /// 直播信息
+@objcMembers
 class _NEKaraokeInfoResponse: NSObject, Codable {
   var anchor: _NECreateLiveAnchor?
   var live: _NECreateLiveLive?
