@@ -5,7 +5,7 @@
 import Foundation
 
 /// 解析器
-struct NEKaraokeDecoder {
+enum NEKaraokeDecoder {
   static let tag: String = "NEKaraokeDecoder"
 
   // MARK: - ------------------------- 字典转模型 --------------------------

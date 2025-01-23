@@ -3,8 +3,9 @@
 // found in the LICENSE file.
 
 import Foundation
-@objc
+
 /// 邀请操作类型
+@objc
 public enum NEKaraokeInviteAction: Int, Codable {
   /// 邀请
   case invite = 1
@@ -16,8 +17,8 @@ public enum NEKaraokeInviteAction: Int, Codable {
   case cancel
 }
 
-@objcMembers
 /// 邀请请求模型
+@objcMembers
 public class NEKaraokeInviteRequest: NSObject, Codable {
   /// 点歌编号，action=1 时必传
   public var orderId: Int?

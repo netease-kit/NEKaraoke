@@ -4,6 +4,7 @@
 
 import AVFAudio
 import Foundation
+
 /// 歌曲相关接口
 public extension NEKaraokeKit {
   /// 开始唱歌
@@ -387,10 +388,10 @@ public extension NEKaraokeKit {
     }, failure: callback)
   }
 
-  @discardableResult
   /// 切换伴奏和原声
   /// - Parameter enableAccompniment: 是否是伴奏
   /// - Returns: 0代表成功，否则失败
+  @discardableResult
   func switchAccompaniment(_ enableAccompniment: Bool) -> Int {
     NEKaraokeLog.apiLog(kitTag, desc: "Switch accompaniment. Enable: \(enableAccompniment).")
     Judge.condition {

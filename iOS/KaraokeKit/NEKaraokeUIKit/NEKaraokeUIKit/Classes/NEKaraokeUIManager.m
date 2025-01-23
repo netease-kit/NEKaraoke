@@ -61,21 +61,4 @@
   }
 }
 
-- (UINavigationController *)createViewController {
-  UINavigationController *c = [[UINavigationController alloc]
-      initWithRootViewController:[[NEKaraokeCreateViewController alloc] init]];
-  c.modalPresentationStyle = UIModalPresentationFullScreen;
-  return c;
-}
-
-- (UINavigationController *)roomListViewController {
-  UINavigationController *c = [[UINavigationController alloc]
-      initWithRootViewController:[[NEKaraokeListViewController alloc] init]];
-  if (@available(iOS 13.0, *)) {
-    c.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
-  }
-  c.modalPresentationStyle = UIModalPresentationFullScreen;
-  return c;
-}
-
 @end

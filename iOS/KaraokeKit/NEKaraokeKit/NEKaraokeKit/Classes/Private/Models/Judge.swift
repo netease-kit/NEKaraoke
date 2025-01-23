@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct Judge {
+enum Judge {
   /// 前置条件判断
   static func preCondition<T: Any>(_ success: @escaping () -> Void,
                                    failure: NEKaraokeCallback<T>? = nil) {
@@ -32,9 +32,9 @@ struct Judge {
     success()
   }
 
+  /// 同步返回
   @discardableResult
 
-  /// 同步返回
   static func syncCondition(_ success: @escaping () -> Int) -> Int {
     guard NEKaraokeKit.shared().isInitialized else {
       NEKaraokeLog.errorLog(kitTag, desc: "Uninitialized.")

@@ -4,8 +4,8 @@
 
 import Foundation
 
-@objc
 /// 本地音频输出设备
+@objc
 public enum NEKaraokeAudioOutputDevice: UInt {
   /// 扬声器
   case speakerPhone = 0

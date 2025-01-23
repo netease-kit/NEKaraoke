@@ -5,8 +5,8 @@
 import Foundation
 import NERoomKit
 
-@objcMembers
 /// 麦位信息
+@objcMembers
 public class NEKaraokeSeatInfo: NSObject {
   /// 唯一ID
   var uuid: String = ""

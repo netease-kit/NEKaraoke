@@ -4,8 +4,8 @@
 
 import Foundation
 
-@objc
 /// 直播状态
+@objc
 public enum NEKaraokeLiveState: Int {
   /// 未开始
   case notStart = 0

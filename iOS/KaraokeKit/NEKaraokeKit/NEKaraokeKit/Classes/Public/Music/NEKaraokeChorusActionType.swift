@@ -5,10 +5,10 @@
 import Foundation
 
 /// 收到打赏消息
-internal let BATCH_REWARD_TYPE = 1005
+let BATCH_REWARD_TYPE = 1005
 
-@objc
 /// 合唱状态
+@objc
 public enum NEKaraokeChorusActionType: Int {
   /// 取消合唱邀请
   case cancelInvite = 1029
@@ -32,8 +32,8 @@ public enum NEKaraokeChorusActionType: Int {
   case next = 1038
 }
 
-@objc
 /// 点歌状态
+@objc
 public enum NEKaraokePickSongActionType: Int {
   /// 点歌
   case pick = 1008

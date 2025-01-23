@@ -5,8 +5,8 @@
 import Foundation
 import NERoomKit
 
-@objc
 /// SDK API的通用回调接口。SDK提供的接口多为异步实现，在调用这些接口时，需要提供一个该接口的实现作为回调参数
+@objc
 public protocol NEKaraokeListener: NSObjectProtocol {
   /// 成员进入房间回调
   /// - Parameter members: 成员列表

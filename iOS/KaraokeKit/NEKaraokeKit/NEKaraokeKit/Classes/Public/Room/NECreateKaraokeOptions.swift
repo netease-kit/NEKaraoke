@@ -4,6 +4,6 @@
 
 import Foundation
 
-@objcMembers
 /// 创建Karaoke房间配置
+@objcMembers
 public class NECreateKaraokeOptions: NSObject {}

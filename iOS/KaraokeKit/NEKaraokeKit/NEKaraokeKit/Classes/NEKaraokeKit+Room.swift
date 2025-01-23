@@ -3,9 +3,10 @@
 // found in the LICENSE file.
 
 import Foundation
+import NECopyrightedMedia
 import NERoomKit
 import UIKit
-import NECopyrightedMedia
+
 /// 房间操作扩展
 public extension NEKaraokeKit {
   /// 查询房间列表
@@ -330,7 +331,7 @@ public extension NEKaraokeKit {
                      callback: NEKaraokeCallback<AnyObject>? = nil) {
     NEKaraokeLog.infoLog(kitTag, desc: "Kick member out. Account: \(account)")
     Judge.preCondition({
-      self.roomContext!.kickMemberOut(userUuid: account) { code, msg, _ in
+      self.roomContext!.kickMemberOut(userUuid: account, toBlacklist: false) { code, msg, _ in
         if code == 0 {
           NEKaraokeLog.successLog(kitTag, desc: "Successfully kickout member.")
         } else {
@@ -357,29 +358,17 @@ public extension NEKaraokeKit {
         callback?(NEKaraokeErrorCode.failed, "Can't find LocalMember", nil)
         return
       }
-      self.roomContext!.updateMemberProperty(
-        userUuid: local,
-        key: "recordDevice",
-        value: "off"
-      ) { code, msg, _ in
-        if code == 0 {
-          let code = self.roomContext!.rtcController.setRecordDeviceMute(muted: true)
-          if code == 0 {
-            NEKaraokeLog.successLog(kitTag, desc: "Successfully mute my audio.")
-          } else {
-            NEKaraokeLog.errorLog(
-              kitTag,
-              desc: "Failed to mute my audio. Code: \(code). Msg: \(msg ?? "")"
-            )
-          }
-        } else {
+
+      self.roomContext?.rtcController.muteMyAudio(enableMediaPub: true, callback: { code, msg, obj in
+        var res = code
+        if res != 0 {
           NEKaraokeLog.errorLog(
             kitTag,
             desc: "Failed to mute my audio. Code: \(code). Msg: \(msg ?? "")"
           )
         }
-        callback?(code, msg, nil)
-      }
+        callback?(res, msg, nil)
+      })
     }, failure: callback)
   }
 
@@ -396,29 +385,16 @@ public extension NEKaraokeKit {
         callback?(NEKaraokeErrorCode.failed, "Can't find LocalMember", nil)
         return
       }
-      self.roomContext!.updateMemberProperty(
-        userUuid: local,
-        key: "recordDevice",
-        value: "on"
-      ) { code, msg, _ in
-        if code == 0 {
-          let code = self.roomContext!.rtcController.setRecordDeviceMute(muted: false)
-          if code == 0 {
-            NEKaraokeLog.successLog(kitTag, desc: "Successfully mute my audio.")
-          } else {
-            NEKaraokeLog.errorLog(
-              kitTag,
-              desc: "Failed to mute my audio. Code: \(code). Msg: \(msg ?? "")"
-            )
-          }
-        } else {
+      self.roomContext?.rtcController.unmuteMyAudio(enableMediaPub: true, callback: { code, msg, obj in
+        var res = code
+        if res != 0 {
           NEKaraokeLog.errorLog(
             kitTag,
             desc: "Failed to unmute my audio. Code: \(code). Msg: \(msg ?? "")"
           )
         }
-        callback?(code, msg, nil)
-      }
+        callback?(res, msg, nil)
+      })
     }, failure: callback)
   }
 
@@ -459,10 +435,10 @@ public extension NEKaraokeKit {
     }, failure: callback)
   }
 
-  @discardableResult
   /// 调节播放歌曲的音量
   /// - Parameter volume: 音量  范围为 [0-100]
   /// - Returns: 0代表成功，否则失败
+  @discardableResult
   func adjustPlayingSongVolume(_ volume: UInt32) -> Int {
     NEKaraokeLog.infoLog(kitTag, desc: "Adjust play music volume. Volume: \(volume)")
     guard let roomContext = roomContext else {
@@ -482,10 +458,10 @@ public extension NEKaraokeKit {
     return NEKaraokeErrorCode.failed
   }
 
-  @discardableResult
   /// 调节人声音
   /// - Parameter volume: 音量  范围为 [0-100]
   /// - Returns: 0代表成功，否则失败
+  @discardableResult
   func adjustRecordingSignalVolume(_ volume: UInt32) -> Int {
     NEKaraokeLog.infoLog(kitTag, desc: "Adjust recording signal volume. Volume: \(volume)")
     return Judge.syncCondition {
@@ -493,10 +469,10 @@ public extension NEKaraokeKit {
     }
   }
 
-  @discardableResult
   /// 变调
   /// - Parameter pitch: 音调
   /// - Returns: 0代表成功，否则失败
+  @discardableResult
   func setLocalVoicePitch(_ pitch: Double) -> Int {
     NEKaraokeLog.infoLog(kitTag, desc: "Set local voice pitch. Pitch: \(pitch)")
     return Judge.syncCondition {
@@ -504,13 +480,13 @@ public extension NEKaraokeKit {
     }
   }
 
-  @discardableResult
   /// 调节音效升降key。
   /// 发起音效后可调解。伴音结束后再发起需要重新设置。
   /// 音调pitch取值范围为 [-12,12]，每相邻两个值的音高距离相差半音。取值的绝对值越大，音调升高或降低得越多。
   /// - Parameters:
   ///   - pitch: 按半音音阶调整本地播放音乐的音调，默认值为0，即不调整音调。取值范围为 [-12,12]。
   /// - Returns: 0: 代表成功 否则失败
+  @discardableResult
   func setPlayingSongPitch(_ pitch: Int32) -> Int {
     NEKaraokeLog.infoLog(kitTag, desc: "Set playing song pitch. Pitch: \(pitch)")
     guard let roomContext = roomContext else {
@@ -527,10 +503,10 @@ public extension NEKaraokeKit {
     return NEKaraokeErrorCode.failed
   }
 
-  @discardableResult
   /// 音效混响
   /// - Parameter param: 混响参数
   /// - Returns: 0代表成功，否则失败
+  @discardableResult
   func setLocalVoiceReverbParam(_ param: NEKaraokeReverbParam) -> Int {
     NEKaraokeLog.infoLog(kitTag, desc: "Set local voice reverb param. Param: \(param)")
     return Judge.syncCondition {
@@ -538,13 +514,13 @@ public extension NEKaraokeKit {
     }
   }
 
-  @discardableResult
   /// 音效均衡
   /// - Parameters:
   ///   - bandFrequency: 频谱子带索引，取值范围是 [0-9]，分别代表 10 个频带，对应的中心频率是 [31，62，125，250，500，1k，2k，4k，8k，16k]
-  // Hz
   ///   - bandGain: 每个 band 的增益，单位是 dB，每一个值的范围是 [-15，15]，默认值为 0
   /// - Returns: 0代表成功，否则失败
+  @discardableResult
+  // Hz
   func setLocalVoiceEqualization(_ bandFrequency: NEKaraokeAudioEqualizationBandFrequency,
                                  bandGain: Int) -> Int {
     NEKaraokeLog.infoLog(
@@ -559,10 +535,10 @@ public extension NEKaraokeKit {
     }
   }
 
-  @discardableResult
   /// 开启耳返
   /// - Parameter volume: 耳返音量 范围: [0-100]
   /// - Returns: 0代表成功 否则失败
+  @discardableResult
   func enableEarBack(volume: UInt32) -> Int {
     NEKaraokeLog.infoLog(kitTag, desc: "Enable earback. Volume: \(volume).")
     return Judge.syncCondition {
@@ -576,9 +552,9 @@ public extension NEKaraokeKit {
     }
   }
 
-  @discardableResult
   /// 关闭耳返
   /// - Returns: 0: 代表成功 否则失败
+  @discardableResult
   func disableEarBack() -> Int {
     NEKaraokeLog.infoLog(kitTag, desc: "Disable earback.")
     return Judge.syncCondition {
@@ -592,17 +568,17 @@ public extension NEKaraokeKit {
     }
   }
 
-  @discardableResult
   /// 获取当前播放音乐长度
   /// - Returns: 长度
+  @discardableResult
   func getEffectDuration() -> UInt64 {
     audioPlayService?.getEffectDuration() ?? 0
   }
 
-  @discardableResult
   /// 设置音乐播放位置
   /// - Parameter position: 播放位置，单位毫秒
   /// - Returns: 0成功，其他失败
+  @discardableResult
   func setPlayingPosition(position: UInt64) -> Int {
     audioPlayService?.setEffectPosition(position: position) ?? -1
   }

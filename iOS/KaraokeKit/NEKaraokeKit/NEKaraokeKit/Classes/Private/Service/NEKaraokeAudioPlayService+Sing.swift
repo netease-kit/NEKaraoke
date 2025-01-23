@@ -4,6 +4,8 @@
 
 import Foundation
 import NERoomKit
+import NERtcSDK
+
 /// 唱歌模式扩展
 extension NEKaraokeAudioPlayService {
   @objc
@@ -92,8 +94,8 @@ extension NEKaraokeAudioPlayService {
                  accompanyPath: String,
                  volume: Int) -> Int {
     NEKaraokeLog.infoLog(kitTag, desc: "startSolo.")
-    // 开启AEC模式
-    roomContext.rtcController.setParameters(["key_audio_external_audio_mix": true])
+    NERtcEngine.shared().setChannelProfile(.karaoke)
+
     let code = playOrginalAndAccompany(roomContext, orginalPath, accompanyPath, volume)
     if code == 0 {
       NEKaraokeLog.successLog(kitTag, desc: "Successfully play music. start play timer")
@@ -124,7 +126,8 @@ extension NEKaraokeAudioPlayService {
     chorusId = choristerId
     if singer == .anchor { // 主唱
       // 开启AEC模式
-      roomContext.rtcController.setParameters(["key_audio_external_audio_mix": true])
+      NERtcEngine.shared().setChannelProfile(.karaoke)
+
       let code = playOrginalAndAccompany(roomContext, orginalPath, accompanyPath, volume)
       if code == 0 {
         NEKaraokeLog.successLog(kitTag, desc: "Successfully anchor serial chorus. start play timer")
@@ -167,9 +170,10 @@ extension NEKaraokeAudioPlayService {
     if singer == .anchor { // 主唱
       /// 开启低延时
       roomContext.rtcController.setParameters(["engine.audio.ktv.chrous": true])
+      NERtcEngine.shared().setChannelProfile(.karaoke)
+
       roomContext.rtcController.enableLocalSubstreamAudio()
-      // 开启AEC模式
-      roomContext.rtcController.setParameters(["key_audio_external_audio_mix": true])
+
       let localTime = Int64(NSDate().timeIntervalSince1970 * 1000) + timestamp
       let code = playOrginalAndAccompany(
         roomContext,
@@ -218,8 +222,8 @@ extension NEKaraokeAudioPlayService {
       NEKaraokeLog.infoLog(kitTag, desc: "实时副唱. anchorId: \(anchorId)")
       /// 开启低延时
       self.roomContext?.rtcController.setParameters(["engine.audio.ktv.chrous": true])
-      // 开启AEC模式
-      self.roomContext?.rtcController.setParameters(["key_audio_external_audio_mix": true])
+      NERtcEngine.shared().setChannelProfile(.karaoke)
+        
       // 不订阅主唱音频辅流
       self.roomContext?.rtcController.unsubscribeRemoteAudioSubStream(anchorId)
 

@@ -4,8 +4,8 @@
 
 import Foundation
 
-@objc
 /// 结束Karaoke 原因
+@objc
 public enum NEKaraokeEndReason: UInt {
   /// 成员主动离开房间
   case leaveBySelf

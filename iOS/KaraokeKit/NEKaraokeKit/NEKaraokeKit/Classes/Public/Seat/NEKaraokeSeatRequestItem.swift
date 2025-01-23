@@ -4,8 +4,9 @@
 
 import Foundation
 import NERoomKit
-@objcMembers
+
 /// 麦位请求模型
+@objcMembers
 public class NEKaraokeSeatRequestItem: NSObject {
   /// 麦位位置，如果为-1，表示未指定位置。
   public var index: Int = -1

@@ -4,8 +4,8 @@
 
 import Foundation
 
-@objcMembers
 /// 动作操作人
+@objcMembers
 public class NEKaraokeOperator: NSObject, Codable {
   /// 操作人ID
   private var userUuid: String?
@@ -19,8 +19,8 @@ public class NEKaraokeOperator: NSObject, Codable {
   public var icon: String?
 }
 
-@objcMembers
 /// 邀请合唱模型
+@objcMembers
 public class NEKaraokeSongModel: NSObject, Codable {
   /// 额外参数
   public var ext: [String: Any]?

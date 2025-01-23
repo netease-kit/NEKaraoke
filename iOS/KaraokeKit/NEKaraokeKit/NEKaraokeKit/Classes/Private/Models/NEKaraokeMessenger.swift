@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct NEKaraokeMessenger {
+enum NEKaraokeMessenger {
   enum Code {
     // 消息ID
     static var commandId: Int = 10000

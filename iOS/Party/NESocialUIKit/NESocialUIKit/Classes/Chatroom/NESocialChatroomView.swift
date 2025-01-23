@@ -256,7 +256,7 @@ class NESocialChatroomCell: UITableViewCell {
   func caculateCellSize(_ messages: [NESocialChatroomMessage]) {
     let width = frame.width
     caculateQueue.async {
-      messages.forEach { message in
+      for message in messages {
         message.caculateCellSize(maxWidth: width - 10)
         self.messages.append(message)
       }

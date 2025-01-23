@@ -17,6 +17,7 @@
 @property(nonatomic, strong) NEAERecordPanelSlideView *earbackSlider;
 @property(nonatomic, strong) NEAERecordPanelSlideView *accompanySlider;
 @property(nonatomic, strong) NEAERecordPanelSlideView *voiceSlider;
+@property(nonatomic, strong) NEAERecordPanelSlideView *playbackVoiceSlider;
 @property(nonatomic, strong) NEAEStepView *keyView;
 @property(nonatomic, strong) NEAERecordPanelSlideView *strengthSlider;
 @property(nonatomic, strong) UILabel *tipsLabel;
@@ -110,9 +111,16 @@
     make.height.mas_equalTo(22);
   }];
 
+  [self.view addSubview:self.playbackVoiceSlider];
+  [self.playbackVoiceSlider mas_makeConstraints:^(MASConstraintMaker *make) {
+    make.top.equalTo(self.voiceSlider.mas_bottom).offset(28);
+    make.left.right.equalTo(self.view);
+    make.height.mas_equalTo(22);
+  }];
+
   [self.view addSubview:self.keyView];
   [self.keyView mas_makeConstraints:^(MASConstraintMaker *make) {
-    make.top.equalTo(self.voiceSlider.mas_bottom).offset(28);
+    make.top.equalTo(self.playbackVoiceSlider.mas_bottom).offset(28);
     make.left.right.equalTo(self.view);
     make.height.mas_equalTo(30);
   }];
@@ -173,6 +181,7 @@
         slideToValue:[self.manager getAudioEffectVolumeWithEffectId:self.currentEffectId]
             animated:true];
     [self.voiceSlider.slider slideToValue:[self.manager getRecordingSignalVolume] animated:true];
+    [self.playbackVoiceSlider.slider slideToValue:[self.manager getPlaybackSignalVolume] animated:true];
     [self.strengthSlider.slider slideToValue:[self.manager getReverbIntensity] animated:true];
     self.keyView.step = [self.manager getEffectPitchWithEffectId:self.currentEffectId];
 
@@ -206,6 +215,23 @@
   } else {
     [self.manager enableEarback:false];
   }
+}
+
+- (NEAERecordPanelSlideView *)playbackVoiceSlider{
+  if (!_playbackVoiceSlider) {
+    _playbackVoiceSlider = [[NEAERecordPanelSlideView alloc] initWithMinValue:0 maxValue:100];
+    _playbackVoiceSlider.slider.showRecommendValue = YES;
+    _playbackVoiceSlider.slider.shakeWhenReachRecommendValue = YES;
+    _playbackVoiceSlider.titleL.text = @"他人合唱音量";
+    _playbackVoiceSlider.slider.defaultValue = [self.manager getPlaybackSignalVolume];
+    _playbackVoiceSlider.slider.recommendValue = 10;
+    __weak typeof(self) weakSelf = self;
+    _playbackVoiceSlider.slider.valueChangedBlock = ^(CGFloat value) {
+      __strong typeof(weakSelf) self = weakSelf;
+      [self.manager adjustPlaybackSignalVolume:value];
+    };
+  }
+  return _playbackVoiceSlider;
 }
 
 - (NEAERecordPanelSlideView *)voiceSlider {

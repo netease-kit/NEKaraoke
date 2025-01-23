@@ -2,11 +2,11 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
-import SnapKit
 import LottieSwift
-import NEKaraokeUIKit
 import NECoreKit
+import NEKaraokeUIKit
+import SnapKit
+import UIKit
 
 class NPTHomeCell: UITableViewCell {
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -75,12 +75,11 @@ class NPTHomeCell: UITableViewCell {
 }
 
 class NPTHomeViewController: UIViewController {
-  
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     navigationController?.setNavigationBarHidden(false, animated: true)
   }
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.

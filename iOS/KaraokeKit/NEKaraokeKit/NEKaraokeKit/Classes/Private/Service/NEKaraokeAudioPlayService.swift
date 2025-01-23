@@ -4,6 +4,7 @@
 
 import Foundation
 import NERoomKit
+import NERtcSDK
 
 enum NEKaraokeSinger {
   // 主唱
@@ -14,8 +15,8 @@ enum NEKaraokeSinger {
   case audience
 }
 
-@objc
 /// K 歌模式
+@objc
 public enum NEKaraokeSongMode: Int {
   /// 独唱
   case solo
@@ -100,9 +101,8 @@ class NEKaraokeAudioPlayService: NSObject {
     // 监听音频
     roomContext?.rtcController.setAudioFrame(withObserver: self)
     // 会前 设置场景
-    roomContext?.rtcController.setChannelProfile(.liveBroadcasting)
-    // 设置音频编码属性
-    roomContext?.rtcController.setAudioProfile(.highQualityStereo, scenario: .music)
+    NERtcEngine.shared().setChannelProfile(.highQualityChatroom)
+      
     // 设置录制和播放声音混音后的数据格式
     let format = NERoomRtcAudioFrameRequestFormat()
     format.channels = 2
@@ -200,20 +200,20 @@ class NEKaraokeAudioPlayService: NSObject {
     }
   }
 
-  @discardableResult
   /// 暂停歌曲
+  @discardableResult
   func pauseSong() -> Int {
     roomContext?.rtcController.pauseAllEffects() ?? NEKaraokeErrorCode.failed
   }
 
-  @discardableResult
   /// 恢复播放
+  @discardableResult
   func resumeSong() -> Int {
     roomContext?.rtcController.resumeAllEffects() ?? NEKaraokeErrorCode.failed
   }
 
-  @discardableResult
   /// 停止播放
+  @discardableResult
   func stopSong() -> Int {
     roomContext?.rtcController.stopAllEffects() ?? NEKaraokeErrorCode.failed
   }
@@ -225,7 +225,7 @@ class NEKaraokeAudioPlayService: NSObject {
     playTimer = nil
     if singer == .anchor {
       // 关闭AEC模式
-      roomContext?.rtcController.setParameters(["key_audio_external_audio_mix": false])
+      NERtcEngine.shared().setChannelProfile(.highQualityChatroom)
       if mode == .seaialChorus { // 主唱 - 串行
         if let chorusId = chorusId {
           roomContext?.rtcController.subscribeRemoteAudio(userUuid: chorusId)
@@ -233,6 +233,7 @@ class NEKaraokeAudioPlayService: NSObject {
         roomContext?.rtcController.setAudioSubscribeOnlyBy([])
       } else if mode == .realTimeChorus { // 主唱 - 实时
         roomContext?.rtcController.setParameters(["engine.audio.ktv.chrous": false])
+
         roomContext?.rtcController.disableLocalSubstreamAudio()
         if let chorusId = chorusId {
           roomContext?.rtcController.subscribeRemoteVideoStream(
@@ -242,10 +243,9 @@ class NEKaraokeAudioPlayService: NSObject {
         }
       }
     } else if singer == .chorister {
-      // 关闭AEC模式
-      roomContext?.rtcController.setParameters(["key_audio_external_audio_mix": false])
       if mode == .realTimeChorus { // 副唱 - 实时
         roomContext?.rtcController.setParameters(["engine.audio.ktv.chrous": false])
+          NERtcEngine.shared().setChannelProfile(.highQualityChatroom)
         // 不订阅主唱音频辅流
         roomContext?.rtcController.subscribeRemoteAudioSubStream(anchorId)
         roomContext?.rtcController.subscribeRemoteVideoStream(

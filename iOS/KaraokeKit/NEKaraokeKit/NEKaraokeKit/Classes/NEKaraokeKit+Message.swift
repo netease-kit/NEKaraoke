@@ -107,18 +107,7 @@ public extension NEKaraokeKit {
 extension NEKaraokeKit: NERoomListener {
   /// 成员属性变更
   public func onMemberPropertiesChanged(member: NERoomMember, properties _: [String: String]) {
-    DispatchQueue.main.async {
-      for pointerListener in self.listeners.allObjects {
-        guard pointerListener is NEKaraokeListener,
-              let listener = pointerListener as? NEKaraokeListener else { continue }
-        let item = NEKaraokeMember(member)
-        if listener
-          .responds(to: #selector(NEKaraokeListener
-              .onMemberAudioMuteChanged(_:mute:operateBy:))) {
-          listener.onMemberAudioMuteChanged?(item, mute: !item.isAudioOn, operateBy: nil)
-        }
-      }
-    }
+    DispatchQueue.main.async {}
   }
 
   public func onMemberJoinRtcChannel(members: [NERoomMember]) {
