@@ -7,11 +7,12 @@
 package com.netease.yunxin.kit.karaokekit.impl.utils
 
 import android.text.TextUtils
-import com.netease.yunxin.kit.karaokekit.api.MUTE_VOICE_KEY
-import com.netease.yunxin.kit.karaokekit.api.MUTE_VOICE_VALUE_ON
+import com.netease.yunxin.kit.karaokekit.api.NEKaraokeKit
+import com.netease.yunxin.kit.karaokekit.api.NEKaraokeRole
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeAnchor
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeBatchGiftModel
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeLiveModel
+import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeMember
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeOrderSongOperatorUser
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeRoomInfo
 import com.netease.yunxin.kit.karaokekit.api.model.NEKaraokeRoomList
@@ -31,6 +32,29 @@ import com.netease.yunxin.kit.roomkit.api.service.NESeatItem
 import com.netease.yunxin.kit.roomkit.api.service.NESeatRequestItem
 
 internal object KaraokeUtils {
+
+    fun isLocal(uuid: String?): Boolean {
+        return NEKaraokeKit.getInstance().localMember != null &&
+            TextUtils.equals(NEKaraokeKit.getInstance().localMember!!.account, uuid)
+    }
+
+    fun isHost(uuid: String?): Boolean {
+        val member: NEKaraokeMember =
+            getMember(uuid)
+                ?: return false
+        return TextUtils.equals(member.role, NEKaraokeRole.HOST.value)
+    }
+
+    fun getMember(uuid: String?): NEKaraokeMember? {
+        val allMemberList = NEKaraokeKit.getInstance().allMemberList
+        for (i in allMemberList.indices) {
+            val member = allMemberList[i]
+            if (TextUtils.equals(member.account, uuid)) {
+                return member
+            }
+        }
+        return null
+    }
 
     fun karaokeRoomInfo2NEKaraokeRoomInfo(karaokeRoomInfo: KaraokeRoomInfo): NEKaraokeRoomInfo {
         return NEKaraokeRoomInfo(
@@ -131,10 +155,6 @@ internal object KaraokeUtils {
         if (roomMember == null) {
             return false
         }
-        val properties = roomMember.properties
-        return properties.containsKey(MUTE_VOICE_KEY) && TextUtils.equals(
-            properties[MUTE_VOICE_KEY],
-            MUTE_VOICE_VALUE_ON
-        )
+        return roomMember.isAudioOn
     }
 }

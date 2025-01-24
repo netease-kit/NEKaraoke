@@ -12,6 +12,7 @@ plugins {
 
 android {
     compileSdk = 33
+    namespace = "com.netease.yunxin.kit.karaokekit.audioeffect"
     buildFeatures {
         viewBinding = true
     }

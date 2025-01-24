@@ -5,6 +5,7 @@
 package com.netease.yunxin.kit.karaokekit.audioeffect.ui;
 
 import static com.netease.yunxin.kit.karaokekit.audioeffect.ui.ToneContract.ToneUIState.DEFAULT_RECORD_SIGNAL_VOLUME_MAX;
+import static com.netease.yunxin.kit.karaokekit.audioeffect.ui.ToneContract.ToneUIState.DeFAULT_OTHER_SIGNAL_VOLUME_MAX;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -90,6 +91,10 @@ public class ToneDialogFragment extends BottomSheetDialogFragment {
     binding.toneDialogFragmentRecordingVolumeSeekbar.setOnSeekBarChangeListener(
         (OnSeekBarChangeListenerAdapter)
             (seekBar, progress, fromUser) -> viewModel.setRecordingSignalVolume(progress));
+    binding.toneDialogFragmentOtherRecordingVolumeSeekbar.setMax(DeFAULT_OTHER_SIGNAL_VOLUME_MAX);
+    binding.toneDialogFragmentOtherRecordingVolumeSeekbar.setOnSeekBarChangeListener(
+        (OnSeekBarChangeListenerAdapter)
+            (seekBar, progress, fromUser) -> viewModel.adjustPlaybackSignalVolume(progress));
     binding.toneDialogFragmentReverberationStrengthSeekbar.setOnSeekBarChangeListener(
         (OnSeekBarChangeListenerAdapter)
             (seekBar, progress, fromUser) -> viewModel.setReverberationStrength(progress));
@@ -139,6 +144,8 @@ public class ToneDialogFragment extends BottomSheetDialogFragment {
               binding.toneDialogFragmentEffectVolumeSeekbar.setProgress(toneUIState.effectVolume);
               binding.toneDialogFragmentRecordingVolumeSeekbar.setProgress(
                   toneUIState.recordingSignalVolume);
+              binding.toneDialogFragmentOtherRecordingVolumeSeekbar.setProgress(
+                  toneUIState.otherSignalVolume);
               if (toneUIState.reverberationStrength > 0) {
                 binding.toneDialogFragmentReverberationStrengthSeekbar.setProgress(
                     toneUIState.reverberationStrength);
@@ -161,12 +168,7 @@ public class ToneDialogFragment extends BottomSheetDialogFragment {
             });
 
     if (NEAudioEffectManager.INSTANCE.isHeadsetOn(context)) {
-      if (viewModel.isFirstShow) {
-        // 第一次进来，插着耳机状态下默认打开耳返功能
-        viewModel.setEarBackEnable(true);
-      } else {
-        viewModel.setEarBackEnable(NEAudioEffectManager.INSTANCE.isEarBackEnable());
-      }
+      viewModel.setEarBackEnable(NEAudioEffectManager.INSTANCE.isEarBackEnable());
     }
     if (viewModel.isFirstShow) {
       viewModel.isFirstShow = false;

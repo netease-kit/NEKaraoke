@@ -106,7 +106,7 @@ internal class AudioPlayServiceImpl :
     ) {
         KaraokeLog.i(tag, "originPath : $originPath,  accompanyPath: $accompanyPath，songMode：$mode")
         reset()
-        NERtcEx.getInstance().setChannelProfile(NERtcConstants.RTCChannelProfile.Karaoke)
+        rtcController?.setChannelProfile(NERtcConstants.RTCChannelProfile.Karaoke)
         this.originPath = originPath
         this.realDelayTime = startTimeStamp
         this.accompanyPath = accompanyPath
@@ -185,7 +185,7 @@ internal class AudioPlayServiceImpl :
             }
         }
         rtcController?.setParameters("engine.audio.ktv.chrous", false)
-        NERtcEx.getInstance().setChannelProfile(NERtcConstants.RTCChannelProfile.HIGHQUALITY_CHATROOM)
+        rtcController?.setChannelProfile(NERtcConstants.RTCChannelProfile.HIGHQUALITY_CHATROOM)
         rtcController?.disableLocalSubStreamAudio() // / 关闭主唱音频辅流
         rtcController?.stopEffect(NEKaraokeConstant.EFFECT_ID_ORIGIN)
         rtcController?.stopEffect(NEKaraokeConstant.EFFECT_ID_ACCOMPANY)
@@ -574,12 +574,10 @@ internal class AudioPlayServiceImpl :
             opMode = NERoomRtcAudioFrameOpMode.audioFrameOpModeReadOnly
         )
         rtcController?.setMixedAudioFrameParameters(mixRequestFormat)
-
         val beforeMixRequestFormat = NERtcAudioFrameRequestFormat()
         beforeMixRequestFormat.channels = 2
         beforeMixRequestFormat.sampleRate = 48000
         beforeMixRequestFormat.opMode = NERoomRtcAudioFrameOpMode.audioFrameOpModeReadOnly
-
         NERtcEx.getInstance().setPlaybackBeforeMixingAudioFrameParameters(beforeMixRequestFormat)
     }
 

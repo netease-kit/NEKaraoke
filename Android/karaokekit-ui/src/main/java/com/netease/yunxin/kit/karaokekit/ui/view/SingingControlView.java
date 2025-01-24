@@ -326,25 +326,14 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
                 refreshSingView();
                 preludeTime = lyricBusinessModel.preludeTime;
                 llyControl.setVisibility(VISIBLE);
-                NEAudioEffectManager.INSTANCE.adjustRecordingSignalVolume(
-                    NEAudioEffectManager.INSTANCE.getRecordingSignalVolume());
-                if (finalOriginPath != null && finalAccompanyPath != null) {
-                  NEKaraokeKit.getInstance()
-                      .playSong(
-                          finalOriginPath,
-                          finalAccompanyPath,
-                          NEAudioEffectManager.INSTANCE.getAudioMixingVolume(),
-                          anchorUuid,
-                          chorusUid,
-                          startTimeStamp,
-                          true,
-                          NEKaraokeSongMode.SOLO,
-                          null);
-                } else {
-                  ALog.e(
-                      TAG,
-                      "loadLyric1 success but finalOriginPath == null or finalAccompanyPath == null");
-                }
+                playSong(
+                    finalOriginPath,
+                    finalAccompanyPath,
+                    anchorUuid,
+                    chorusUid,
+                    startTimeStamp,
+                    true,
+                    NEKaraokeSongMode.SOLO);
                 // 显示歌词，可能会导致上一首歌的音频数据还在回调，先放在play后面
                 showLyricAndScore(lyricBusinessModel);
               }
@@ -364,42 +353,41 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
       switchKTVState(KTV_STATE_SINGING);
       if (isLocalMain()) { // 主唱
         initLyricView();
-        if (originPath != null && accompanyPath != null) {
-          NEKaraokeKit.getInstance()
-              .playSong(
-                  originPath,
-                  accompanyPath,
-                  NEAudioEffectManager.INSTANCE.getAudioMixingVolume(),
-                  anchorUuid,
-                  chorusUid,
-                  REAL_DELAY_TIME,
-                  true,
-                  mode,
-                  null);
-        } else {
-          ALog.e(TAG, "playSong2 but originPath == null or accompanyPath == null");
-        }
+        playSong(originPath, accompanyPath, anchorUuid, chorusUid, REAL_DELAY_TIME, true, mode);
       } else if (isLocalAssistant()) { // 副唱
         initLyricView();
-        if (originPath != null && accompanyPath != null) {
-          NEKaraokeKit.getInstance()
-              .playSong(
-                  originPath,
-                  accompanyPath,
-                  NEAudioEffectManager.INSTANCE.getAudioMixingVolume(),
-                  anchorUuid,
-                  chorusUid,
-                  REAL_DELAY_TIME,
-                  false,
-                  mode,
-                  null);
-        } else {
-          ALog.e(TAG, "playSong3 success but originPath == null or accompanyPath == null");
-        }
+        playSong(originPath, accompanyPath, anchorUuid, chorusUid, REAL_DELAY_TIME, false, mode);
       } else { // 听众
         initLyricView();
       }
     }
+  }
+
+  private void playSong(
+      String finalOriginPath,
+      String finalAccompanyPath,
+      String anchorUuid,
+      String chorusUid,
+      long startTimeStamp,
+      boolean isAnchor,
+      NEKaraokeSongMode mode) {
+
+    NEAudioEffectManager.INSTANCE.adjustRecordingSignalVolumeWithRemember(
+        NEAudioEffectManager.INSTANCE.getRecordingSignalVolume());
+    NEAudioEffectManager.INSTANCE.adjustPlaybackSignalVolumeWithRemember(
+        NEAudioEffectManager.INSTANCE.getOtherSignalVolume());
+
+    NEKaraokeKit.getInstance()
+        .playSong(
+            finalOriginPath,
+            finalAccompanyPath,
+            NEAudioEffectManager.INSTANCE.getAudioMixingVolume(),
+            anchorUuid,
+            chorusUid,
+            startTimeStamp,
+            isAnchor,
+            mode,
+            null);
   }
 
   private void handleControlView(boolean enableSwitchSongTypeNotSerial) {
@@ -649,6 +637,10 @@ public class SingingControlView extends LinearLayout implements ISingViewControl
       songModelChangeListener.onSongModelChange(null);
     }
     switchKTVState(KTV_STATE_INIT);
+    NEAudioEffectManager.INSTANCE.adjustRecordingSignalVolume(
+        NEAudioEffectManager.DEFAULT_RECORDING_SIGNAL_VOLUME);
+    NEAudioEffectManager.INSTANCE.adjustPlaybackSignalVolume(
+        NEAudioEffectManager.DEFAULT_OTHER_SIGNAL_VOLUME);
     currentSongModel = null;
   }
 

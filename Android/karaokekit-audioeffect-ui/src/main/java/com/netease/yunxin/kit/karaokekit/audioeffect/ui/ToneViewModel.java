@@ -5,6 +5,7 @@
 package com.netease.yunxin.kit.karaokekit.audioeffect.ui;
 
 import static com.netease.yunxin.kit.karaokekit.audioeffect.ui.ToneContract.ToneUIState.DEFAULT_EFFECT_VALUE;
+import static com.netease.yunxin.kit.karaokekit.audioeffect.ui.ToneContract.ToneUIState.DEFAULT_OTHER_SIGNAL_VOLUME;
 import static com.netease.yunxin.kit.karaokekit.audioeffect.ui.ToneContract.ToneUIState.DEFAULT_RECORD_SIGNAL_VOLUME;
 import static com.netease.yunxin.kit.karaokekit.audioeffect.ui.ToneContract.ToneUIState.DEFAULT_VALUE;
 import static com.netease.yunxin.kit.karaokekit.audioeffect.ui.ToneContract.ToneUIState.INVALID_EFFECT_STRENGTH;
@@ -52,6 +53,7 @@ public class ToneViewModel extends AndroidViewModel implements ToneContract.View
     toneUIState.effectVolume = DEFAULT_EFFECT_VALUE;
     toneUIState.effectPitch = 0;
     toneUIState.recordingSignalVolume = DEFAULT_RECORD_SIGNAL_VOLUME;
+    toneUIState.otherSignalVolume = DEFAULT_OTHER_SIGNAL_VOLUME;
     toneUIState.reverberationStrength = INVALID_EFFECT_STRENGTH;
     this.toneUIState.setValue(toneUIState);
   }
@@ -72,6 +74,7 @@ public class ToneViewModel extends AndroidViewModel implements ToneContract.View
                 state.earBackVolume,
                 state.effectVolume,
                 state.recordingSignalVolume,
+                state.otherSignalVolume,
                 state.effectPitch,
                 state.reverberationType,
                 state.reverberationStrength));
@@ -91,6 +94,7 @@ public class ToneViewModel extends AndroidViewModel implements ToneContract.View
               volume,
               state.effectVolume,
               state.recordingSignalVolume,
+              state.otherSignalVolume,
               state.effectPitch,
               state.reverberationType,
               state.reverberationStrength));
@@ -108,6 +112,7 @@ public class ToneViewModel extends AndroidViewModel implements ToneContract.View
             state.earBackVolume,
             volume,
             state.recordingSignalVolume,
+            state.otherSignalVolume,
             state.effectPitch,
             state.reverberationType,
             state.reverberationStrength));
@@ -124,6 +129,7 @@ public class ToneViewModel extends AndroidViewModel implements ToneContract.View
             state.earBackVolume,
             state.effectVolume,
             state.recordingSignalVolume,
+            state.otherSignalVolume,
             pitch,
             state.reverberationType,
             state.reverberationStrength));
@@ -150,13 +156,31 @@ public class ToneViewModel extends AndroidViewModel implements ToneContract.View
   @Override
   public void setRecordingSignalVolume(int volume) {
     ALog.d(TAG, "setRecordingSignalVolume,volume:" + volume);
-    audioEffectManager.adjustRecordingSignalVolume(volume);
+    audioEffectManager.adjustRecordingSignalVolumeWithRemember(volume);
     final ToneContract.ToneUIState state = toneUIState.getValue();
     toneUIState.setValue(
         new ToneContract.ToneUIState(
             state.earBackEnabled,
             state.earBackVolume,
             state.effectVolume,
+            volume,
+            state.otherSignalVolume,
+            state.effectPitch,
+            state.reverberationType,
+            state.reverberationStrength));
+  }
+
+  @Override
+  public void adjustPlaybackSignalVolume(int volume) {
+    ALog.d(TAG, "adjustPlaybackSignalVolume,volume:" + volume);
+    audioEffectManager.adjustPlaybackSignalVolumeWithRemember(volume);
+    final ToneContract.ToneUIState state = toneUIState.getValue();
+    toneUIState.setValue(
+        new ToneContract.ToneUIState(
+            state.earBackEnabled,
+            state.earBackVolume,
+            state.effectVolume,
+            state.recordingSignalVolume,
             volume,
             state.effectPitch,
             state.reverberationType,
@@ -184,6 +208,7 @@ public class ToneViewModel extends AndroidViewModel implements ToneContract.View
             state.earBackVolume,
             state.effectVolume,
             state.recordingSignalVolume,
+            state.otherSignalVolume,
             state.effectPitch,
             type,
             state.reverberationStrength));
@@ -200,6 +225,7 @@ public class ToneViewModel extends AndroidViewModel implements ToneContract.View
             state.earBackVolume,
             state.effectVolume,
             state.recordingSignalVolume,
+            state.otherSignalVolume,
             state.effectPitch,
             state.reverberationType,
             strength));
