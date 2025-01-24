@@ -28,7 +28,10 @@ object NEAudioEffectManager {
 
     private const val DEFAULT_EAR_BACK_VOLUME = 50
     private const val DEFAULT_AUDIO_MIXING_VOLUME = 50
-    private const val DEFAULT_RECORDING_SIGNAL_VOLUME = 80
+    const val DEFAULT_RECORDING_SIGNAL_VOLUME = 100
+    private const val DEFAULT_IN_KTV_RECORDING_SIGNAL_VOLUME = 80
+    const val DEFAULT_OTHER_SIGNAL_VOLUME = 100
+    private const val DEFAULT_IN_KTV_OTHER_SIGNAL_VOLUME = 10
 
     /**
      * 耳返开启状态
@@ -48,7 +51,12 @@ object NEAudioEffectManager {
     /**
      * 人声音量，默认80
      */
-    private var recordingSignalVolume = DEFAULT_RECORDING_SIGNAL_VOLUME
+    private var recordingSignalVolume = DEFAULT_IN_KTV_RECORDING_SIGNAL_VOLUME
+
+    /**
+     * 其他人音量，默认10
+     */
+    private var otherSignalVolume = DEFAULT_IN_KTV_OTHER_SIGNAL_VOLUME
 
     /**
      * 开启或耳返。
@@ -84,9 +92,37 @@ object NEAudioEffectManager {
      * @param volume Int 采集信号音量，取值范围为 [0, 400]。其中：0：静音。100：（默认）原始音量。400：最大可为原始音量的 4 倍（自带溢出保护）。
      * @return 0表示方法调用成功，其他失败。
      */
-    fun adjustRecordingSignalVolume(volume: Int): Int {
+    fun adjustRecordingSignalVolumeWithRemember(volume: Int): Int {
         recordingSignalVolume = volume
         return RtcHelper.adjustRecordingSignalVolume(volume)
+    }
+
+    /**
+     * 调节人声音量
+     * @param volume Int 采集信号音量，取值范围为 [0, 400]。其中：0：静音。100：（默认）原始音量。400：最大可为原始音量的 4 倍（自带溢出保护）。
+     * @return 0表示方法调用成功，其他失败。
+     */
+    fun adjustRecordingSignalVolume(volume: Int): Int {
+        return RtcHelper.adjustRecordingSignalVolume(volume)
+    }
+
+    /**
+     * 调节其他人人声音量
+     * @param volume Int 采集信号音量，取值范围为 [0, 400]。其中：0：静音。100：（默认）原始音量。400：最大可为原始音量的 4 倍（自带溢出保护）。
+     * @return 0表示方法调用成功，其他失败。
+     */
+    fun adjustPlaybackSignalVolumeWithRemember(volume: Int): Int {
+        otherSignalVolume = volume
+        return RtcHelper.adjustPlaybackSignalVolume(volume)
+    }
+
+    /**
+     * 调节其他人人声音量
+     * @param volume Int 采集信号音量，取值范围为 [0, 400]。其中：0：静音。100：（默认）原始音量。400：最大可为原始音量的 4 倍（自带溢出保护）。
+     * @return 0表示方法调用成功，其他失败。
+     */
+    fun adjustPlaybackSignalVolume(volume: Int): Int {
+        return RtcHelper.adjustPlaybackSignalVolume(volume)
     }
 
     /**
@@ -103,6 +139,14 @@ object NEAudioEffectManager {
      */
     fun getRecordingSignalVolume(): Int {
         return recordingSignalVolume
+    }
+
+    /**
+     * 获取其他人人声音量
+     * @return 人声音量，取值范围为 [0, 400]。其中：0：静音。100：（默认）原始音量。400：最大可为原始音量的 4 倍（自带溢出保护）
+     */
+    fun getOtherSignalVolume(): Int {
+        return otherSignalVolume
     }
 
     /**
@@ -301,7 +345,8 @@ object NEAudioEffectManager {
     fun resetAll() {
         earBackVolume = DEFAULT_EAR_BACK_VOLUME
         audioMixingVolume = DEFAULT_AUDIO_MIXING_VOLUME
-        recordingSignalVolume = DEFAULT_RECORDING_SIGNAL_VOLUME
+        recordingSignalVolume = DEFAULT_IN_KTV_RECORDING_SIGNAL_VOLUME
+        otherSignalVolume = DEFAULT_IN_KTV_OTHER_SIGNAL_VOLUME
     }
 }
 

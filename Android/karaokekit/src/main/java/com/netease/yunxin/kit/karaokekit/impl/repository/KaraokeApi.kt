@@ -32,14 +32,6 @@ interface KaraokeApi {
     ): Response<KaraokeRoomInfo>
 
     /**
-     * 加入成功后上报给服务器
-     */
-    @POST("nemo/entertainmentLive/live/joinedLiveRoom")
-    suspend fun joinedKaraoke(
-        @Body params: Map<String, @JvmSuppressWildcards Any>
-    ): Response<Unit>
-
-    /**
      * 直播详情
      */
     @POST("/nemo/entertainmentLive/live/info")

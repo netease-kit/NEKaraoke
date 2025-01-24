@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import com.netease.yunxin.kit.alog.ALog;
+import com.netease.yunxin.kit.common.ui.dialog.TopPopupWindow;
 import com.netease.yunxin.kit.common.ui.utils.ToastX;
 import com.netease.yunxin.kit.common.utils.PermissionUtils;
 import com.netease.yunxin.kit.copyrightedmedia.api.NECopyrightedMedia;
@@ -89,11 +90,15 @@ public class KaraokeRoomActivity extends BaseActivity
   private OrderSongViewModel orderSongViewModel;
   private GiftDialog giftDialog;
   private final GiftRender giftRender = new GiftRender();
+  private TopPopupWindow permissionPop;
 
   private final ActivityResultLauncher<String> requestPermissionLauncher =
       registerForActivityResult(
           new ActivityResultContracts.RequestPermission(),
           isGranted -> {
+            if (permissionPop != null) {
+              permissionPop.dismiss();
+            }
             if (isGranted) {
               joinRoom(
                   roomInfo.getRoomUuid(),
@@ -182,6 +187,17 @@ public class KaraokeRoomActivity extends BaseActivity
           roomInfo.getLiveRecordId(),
           roomInfo.getRole());
     } else {
+      binding
+          .getRoot()
+          .post(
+              () -> {
+                permissionPop =
+                    new TopPopupWindow(
+                        KaraokeRoomActivity.this,
+                        R.string.app_permission_tip_microphone_title,
+                        R.string.app_permission_tip_microphone_content);
+                permissionPop.showAtLocation(binding.getRoot(), Gravity.TOP, 0, 100);
+              });
       requestPermissionLauncher.launch(RECORD_AUDIO_PERMISSION);
     }
   }
@@ -252,8 +268,9 @@ public class KaraokeRoomActivity extends BaseActivity
       binding.ivLocalAudioSwitch.setVisibility(View.VISIBLE);
     } else {
       binding.ivLocalAudioSwitch.setVisibility(View.GONE);
-      binding.ivLocalAudioSwitch.setSelected(false);
     }
+
+    binding.ivLocalAudioSwitch.setSelected(KaraokeUIUtils.isLocalMute());
 
     switch (currentSeatState) {
       case KaraokeRoomViewModel.CURRENT_SEAT_STATE_APPLYING:
@@ -641,9 +658,6 @@ public class KaraokeRoomActivity extends BaseActivity
               if (currentSeatState != seatState) {
                 currentSeatState = seatState;
                 refreshAudioSwitchButton();
-                if (currentSeatState == KaraokeRoomViewModel.CURRENT_SEAT_STATE_ON_SEAT) {
-                  NEKaraokeKit.getInstance().unmuteMyAudio(null);
-                }
               }
             });
     karaokeRoomViewModel

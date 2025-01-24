@@ -469,7 +469,3 @@ object NEKaraokeConstant {
      */
     const val EFFECT_ID_ACCOMPANY = 1001
 }
-
-const val MUTE_VOICE_KEY = "recordDevice" // / 根据该成员属性 变更mic声音采集
-const val MUTE_VOICE_VALUE_ON = "on"
-const val MUTE_VOICE_VALUE_OFF = "off"

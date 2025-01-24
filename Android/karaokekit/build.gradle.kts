@@ -38,6 +38,6 @@ dependencies {
     implementation("com.netease.yunxin.kit.common:common:1.3.1")
     implementation("com.netease.yunxin.kit.common:common-network:1.1.8")
     api("com.netease.yunxin.kit.room:roomkit:1.34.0")
+    api("com.netease.yunxin:nertc-base:5.6.50")
     api("com.netease.yunxin.kit.copyrightedmedia:copyrightedmedia:1.8.0")
-    api("com.netease.yunxin:nertc-base:5.6.40")
 }

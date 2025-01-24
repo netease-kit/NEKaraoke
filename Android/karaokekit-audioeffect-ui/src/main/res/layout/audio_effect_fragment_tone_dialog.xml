@@ -4,23 +4,23 @@
 <!-- found in the LICENSE file. -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-            android:id="@+id/tone_dialog_fragment_title"
-            android:layout_width="wrap_content"
-            android:layout_height="46dp"
-            android:gravity="center"
-            android:text="@string/audioeffect_dialog_fragment_title"
-            android:textSize="16sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textStyle="bold"
-            />
+        android:id="@+id/tone_dialog_fragment_title"
+        android:layout_width="wrap_content"
+        android:layout_height="46dp"
+        android:gravity="center"
+        android:text="@string/audioeffect_dialog_fragment_title"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textStyle="bold"
+        />
 
     <TextView
         android:id="@+id/tone_dialog_fragment_action_reset"
@@ -38,44 +38,44 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <View
-            android:id="@+id/tone_dialog_fragment_line_0"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#5F5F5F"
-            app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_title"
-            />
+        android:id="@+id/tone_dialog_fragment_line_0"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#5F5F5F"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_title"
+        />
 
     <RelativeLayout
-            android:id="@+id/tone_dialog_fragment_ear_back_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_line_0"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="19dp"
-            android:orientation="vertical"
-            android:layout_marginLeft="14dp"
-            android:layout_marginRight="14dp"
-            android:gravity="center_vertical"
-            >
+        android:id="@+id/tone_dialog_fragment_ear_back_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_line_0"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="19dp"
+        android:orientation="vertical"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:gravity="center_vertical"
+        >
 
         <TextView
-                android:id="@+id/tone_dialog_fragment_ear_back_title"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:gravity="center"
-                android:text="@string/audioeffect_dialog_fragment_ear_back_title"
-                android:textSize="14sp"
-                android:textColor="@android:color/white" />
+            android:id="@+id/tone_dialog_fragment_ear_back_title"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:text="@string/audioeffect_dialog_fragment_ear_back_title"
+            android:textSize="14sp"
+            android:textColor="@android:color/white" />
 
         <TextView
-                android:id="@+id/tone_dialog_fragment_ear_back_desc"
-                android:layout_below="@id/tone_dialog_fragment_ear_back_title"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:gravity="center"
-                android:text="@string/audioeffect_dialog_fragment_ear_back_desc"
-                android:textSize="12sp"
-                android:textColor="#80FFFFFF" />
+            android:id="@+id/tone_dialog_fragment_ear_back_desc"
+            android:layout_below="@id/tone_dialog_fragment_ear_back_title"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:text="@string/audioeffect_dialog_fragment_ear_back_desc"
+            android:textSize="12sp"
+            android:textColor="#80FFFFFF" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/tone_dialog_fragment_ear_back_switch"
@@ -92,125 +92,164 @@
     </RelativeLayout>
 
     <TextView
-            android:id="@+id/tone_dialog_fragment_ear_back_volume"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:text="@string/audioeffect_dialog_fragment_ear_back_volume"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_ear_back_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="12dp"
-            />
+        android:id="@+id/tone_dialog_fragment_ear_back_volume"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:text="@string/audioeffect_dialog_fragment_ear_back_volume"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_ear_back_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="12dp"
+        />
 
     <SeekBar
-            android:id="@+id/tone_dialog_fragment_ear_back_volume_seekbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:thumb="@drawable/audio_effect_seekbar_thumb_drawable"
-            android:maxHeight="4dp"
-            android:progressDrawable="@drawable/audio_effect_seekbar_progress_drawable"
-            app:layout_constraintStart_toEndOf="@id/tone_dialog_fragment_ear_back_volume"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tone_dialog_fragment_ear_back_volume"
-            app:layout_constraintBottom_toBottomOf="@id/tone_dialog_fragment_ear_back_volume"
-            android:layout_marginEnd="14dp"
-            android:layout_marginStart="10dp" />
+        android:id="@+id/tone_dialog_fragment_ear_back_volume_seekbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:thumb="@drawable/audio_effect_seekbar_thumb_drawable"
+        android:maxHeight="4dp"
+        android:progressDrawable="@drawable/audio_effect_seekbar_progress_drawable"
+        app:layout_constraintStart_toEndOf="@id/tone_dialog_fragment_ear_back_volume"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tone_dialog_fragment_ear_back_volume"
+        app:layout_constraintBottom_toBottomOf="@id/tone_dialog_fragment_ear_back_volume"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="10dp" />
 
     <View
-            android:id="@+id/tone_dialog_fragment_line_1"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
-            android:background="#5F5F5F"
-            app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_ear_back_volume"
-            />
+        android:id="@+id/tone_dialog_fragment_line_1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
+        android:background="#5F5F5F"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_ear_back_volume"
+        />
 
     <TextView
-            android:id="@+id/tone_dialog_fragment_effect_volume"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:text="@string/audioeffect_dialog_fragment_effect_volume"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_line_1"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="12dp"
-            />
+        android:id="@+id/tone_dialog_fragment_effect_volume"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:text="@string/audioeffect_dialog_fragment_effect_volume"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_line_1"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="12dp"
+        />
 
     <SeekBar
-            android:id="@+id/tone_dialog_fragment_effect_volume_seekbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:thumb="@drawable/audio_effect_seekbar_thumb_drawable"
-            android:maxHeight="4dp"
-            android:progressDrawable="@drawable/audio_effect_seekbar_progress_drawable"
-            app:layout_constraintStart_toEndOf="@id/tone_dialog_fragment_effect_volume"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tone_dialog_fragment_effect_volume"
-            app:layout_constraintBottom_toBottomOf="@id/tone_dialog_fragment_effect_volume"
-            android:layout_marginEnd="14dp"
-            android:layout_marginStart="10dp"
+        android:id="@+id/tone_dialog_fragment_effect_volume_seekbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:thumb="@drawable/audio_effect_seekbar_thumb_drawable"
+        android:maxHeight="4dp"
+        android:progressDrawable="@drawable/audio_effect_seekbar_progress_drawable"
+        app:layout_constraintStart_toEndOf="@id/tone_dialog_fragment_effect_volume"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tone_dialog_fragment_effect_volume"
+        app:layout_constraintBottom_toBottomOf="@id/tone_dialog_fragment_effect_volume"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="10dp"
 
-            />
+        />
 
     <View
-            android:id="@+id/tone_dialog_fragment_line_2"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
-            android:background="#5F5F5F"
-            app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_effect_volume"
-            />
+        android:id="@+id/tone_dialog_fragment_line_2"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
+        android:background="#5F5F5F"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_effect_volume"
+        />
 
     <TextView
-            android:id="@+id/tone_dialog_fragment_recording_volume"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:text="@string/audioeffect_dialog_fragment_recording_volume"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_line_2"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="12dp"
-            />
+        android:id="@+id/tone_dialog_fragment_recording_volume"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:text="@string/audioeffect_dialog_fragment_recording_volume"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_line_2"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="12dp"
+        />
 
     <SeekBar
-            android:id="@+id/tone_dialog_fragment_recording_volume_seekbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:thumb="@drawable/audio_effect_seekbar_thumb_drawable"
-            android:maxHeight="4dp"
-            android:progressDrawable="@drawable/audio_effect_seekbar_progress_drawable"
-            app:layout_constraintStart_toEndOf="@id/tone_dialog_fragment_recording_volume"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tone_dialog_fragment_recording_volume"
-            app:layout_constraintBottom_toBottomOf="@id/tone_dialog_fragment_recording_volume"
-            android:layout_marginEnd="14dp"
-            android:layout_marginStart="10dp"
-            />
+        android:id="@+id/tone_dialog_fragment_recording_volume_seekbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:thumb="@drawable/audio_effect_seekbar_thumb_drawable"
+        android:maxHeight="4dp"
+        android:progressDrawable="@drawable/audio_effect_seekbar_progress_drawable"
+        app:layout_constraintStart_toEndOf="@id/tone_dialog_fragment_recording_volume"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tone_dialog_fragment_recording_volume"
+        app:layout_constraintBottom_toBottomOf="@id/tone_dialog_fragment_recording_volume"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="10dp"
+        />
 
 
     <View
-            android:id="@+id/tone_dialog_fragment_line_3"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
-            android:background="#5F5F5F"
-            app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_recording_volume"
-            />
+        android:id="@+id/tone_dialog_fragment_line_3"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
+        android:background="#5F5F5F"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_recording_volume"
+        />
+
+    <TextView
+        android:id="@+id/tone_dialog_fragment_other_recording_volume"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:text="@string/audioeffect_dialog_fragment_other_recording_volume"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_line_3"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="12dp"
+        />
+
+    <SeekBar
+        android:id="@+id/tone_dialog_fragment_other_recording_volume_seekbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:thumb="@drawable/audio_effect_seekbar_thumb_drawable"
+        android:maxHeight="4dp"
+        android:progressDrawable="@drawable/audio_effect_seekbar_progress_drawable"
+        app:layout_constraintStart_toEndOf="@id/tone_dialog_fragment_other_recording_volume"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tone_dialog_fragment_other_recording_volume"
+        app:layout_constraintBottom_toBottomOf="@id/tone_dialog_fragment_other_recording_volume"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="10dp"
+        />
+    <View
+        android:id="@+id/tone_dialog_fragment_line_4"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
+        android:background="#5F5F5F"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_other_recording_volume"
+        />
 
     <TextView
         android:id="@+id/tone_dialog_fragment_effect_pitch"
@@ -220,7 +259,7 @@
         android:text="@string/audioeffect_dialog_fragment_effect_pitch"
         android:textSize="14sp"
         android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_line_3"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_line_4"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="14dp"
         android:layout_marginTop="21dp"
@@ -233,7 +272,7 @@
         android:layout_height="36dp"
         android:maxHeight="4dp"
         app:layout_constraintStart_toEndOf="@id/tone_dialog_fragment_effect_pitch"
-        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_line_3"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_line_4"
         android:layout_marginEnd="14dp"
         android:layout_marginTop="14dp"
         android:layout_marginStart="10dp"
@@ -271,55 +310,55 @@
     </LinearLayout>
 
     <TextView
-            android:id="@+id/tone_dialog_fragment_reverberation_title"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:text="@string/audioeffect_dialog_fragment_reverberation"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_effect_pitch_container"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="24dp"
-            />
+        android:id="@+id/tone_dialog_fragment_reverberation_title"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:text="@string/audioeffect_dialog_fragment_reverberation"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_effect_pitch_container"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="24dp"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tone_dialog_fragment_reverberation_type_recyclerview"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_reverberation_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginLeft="14dp"
-            android:layout_marginRight="14dp"
-            android:layout_marginTop="12dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:id="@+id/tone_dialog_fragment_reverberation_type_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_reverberation_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 
 
     <TextView
-            android:id="@+id/tone_dialog_fragment_reverberation_strength"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:text="@string/audioeffect_dialog_fragment_reverberation_strength"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_reverberation_type_recyclerview"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="108dp"
-            />
+        android:id="@+id/tone_dialog_fragment_reverberation_strength"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:text="@string/audioeffect_dialog_fragment_reverberation_strength"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/tone_dialog_fragment_reverberation_type_recyclerview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="108dp"
+        />
 
     <SeekBar
-            android:id="@+id/tone_dialog_fragment_reverberation_strength_seekbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:thumb="@drawable/audio_effect_seekbar_thumb_drawable"
+        android:id="@+id/tone_dialog_fragment_reverberation_strength_seekbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:thumb="@drawable/audio_effect_seekbar_thumb_drawable"
         android:maxHeight="4dp"
         android:progressDrawable="@drawable/audio_effect_seekbar_progress_drawable"
         app:layout_constraintStart_toEndOf="@id/tone_dialog_fragment_reverberation_strength"
