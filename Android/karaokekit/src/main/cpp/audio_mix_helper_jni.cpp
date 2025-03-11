@@ -21,7 +21,6 @@ Java_com_netease_yunxin_kit_karaokekit_impl_utils_AudioMixHelper_mixAudioFrameDa
   }
 
   int dest_length = env->GetArrayLength(dest);
-  int src_length = env->GetArrayLength(src);
 
   jbyte* dest_buf = env->GetByteArrayElements(dest, JNI_FALSE);
   jbyte* src_buf = env->GetByteArrayElements(src, JNI_FALSE);

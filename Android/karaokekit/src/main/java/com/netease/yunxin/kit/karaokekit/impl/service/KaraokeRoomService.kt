@@ -8,12 +8,7 @@ package com.netease.yunxin.kit.karaokekit.impl.service
 
 import android.text.TextUtils
 import com.google.gson.JsonObject
-import com.netease.lava.nertc.sdk.NERtc
 import com.netease.lava.nertc.sdk.NERtcConstants
-import com.netease.lava.nertc.sdk.NERtcEx
-import com.netease.yunxin.kit.karaokekit.api.MUTE_VOICE_KEY
-import com.netease.yunxin.kit.karaokekit.api.MUTE_VOICE_VALUE_OFF
-import com.netease.yunxin.kit.karaokekit.api.MUTE_VOICE_VALUE_ON
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeAudioFrame
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeAudioOutputDevice
 import com.netease.yunxin.kit.karaokekit.api.NEKaraokeChorusActionType
@@ -40,14 +35,12 @@ import com.netease.yunxin.kit.roomkit.api.NERoomListener
 import com.netease.yunxin.kit.roomkit.api.NERoomListenerAdapter
 import com.netease.yunxin.kit.roomkit.api.NERoomMember
 import com.netease.yunxin.kit.roomkit.api.NERoomRtcStatsListener
+import com.netease.yunxin.kit.roomkit.api.NEUnitCallback
 import com.netease.yunxin.kit.roomkit.api.model.NEAudioOutputDevice
 import com.netease.yunxin.kit.roomkit.api.model.NERoomConnectType
 import com.netease.yunxin.kit.roomkit.api.model.NERoomReverbParam
-import com.netease.yunxin.kit.roomkit.api.model.NERoomRtcAudioProfile
 import com.netease.yunxin.kit.roomkit.api.model.NERoomRtcAudioRecvStats
-import com.netease.yunxin.kit.roomkit.api.model.NERoomRtcAudioScenario
 import com.netease.yunxin.kit.roomkit.api.model.NERoomRtcAudioSendStats
-import com.netease.yunxin.kit.roomkit.api.model.NERoomRtcChannelProfile
 import com.netease.yunxin.kit.roomkit.api.model.NERoomRtcClientRole
 import com.netease.yunxin.kit.roomkit.api.model.NERoomRtcNetworkQualityInfo
 import com.netease.yunxin.kit.roomkit.api.model.NERoomRtcStats
@@ -65,22 +58,23 @@ import com.netease.yunxin.kit.roomkit.impl.model.RoomCustomMessages
 import java.util.Locale
 
 internal class KaraokeRoomService : NERoomRtcStatsListener, NEPlayStateChangeCallback {
-    private var TAG = "KaraokeRoomService"
     private var currentRoomContext: NERoomContext? = null
     private val listeners = ArrayList<NEKaraokeListener>()
     private var roomListener: NERoomListener? = null
     private var seatListener: NESeatEventListener? = null
     private var rtcStatsListener: NERoomRtcStatsListener? = null
     private var audioPlayService: NEAudioPlayService? = null
-    private var reportRtt: Long = 0; // / 实时合唱时上报给服务端的rtt
+    private var reportRtt: Long = 0 // / 实时合唱时上报给服务端的rtt
 
     companion object {
-        const val TYPE_ORDER_SONG = 1008 // 点歌
-        const val TYPE_CANCEL_SONG = 1009 // 取消点歌
-        const val TYPE_MANUAL_SWITCH_SONG = 1010 // 切歌
-        const val TYPE_TOP_SONG = 1011 // 置顶
-        const val TYPE_ORDERED_SONG_LIST_CHANGE = 1012 // 点歌列表变化
-        const val TYPE_GIFT = 1005 // 礼物
+        private const val TAG = "KaraokeRoomService"
+        private const val ERROR_MSG_ROOM_NOT_EXISTS = "Room not exists"
+        private const val TYPE_ORDER_SONG = 1008 // 点歌
+        private const val TYPE_CANCEL_SONG = 1009 // 取消点歌
+        private const val TYPE_MANUAL_SWITCH_SONG = 1010 // 切歌
+        private const val TYPE_TOP_SONG = 1011 // 置顶
+        private const val TYPE_ORDERED_SONG_LIST_CHANGE = 1012 // 点歌列表变化
+        private const val TYPE_GIFT = 1005 // 礼物
     }
 
     fun getRtt(): Long {
@@ -121,15 +115,9 @@ internal class KaraokeRoomService : NERoomRtcStatsListener, NEPlayStateChangeCal
     }
 
     private fun setAudioProfile() {
-//        currentRoomContext?.rtcController?.setAudioProfile(
-//            NERoomRtcAudioProfile.HIGH_QUALITY_STEREO,
-//            NERoomRtcAudioScenario.MUSIC
-//        )
-//        currentRoomContext?.rtcController?.setChannelProfile(
-//            NERoomRtcChannelProfile.liveBroadcasting
-//        )
-        NERtcEx.getInstance().setChannelProfile(NERtcConstants.RTCChannelProfile.HIGHQUALITY_CHATROOM)
-
+        currentRoomContext?.rtcController?.setChannelProfile(
+            NERtcConstants.RTCChannelProfile.HIGHQUALITY_CHATROOM
+        )
     }
 
     fun joinRoom(roomUuid: String, role: String, userName: String, callback: NECallback2<Unit>) {
@@ -183,6 +171,31 @@ internal class KaraokeRoomService : NERoomRtcStatsListener, NEPlayStateChangeCal
                                         }
                                     })
                                     callback.onError(code, message)
+                                }
+                            })
+
+                            getSeatInfo(object : NECallback2<NESeatInfo>() {
+                                override fun onSuccess(data: NESeatInfo?) {
+                                    KaraokeLog.d(TAG, "getSeatInfo success")
+                                    data?.let {
+                                        for (seat in data.seatItems) {
+                                            if (KaraokeUtils.isLocal(seat.user)) {
+                                                if (seat.status == NESeatItemStatus.TAKEN) {
+                                                    muteMyAudio(EmptyCallback)
+                                                    currentRoomContext?.rtcController?.setClientRole(
+                                                        NERoomRtcClientRole.BROADCASTER
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                override fun onError(code: Int, message: String?) {
+                                    KaraokeLog.e(
+                                        TAG,
+                                        "getSeatInfo error:code = $code message = $message"
+                                    )
                                 }
                             })
                         }
@@ -287,7 +300,7 @@ internal class KaraokeRoomService : NERoomRtcStatsListener, NEPlayStateChangeCal
         )
     }
 
-    fun sendTextMessage(content: String, callback: NECallback2<NERoomChatMessage>) {
+    fun sendTextMessage(content: String, callback: NECallback2<NERoomChatMessage?>) {
         currentRoomContext?.chatController?.sendBroadcastTextMessage(content, callback)
             ?: callback.onError(
                 NEErrorCode.FAILURE,
@@ -304,27 +317,43 @@ internal class KaraokeRoomService : NERoomRtcStatsListener, NEPlayStateChangeCal
     }
 
     fun muteMyAudio(callback: NECallback2<Unit>) {
-        val uuid = currentRoomContext?.localMember?.uuid
-        uuid?.apply {
-            currentRoomContext?.updateMemberProperty(
-                this,
-                MUTE_VOICE_KEY,
-                MUTE_VOICE_VALUE_OFF,
-                callback
-            )
-        } ?: callback.onError(NEErrorCode.FAILURE, "roomContext is not exist ！")
+        val context = currentRoomContext
+        if (context == null) {
+            callback.onError(NEErrorCode.FAILURE, ERROR_MSG_ROOM_NOT_EXISTS)
+            return
+        }
+
+        context.rtcController.muteMyAudio(
+            true,
+            object : NEUnitCallback() {
+                override fun onError(code: Int, message: String?) {
+                    callback.onError(code, message)
+                }
+                override fun onSuccess() {
+                    callback.onSuccess(Unit)
+                }
+            }
+        )
     }
 
     fun unmuteMyAudio(callback: NECallback2<Unit>) {
-        val uuid = currentRoomContext?.localMember?.uuid
-        uuid?.apply {
-            currentRoomContext?.updateMemberProperty(
-                this,
-                MUTE_VOICE_KEY,
-                MUTE_VOICE_VALUE_ON,
-                callback
-            )
-        } ?: callback.onError(NEErrorCode.FAILURE, "roomContext is not exist ！")
+        val context = currentRoomContext
+        if (context == null) {
+            callback.onError(NEErrorCode.FAILURE, ERROR_MSG_ROOM_NOT_EXISTS)
+            return
+        }
+
+        context.rtcController.unmuteMyAudio(
+            true,
+            object : NEUnitCallback() {
+                override fun onError(code: Int, message: String?) {
+                    callback.onError(code, message)
+                }
+                override fun onSuccess() {
+                    callback.onSuccess(Unit)
+                }
+            }
+        )
     }
 
     fun enableEarBack(volume: Int): Int {
@@ -432,20 +461,6 @@ internal class KaraokeRoomService : NERoomRtcStatsListener, NEPlayStateChangeCal
                 member: NERoomMember,
                 properties: Map<String, String>
             ) {
-                if (properties.containsKey(MUTE_VOICE_KEY)) {
-                    val uuid = getLocalMember()?.account
-                    val voiceValue = properties[MUTE_VOICE_KEY]
-                    if (voiceValue == MUTE_VOICE_VALUE_ON || voiceValue == MUTE_VOICE_VALUE_OFF) {
-                        val mute = voiceValue == MUTE_VOICE_VALUE_OFF
-                        if (member.uuid == uuid) {
-                            currentRoomContext?.rtcController?.setRecordDeviceMute(mute)
-                        }
-                        val ktvMember = mapMember(member)
-                        listeners.forEach {
-                            it.onMemberAudioMuteChanged(ktvMember, mute, ktvMember)
-                        }
-                    }
-                }
             }
 
             override fun onMemberPropertiesDeleted(
@@ -524,6 +539,10 @@ internal class KaraokeRoomService : NERoomRtcStatsListener, NEPlayStateChangeCal
                 operateBy: NERoomMember?
             ) {
                 val operateMember = operateBy?.let { mapMember(it) }
+                KaraokeLog.d(
+                    TAG,
+                    "onMemberAudioMuteChanged member:$member,mute:$mute,operateBy:$operateMember"
+                )
                 listeners.forEach {
                     it.onMemberAudioMuteChanged(mapMember(member), mute, operateMember)
                 }
@@ -803,15 +822,16 @@ internal class KaraokeRoomService : NERoomRtcStatsListener, NEPlayStateChangeCal
             }
 
             override fun onSeatListChanged(seatItems: List<NESeatItem>) {
-                var isCurrentOnSeat = isCurrentOnSeat(seatItems)
-                if (isCurrentOnSeat) {
-                    currentRoomContext?.rtcController?.unmuteMyAudio()
-                }
+                KaraokeLog.d(TAG, "onSeatListChanged seatItems = $seatItems")
+                val isCurrentOnSeat = isCurrentOnSeat(seatItems)
                 currentRoomContext?.rtcController?.setClientRole(
                     if (isCurrentOnSeat) NERoomRtcClientRole.BROADCASTER else NERoomRtcClientRole.AUDIENCE
                 )
 
-                KaraokeLog.d(TAG, "onSeatListChanged seatItems = $seatItems")
+                if (isCurrentOnSeat) {
+                    currentRoomContext?.rtcController?.unmuteMyAudio()
+                }
+
                 listeners.forEach {
                     it.onSeatListChanged(
                         seatItems.map { it2 -> KaraokeUtils.karaokeSeatItem2NEKaraokeSeatItem(it2) }
@@ -909,3 +929,5 @@ internal class KaraokeRoomService : NERoomRtcStatsListener, NEPlayStateChangeCal
         }
     }
 }
+
+internal object EmptyCallback : NECallback2<Unit>()

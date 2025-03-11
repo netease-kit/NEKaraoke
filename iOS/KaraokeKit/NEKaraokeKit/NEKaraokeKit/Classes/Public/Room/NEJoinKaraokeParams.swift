@@ -4,9 +4,9 @@
 
 import Foundation
 
+/// 角色
 @objc
 
-/// 角色
 public enum NEKaraokeRole: Int {
   /// 房主
   case host = 0
@@ -21,8 +21,8 @@ public enum NEKaraokeRole: Int {
   }
 }
 
-@objcMembers
 /// 加入房间参数
+@objcMembers
 public class NEJoinKaraokeParams: NSObject {
   /// 房间uid
   public var roomUuid: String = ""

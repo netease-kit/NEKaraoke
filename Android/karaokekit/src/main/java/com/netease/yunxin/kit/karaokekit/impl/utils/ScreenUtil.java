@@ -119,7 +119,7 @@ public class ScreenUtil {
 
   public static int getNavBarHeight(Context context) {
     Resources resources = context.getResources();
-    @SuppressLint("InternalInsetResource")
+    @SuppressLint({"InternalInsetResource", "DiscouragedApi"})
     int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
     if (resourceId > 0) {
       return resources.getDimensionPixelSize(resourceId);

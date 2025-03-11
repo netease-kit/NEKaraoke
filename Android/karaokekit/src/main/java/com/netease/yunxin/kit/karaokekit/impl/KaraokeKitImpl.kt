@@ -366,47 +366,32 @@ internal class KaraokeKitImpl : NEKaraokeKit, CoroutineRunner() {
                 override fun onSuccess(data: Unit?) {
                     KaraokeLog.i(TAG, "joinRoom success")
 
-                    karaokeService.joinedKaraoke(
+                    karaokeService.getRoomInfo(
                         params.liveRecordId,
-                        object : NetRequestCallback<Unit> {
-                            override fun error(code: Int, msg: String?) {
-                                KaraokeLog.i(
+                        object : NetRequestCallback<KaraokeRoomInfo> {
+                            override fun success(info: KaraokeRoomInfo?) {
+                                KaraokeLog.d(
                                     TAG,
-                                    "joinedKaraoke failed code = $code message = $msg"
+                                    "joinRoom  getRoomInfo success"
                                 )
-                                callback?.onFailure(code, msg)
-                            }
-
-                            override fun success(info: Unit?) {
-                                KaraokeLog.i(TAG, "joinedKaraoke success")
-                                karaokeService.getRoomInfo(
-                                    params.liveRecordId,
-                                    object : NetRequestCallback<KaraokeRoomInfo> {
-                                        override fun success(info: KaraokeRoomInfo?) {
-                                            KaraokeLog.d(
-                                                TAG,
-                                                "joinRoom  getRoomInfo success"
-                                            )
-                                            callback?.onSuccess(
-                                                info?.let {
-                                                    KaraokeUtils.karaokeRoomInfo2NEKaraokeRoomInfo(
-                                                        it
-                                                    )
-                                                }
-                                            )
-                                        }
-
-                                        override fun error(code: Int, msg: String?) {
-                                            KaraokeLog.e(
-                                                TAG,
-                                                "get room info after join room error: code = $code message = $msg"
-                                            )
-                                            callback?.onFailure(code, msg)
-                                        }
+                                callback?.onSuccess(
+                                    info?.let {
+                                        KaraokeUtils.karaokeRoomInfo2NEKaraokeRoomInfo(
+                                            it
+                                        )
                                     }
                                 )
                             }
-                        })
+
+                            override fun error(code: Int, msg: String?) {
+                                KaraokeLog.e(
+                                    TAG,
+                                    "get room info after join room error: code = $code message = $msg"
+                                )
+                                callback?.onFailure(code, msg)
+                            }
+                        }
+                    )
                 }
 
                 override fun onError(code: Int, message: String?) {
@@ -630,7 +615,7 @@ internal class KaraokeKitImpl : NEKaraokeKit, CoroutineRunner() {
         KaraokeLog.logApi("sendTextMessage")
         myRoomService.sendTextMessage(
             content,
-            object : NECallback2<NERoomChatMessage>() {
+            object : NECallback2<NERoomChatMessage?>() {
                 override fun onSuccess(data: NERoomChatMessage?) {
                     KaraokeLog.d(TAG, "sendTextMessage success")
                     callback?.onSuccess(data)

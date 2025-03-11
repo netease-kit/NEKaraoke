@@ -10,6 +10,7 @@ static const int AUDIO_MIXING_VOLUME = 50;
 static const int AUDIO_EFFECT_VOLUME = 50;
 static const int REVERB_INTENSITY = 50;
 static const int EQUALIZE_INTENSITY = 100;
+static const int PLAYBACK_SIGNAL_VOLUME = 10;
 
 @interface NEAudioEffectModel : NSObject
 
@@ -18,6 +19,7 @@ static const int EQUALIZE_INTENSITY = 100;
 @property(nonatomic, assign) int earbackVolume;
 @property(nonatomic, assign) int recordingSignalVolume;
 @property(nonatomic, assign) int audioMixingVolume;
+@property(nonatomic, assign) int playbackSignalVolume;
 @property(nonatomic, strong) NSMutableDictionary<NSNumber *, NSNumber *> *audioEffectVolume;
 @property(nonatomic, assign) NERtcVoiceBeautifierType reverbPreset;
 @property(nonatomic, assign) int reverbIntensity;
@@ -46,6 +48,8 @@ static const int EQUALIZE_INTENSITY = 100;
   model.customEqualization = [NSMutableDictionary new];
   model.voiceChangerPreset = kNERtcVoiceChangerOff;
   model.effectPitchArray = [NSMutableArray new];
+  model.playbackSignalVolume = PLAYBACK_SIGNAL_VOLUME;
+    
   return model;
 }
 
@@ -112,6 +116,19 @@ static const int EQUALIZE_INTENSITY = 100;
 
 - (int)getRecordingSignalVolume {
   return self.model.recordingSignalVolume;
+}
+
+- (int)getDefaultPlaybackSignalVolume{
+  return PLAYBACK_SIGNAL_VOLUME;
+}
+
+- (int)adjustPlaybackSignalVolume:(int)volume {
+  self.model.playbackSignalVolume = volume;
+  return [[NERtcEngine sharedEngine] adjustPlaybackSignalVolume:volume];
+}
+
+- (int)getPlaybackSignalVolume {
+  return self.model.playbackSignalVolume;
 }
 
 - (int)setAudioMixingVolume:(int)volume {
@@ -254,6 +271,7 @@ static const int EQUALIZE_INTENSITY = 100;
   self.model.canEarbackEnable = canEarbackEnable;
   [self setEarbackVolume:self.model.earbackVolume];
   [self adjustRecordingSignalVolume:self.model.recordingSignalVolume];
+  [self adjustPlaybackSignalVolume:self.model.playbackSignalVolume];
   [self setAudioMixingVolume:self.model.audioMixingVolume];
   for (NSNumber *key in temp.allKeys) {
     [self setCustomEqualization:[key intValue] bandGain:0];

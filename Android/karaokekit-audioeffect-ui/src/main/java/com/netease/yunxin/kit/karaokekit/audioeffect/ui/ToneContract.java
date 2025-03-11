@@ -76,7 +76,10 @@ public interface ToneContract {
     public static final int DEFAULT_EFFECT_VALUE = 15;
     public static final int INVALID_EFFECT_STRENGTH = -1;
     public static final int DEFAULT_RECORD_SIGNAL_VOLUME_MAX = 100;
+    public static final int DeFAULT_OTHER_SIGNAL_VOLUME_MAX = 100;
     public static final int DEFAULT_RECORD_SIGNAL_VOLUME = 80;
+    public static final int DEFAULT_IN_KTV_OTHER_SIGNAL_VOLUME = 10;
+    public static final int DEFAULT_OTHER_SIGNAL_VOLUME = 100;
 
     ToneUIState() {
       this.reverberationType = ReverberationType.OFF;
@@ -84,6 +87,7 @@ public interface ToneContract {
       this.earBackVolume = NEAudioEffectManager.INSTANCE.getEarBackVolume();
       this.effectVolume = NEAudioEffectManager.INSTANCE.getAudioMixingVolume();
       this.recordingSignalVolume = NEAudioEffectManager.INSTANCE.getRecordingSignalVolume();
+      this.otherSignalVolume = NEAudioEffectManager.INSTANCE.getOtherSignalVolume();
       this.reverberationStrength = INVALID_EFFECT_STRENGTH;
     }
 
@@ -92,6 +96,7 @@ public interface ToneContract {
         int earBackVolume,
         int effectVolume,
         int recordingSignalVolume,
+        int otherSignalVolume,
         int effectPitch,
         ReverberationType reverberationType,
         int reverberationStrength) {
@@ -99,6 +104,7 @@ public interface ToneContract {
       this.earBackVolume = earBackVolume;
       this.effectVolume = effectVolume;
       this.recordingSignalVolume = recordingSignalVolume;
+      this.otherSignalVolume = otherSignalVolume;
       this.effectPitch = effectPitch;
       this.reverberationType = reverberationType;
       this.reverberationStrength = reverberationStrength;
@@ -113,6 +119,7 @@ public interface ToneContract {
     public int effectPitch;
 
     public int recordingSignalVolume;
+    public int otherSignalVolume;
 
     public ReverberationType reverberationType;
 
@@ -175,6 +182,13 @@ public interface ToneContract {
      * @param volume 音量
      */
     void setRecordingSignalVolume(int volume);
+
+    /**
+     * 设置其他人音量
+     *
+     * @param volume
+     */
+    void adjustPlaybackSignalVolume(int volume);
 
     /**
      * 设置混响/均匀类型

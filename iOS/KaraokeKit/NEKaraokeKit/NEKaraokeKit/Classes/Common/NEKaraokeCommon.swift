@@ -4,8 +4,8 @@
 
 import Foundation
 
-@objc
 /// 房间类型
+@objc
 public enum NEKaraokeLiveRoomType: UInt {
   /// PK直播
   case pkLive = 1
@@ -15,8 +15,8 @@ public enum NEKaraokeLiveRoomType: UInt {
   case ktv = 3
 }
 
-@objc
 /// 直播状态
+@objc
 public enum NEKaraokeLiveStatus: UInt {
   /// 未直播
   case idle = 0
@@ -34,8 +34,8 @@ public enum NEKaraokeLiveStatus: UInt {
   case end = 6
 }
 
-@objc
 /// 唱歌模式
+@objc
 public enum NEKaraokeSingMode: Int, Codable {
   /// 智能合唱
   case AIChorus = 0

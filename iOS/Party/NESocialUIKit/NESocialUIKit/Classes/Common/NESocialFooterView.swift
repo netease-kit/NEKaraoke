@@ -125,7 +125,7 @@ public class NESocialFooterView: UIView {
   }
 
   private func layoutButtons() {
-    itemsView.subviews.forEach { view in
+    for view in itemsView.subviews {
       view.removeFromSuperview()
     }
     // 如果有自定义的按钮，添加进来

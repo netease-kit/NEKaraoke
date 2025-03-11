@@ -109,21 +109,6 @@ object KaraokeServiceImpl : KaraokeService {
         }
     }
 
-    override fun joinedKaraoke(liveRecodeId: Long, callback: NetRequestCallback<Unit>) {
-        karaokeScope?.launch {
-            Request.request(
-                { karaokeRepository.joinedKaraoke(liveRecodeId) },
-                success = {
-                    callback.success(it)
-                },
-                error = { code: Int, msg: String ->
-                    reportHttpErrorEvent(HttpErrorReporter.ErrorEvent(code, msg, ""))
-                    callback.error(code, msg)
-                }
-            )
-        }
-    }
-
     override fun getRoomInfo(liveRecordId: Long, callback: NetRequestCallback<KaraokeRoomInfo>) {
         karaokeScope?.launch {
             Request.request(

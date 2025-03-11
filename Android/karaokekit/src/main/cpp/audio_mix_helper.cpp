@@ -53,7 +53,11 @@ void MixToFloatFrame(int16_t* src_data, int16_t* src2_data, int16_t* dst_data,
 }
 
 void setAudioFrameVolume(int16_t* frame, float volume, int samples) {
-  if (!frame || volume == 0.0) {
+  if (!frame) {
+    return;
+  }
+
+  if (volume == 0.0) {
     memset(frame, 0, samples * sizeof(int16_t));
     return;
   }

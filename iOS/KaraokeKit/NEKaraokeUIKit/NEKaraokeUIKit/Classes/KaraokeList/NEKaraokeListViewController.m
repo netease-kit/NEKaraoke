@@ -254,6 +254,12 @@
     [NEKaraokeToast showToast:NELocalizedString(@"网络异常，请稍后重试")];
     return;
   }
+
+  if ([NEKaraokeUIManager sharedInstance].canContinueAction &&
+      ![NEKaraokeUIManager sharedInstance].canContinueAction()) {
+    return;
+  };
+
   [NSNotificationCenter.defaultCenter
       postNotification:[NSNotification notificationWithName:@"karaokeEnter" object:nil]];
   NEKaraokeRoomInfo *roomInfoModel = self.data[indexPath.row];

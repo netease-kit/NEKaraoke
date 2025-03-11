@@ -74,6 +74,15 @@ internal object RtcHelper {
         return NERtcEx.getInstance().adjustRecordingSignalVolume(volume)
     }
 
+    /**
+     * 调节其他人信号音量。
+     * @param volume 采集信号音量，取值范围为 [0, 400]。其中：0：静音。100：（默认）原始音量。400：最大可为原始音量的 4 倍（自带溢出保护）。
+     * @return Int
+     */
+    fun adjustPlaybackSignalVolume(volume: Int): Int {
+        return NERtcEx.getInstance().adjustPlaybackSignalVolume(volume)
+    }
+
     fun setEffectSendVolume(effectId: Int, volume: Int): Int {
         return NERtcEx.getInstance().setEffectSendVolume(effectId, volume)
     }

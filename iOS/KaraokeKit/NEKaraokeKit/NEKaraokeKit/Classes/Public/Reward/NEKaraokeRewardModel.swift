@@ -4,8 +4,8 @@
 
 import Foundation
 
-@objcMembers
 /// 礼物模型
+@objcMembers
 public class NEKaraokeBatchGiftModel: NSObject {
   /// 发送者账号
   public var sendAccout: String = ""

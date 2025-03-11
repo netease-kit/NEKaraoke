@@ -158,7 +158,7 @@ public class KaraokeRoomListActivity extends BaseActivity
                         ALog.e(TAG, "exitVoiceRoom failed code:" + code + ",msg:" + msg);
                       }
                     });
-
+            VoiceRoomUtils.stopFloatPlay();
             dialog.dismiss();
           });
       builder.setNegativeButton(

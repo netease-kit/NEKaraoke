@@ -10,8 +10,6 @@
 @property(nonatomic, weak) UINavigationController *navigationController;
 @property(nonatomic, assign, readwrite) BOOL isViewAppearing;
 @property(nonatomic, assign, readwrite) BOOL isViewDisappearing;
-/// 更新 navigationbar的显隐
-- (void)updateNavigationBarHiddenAnimated:(BOOL)animated;
 @end
 
 @implementation NEUINavigationItem
@@ -29,6 +27,33 @@ static char kNEUINavigationItemKey;
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
   }
   return item;
+}
+
++ (void)load {
+  NEUIKitSwizzling(self, @selector(viewWillAppear:), @selector(ne_viewWillAppear:));
+  NEUIKitSwizzling(self, @selector(viewDidAppear:), @selector(ne_viewDidAppear:));
+}
+- (void)ne_viewWillAppear:(BOOL)animated {
+  self.navigationController.interactivePopGestureRecognizer.delegate = self;
+  [self ne_viewWillAppear:animated];
+}
+- (void)ne_viewDidAppear:(BOOL)animated {
+  [self ne_viewDidAppear:animated];
+}
+#pragma mark ==================  UIGestureRecognizerDelegate   ==================
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+  if (gestureRecognizer == self.navigationController.interactivePopGestureRecognizer) {
+    if (self.navigationController.viewControllers.count < 2 ||
+        self.navigationController.visibleViewController ==
+            [self.navigationController.viewControllers objectAtIndex:0]) {
+      return NO;
+    }
+    UIViewController *topVC = [self.navigationController topViewController];
+    if (topVC.ne_UINavigationItem.disableInteractivePopGestureRecognizer) {
+      return NO;
+    }
+  }
+  return YES;
 }
 @end
 
@@ -58,8 +83,8 @@ static char kNEUINavigationItemKey;
 #pragma mark ==================  UIGestureRecognizerDelegate   ==================
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
   if (gestureRecognizer == self.interactivePopGestureRecognizer) {
-    if (self.viewControllers.count < 2 ||
-        self.visibleViewController == [self.viewControllers objectAtIndex:0]) {
+    if (self.viewControllers.count < 2 || self.visibleViewController == [self.viewControllers
+                                                                            objectAtIndex:0]) {
       return NO;
     }
     UIViewController *topVC = [self topViewController];

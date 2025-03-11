@@ -1051,6 +1051,8 @@
       });
       // 默认设置一把采集音量
       [self.audioManager adjustRecordingSignalVolume:[self.audioManager getRecordingSignalVolume]];
+      [self.audioManager adjustPlaybackSignalVolume:[self.audioManager getDefaultPlaybackSignalVolume]];
+
       NSData *origin = [NSData dataWithContentsOfFile:originPath];
       NSData *accompany = [NSData dataWithContentsOfFile:accompanyPath];
       dispatch_async(dispatch_get_main_queue(), ^{
@@ -1147,6 +1149,8 @@
       self.time = 0;
       self.songModel = nil;
       // 结束，展示下一首歌的界面
+        
+      [self.audioManager adjustPlaybackSignalVolume:100];
       dispatch_async(dispatch_get_main_queue(), ^{
         [self.lyricActionView showSubview:NEKaraokeLyricActionSubviewTypeChooseSong];
         [self showControlView:NO];

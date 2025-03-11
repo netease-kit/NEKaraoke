@@ -4,6 +4,7 @@
 
 import Foundation
 import NECopyrightedMedia
+
 @objc
 public protocol NEKaraokeCopyrightedMediaListener: NSObjectProtocol {
   /// 开始下载回调
