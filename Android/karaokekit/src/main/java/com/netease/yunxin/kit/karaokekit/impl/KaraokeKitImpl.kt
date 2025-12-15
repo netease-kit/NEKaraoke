@@ -134,9 +134,7 @@ internal class KaraokeKitImpl : NEKaraokeKit, CoroutineRunner() {
         realExtras.putAll(config.extras)
         if (config.extras[SERVER_URL_KEY] != null) {
             val serverUrl: String = config.extras[SERVER_URL_KEY] as String
-            baseUrl = config.extras[BASE_URL_KEY] as String
             KaraokeLog.i(TAG, "serverUrl:$serverUrl")
-            KaraokeLog.i(TAG, "baseUrl:$baseUrl")
             if (!TextUtils.isEmpty(serverUrl)) {
                 when {
                     TEST_URL_VALUE == serverUrl -> {
@@ -147,6 +145,10 @@ internal class KaraokeKitImpl : NEKaraokeKit, CoroutineRunner() {
                     }
                 }
             }
+        }
+        if (config.extras[BASE_URL_KEY] != null) {
+            baseUrl = config.extras[BASE_URL_KEY] as String
+            KaraokeLog.i(TAG, "baseUrl:$baseUrl")
         }
         realExtras[SERVER_URL_KEY] = realRoomServerUrl
         val serverConfig =
